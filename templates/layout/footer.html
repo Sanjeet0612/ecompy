@@ -524,23 +524,31 @@
 <!----Signu Section Start-->
 <script>
 $("#signupForm").submit(function(e){
-  
+
     e.preventDefault();
 
     $.ajax({
         url: "/user/api/signup",
         type: "POST",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             name: $("#register-name").val(),
             email: $("#register-email").val(),
             phone: $("#register-phone").val(),
             password: $("#register-password").val()
-        },
+        }),
         success: function(res){
             $("#signupmsg").html(res.message);
         },
-        error: function(){
-            $("#signupmsg").html("Error occurred");
+        error: function(xhr){
+
+            let errors = xhr.responseJSON?.detail;
+
+            if(errors){
+                $("#signupmsg").html(errors[0].msg);
+            }else{
+                $("#signupmsg").html("Error occurred");
+            }
         }
     });
 

@@ -1,37 +1,33 @@
-from fastapi import APIRouter, Form
+from fastapi import APIRouter
 from config.database import SessionLocal
 from models.user import User
-
+from schemas.user import UserCreate
 
 router = APIRouter(prefix="/user", tags=["User"])
 
+
 @router.post("/api/signup")
-def signup(
-    name: str = Form(..., min_length=2, max_length=50),
-    email: str = Form(...),
-    phone: str = Form(None),
-    password: str = Form(..., min_length=6)
-):
+def signup(user: UserCreate):
 
     db = SessionLocal()
 
     try:
-        # check duplicate email
-        existing = db.query(User).filter(User.email == email).first()
+        # duplicate email check
+        existing = db.query(User).filter(User.email == user.email).first()
 
         if existing:
             return {"status": False, "message": "Email already exists"}
 
-        user = User(
-            name=name,
-            email=email,
-            phone=phone,
-            password=password
+        new_user = User(
+            name=user.name,
+            email=user.email,
+            phone=user.phone,
+            password=user.password
         )
 
-        db.add(user)
+        db.add(new_user)
         db.commit()
-        db.refresh(user)
+        db.refresh(new_user)
 
         return {"status": True, "message": "Signup successful ✔️"}
 
@@ -41,6 +37,3 @@ def signup(
 
     finally:
         db.close()
-    
-
-   
