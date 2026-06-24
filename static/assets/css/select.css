@@ -1,0 +1,96 @@
+/*!-----------------------------------------------------------------------------------
+Custom Nice Select Css
+-------------------------------------------------------------------------------------*/
+
+.nice-select {
+  @apply rounded-[100px]! p-4! pr-8! flex! items-center! border border-[#919EAB]/32!;
+}
+
+.nice-select.open {
+  @apply border-black!;
+}
+
+.nice-select span.current {
+  @apply text-light-disabled-text! text-base!;
+}
+
+.nice-select.changed span.current {
+  @apply text-light-primary-text!;
+}
+
+.nice-select.open .list {
+  @apply mt-2.5! border border-[#919EAB]/32! rounded-lg! bg-white! shadow-dark-z-24! py-2! text-base! text-light-primary-text! min-w-[205px]! w-full! z-20!;
+}
+
+.nice-select.open .list li {
+  @apply text-light-primary-text! px-4!;
+}
+
+.nice-select.open .list li:hover {
+  @apply text-primary! bg-transparent!;
+}
+
+.nice-select.open .list li.selected {
+  @apply bg-transparent! text-primary!;
+}
+
+.nice-select:before {
+  font-family: "hgi-stroke-rounded";
+  content: "㭚";
+  pointer-events: none;
+  @apply transition-transform duration-300 ease-in-out z-1 absolute right-2 top-1/2 -translate-y-1/2 text-xl leading-6;
+}
+
+.nice-select:after {
+  display: none !important;
+}
+
+.nice-select.open:before {
+  @apply rotate-180! -translate-y-1/2! transform;
+}
+
+.address-select {
+  @apply w-full! rounded-[80px]! px-3.5! py-4! h-[56px]!;
+}
+
+.pack-select {
+  @apply p-4! pr-11! rounded-[80px]! h-[44px]!;
+}
+
+.pack-select span.current {
+  @apply text-light-disabled-text! text-base!;
+}
+
+.pack-select.bottom.open .list {
+  @apply top-0! -translate-y-[102%]! transform mt-0!;
+}
+
+.filter-select {
+  @apply rounded-[80px]! w-full!;
+}
+
+.filter-select .list,
+.quick-view-select .list {
+  @apply right-0! left-auto!;
+}
+
+.nice-select.open + .nice-select-label,
+.nice-select.label.changed + .nice-select-label {
+  @apply top-0! text-xs leading-[18px] bg-white! px-1!;
+}
+
+.nice-select.open.label span.current {
+  @apply visible! opacity-100!;
+}
+
+.nice-select + .nice-select-label {
+  @apply absolute top-1/2 left-[14px] text-light-disabled-text transform -translate-y-1/2 transition-transform;
+}
+
+.nice-select.label span.current {
+  @apply invisible! opacity-0!;
+}
+
+.nice-select.label.changed span.current {
+  @apply visible! opacity-100!;
+}

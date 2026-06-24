@@ -1,0 +1,63 @@
+/*!-----------------------------------------------------------------------------------
+Others css
+-------------------------------------------------------------------------------------*/
+
+.tab-pane,
+.faq-tab-pane {
+  @apply hidden opacity-0;
+}
+
+.tab-pane.active,
+.faq-tab-pane.active {
+  @apply block opacity-100;
+}
+
+.tab-pane.fade,
+.faq-tab-pane.fade {
+  @apply transition-opacity duration-150 ease-linear;
+}
+
+#dropdownMenu.active {
+  @apply translate-y-0 opacity-100 visible;
+}
+
+#dropdownMenu.hide {
+  @apply translate-y-4 opacity-0 invisible;
+}
+
+.filter-dropdown-menu.active {
+  @apply translate-y-0 opacity-100 visible;
+}
+
+.filter-dropdown-menu.hide {
+  @apply translate-y-4 opacity-0 invisible;
+}
+
+.faq-filter button.active {
+  @apply bg-[#00AB5514] text-primary;
+}
+
+.sticky-header.sticky-top {
+  @apply fixed top-0 left-0 w-full z-50 bg-white shadow-light-z-24 animate-fadeInDown border-t-0!;
+}
+
+.scrollbar-offset {
+  padding-right: 15px;
+}
+
+.blog-pagination li a.active,
+.comment-pagination li a.active {
+  @apply text-primary font-semibold cursor-pointer border border-primary bg-[rgba(0,171,85,0.08)] transition-colors duration-300 ease-in-out;
+}
+
+.my-account-menu li button.active {
+  @apply text-white bg-primary;
+}
+
+.footer-bottom-nav a.active {
+  @apply border-primary! text-primary!;
+}
+
+.footer-bottom-nav a.active i {
+  @apply text-primary!;
+}

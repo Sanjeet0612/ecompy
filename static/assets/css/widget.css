@@ -1,0 +1,63 @@
+/*!-----------------------------------------------------------------------------------
+Widget Css
+-------------------------------------------------------------------------------------*/
+
+/* Widget Rating */
+
+.widget-rating a.active {
+  @apply bg-primary text-white;
+}
+
+/* Price Range */
+.widget-price-range .noUi-target {
+  @apply cursor-pointer border-none shadow-none bg-transparent;
+}
+
+.widget-price-range .noUi-target:focus {
+  @apply outline-none;
+}
+
+.widget-price-range .noUi-horizontal {
+  @apply h-0.5!;
+}
+.widget-price-range .noUi-horizontal .noUi-handle {
+  @apply before:hidden after:hidden cursor-pointer bg-primary -top-2 right-[-15px] size-4 border-primary shadow-none transition-transform duration-100 rounded-full;
+}
+.widget-price-range .noUi-horizontal .noUi-handle:hover {
+  @apply bg-primary;
+}
+.widget-price-range .noUi-connect {
+  @apply bg-primary;
+}
+.widget-price-range .noUi-base {
+  @apply bg-gray-300;
+}
+.widget-price-range .noUi-handle.noUi-handle-upper {
+  @apply right-[-2px];
+}
+
+/* Color Picker */
+.widget-color-picker button.active {
+  @apply size-[28px];
+}
+
+.widget-color-picker button {
+  @apply relative before:hidden before:text-base before:leading-[22px] before:text-white before:content-["䤈"];
+}
+
+.widget-color-picker button::before {
+  font-family: "hgi-stroke-rounded";
+}
+
+.widget-color-picker button.active::before {
+  @apply block;
+}
+
+/* Size Picker */
+.widget-size-picker button.active {
+  @apply bg-primary text-white;
+}
+
+.shop-filter-select .list {
+  @apply right-0! left-auto!;
+}

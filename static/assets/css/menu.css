@@ -1,0 +1,112 @@
+/*!-----------------------------------------------------------------------------------
+Menu Css
+-------------------------------------------------------------------------------------*/
+
+.mobile-menu > ul {
+  @apply flex flex-col px-2 divide-y divide-[rgba(145,158,171,0.21)];
+}
+
+.mobile-menu ul li {
+  @apply py-2;
+}
+
+.mobile-menu ul li.has-sub-item {
+  @apply relative;
+}
+
+.mobile-menu ul li .submenu-button {
+  @apply absolute right-0 top-0 cursor-pointer size-10 inline-flex items-center justify-center;
+}
+
+.mobile-menu ul li .submenu-button:not(.submenu-opened)::before {
+  font-family: "hgi-stroke-rounded";
+  font-size: 16px;
+  line-height: 22px;
+  color: #919eab;
+  content: "㭚";
+  transform: rotate(0deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.mobile-menu ul li .submenu-button.submenu-opened::after {
+  font-family: "hgi-stroke-rounded";
+  font-size: 16px;
+  line-height: 22px;
+  color: #919eab;
+  content: "㭚";
+  transform: rotate(-180deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.mobile-menu ul li ul {
+  @apply hidden flex-col pt-2 pl-2;
+}
+
+.mobile-menu ul li a {
+  @apply text-sm leading-[22px];
+}
+
+.mobile-menu ul li a.active {
+  @apply text-primary;
+}
+
+/* Main Menu */
+.main-menu > ul {
+  @apply hidden xl:flex items-center justify-center;
+}
+
+.main-menu > ul > li > a {
+  @apply 2xl:px-6 py-6 px-4 inline-flex items-center justify-center gap-x-2 font-semibold hover:text-primary text-base leading-6 text-light-primary-text;
+}
+
+.main-menu > ul > li:hover > a {
+  @apply text-primary;
+}
+
+.main-menu > ul > li ul li:hover > a {
+  @apply text-light-primary-text;
+}
+
+.main-menu ul li.has-sub-item {
+  @apply relative;
+}
+
+.main-menu ul li.has-sub-item:has(.mega-menu) {
+  @apply static;
+}
+
+.main-menu ul li.has-sub-item:hover > ul {
+  @apply opacity-100 visible translate-y-0;
+}
+
+.main-menu ul li > ul {
+  @apply absolute left-0 top-full w-[250px] bg-white rounded-lg opacity-0 invisible transition-all duration-300 transform translate-y-4 z-50 shadow-light-z-24 py-3;
+}
+
+.main-menu ul li ul li a {
+  @apply text-sm leading-[22px] hover:text-primary py-3 px-4 flex items-center justify-between;
+}
+
+.main-menu ul li ul li a i {
+  @apply text-xl text-light-primary-text transform rotate-270;
+}
+
+.main-menu ul li > .mega-menu ul li a {
+  @apply p-0;
+}
+
+.main-menu ul li > .mega-menu {
+  @apply absolute left-1/2 -translate-x-1/2 top-full w-full bg-white rounded-lg opacity-0 invisible transition-all duration-300 transform translate-y-4 z-50 shadow-light-z-12;
+}
+
+.main-menu ul li.has-sub-item:hover > .mega-menu {
+  @apply opacity-100 visible translate-y-0;
+}
+
+.main-menu ul li ul li ul {
+  @apply left-full top-0;
+}
+
+.main-menu ul li a.active {
+  @apply text-primary;
+}

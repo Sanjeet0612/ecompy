@@ -1,0 +1,52 @@
+/*!-----------------------------------------------------------------------------------
+Comments Css
+-------------------------------------------------------------------------------------*/
+
+.comment-list {
+  @apply space-y-6;
+}
+
+.comment-body {
+  @apply mb-6 relative border-b border-gray-300;
+}
+
+.comment-meta {
+  @apply flex items-center gap-x-4 mb-1;
+}
+
+.comment-reply {
+  @apply absolute top-0 right-0;
+}
+
+.comment-reply-link {
+  @apply font-semibold leading-[26px] text-primary;
+}
+
+.comment-content {
+  @apply pl-16 pr-15 mb-6;
+}
+
+ol.comment-list li:last-child ol.children li:last-child .comment-body {
+  @apply mb-0 border-b-0;
+}
+
+ol.comment-list
+  li:last-child
+  ol.children
+  li:last-child
+  .comment-body
+  .comment-content {
+  @apply mb-0;
+}
+
+.comments-area .nice-select {
+  @apply rounded-[100px]!;
+}
+
+.comments-area .nice-select .list {
+  @apply right-0! left-auto!;
+}
+
+.comment-list ol.children {
+  @apply lg:ml-15 ml-7;
+}

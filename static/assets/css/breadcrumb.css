@@ -1,0 +1,15 @@
+/*!-----------------------------------------------------------------------------------
+Breadcrumb Css
+-------------------------------------------------------------------------------------*/
+
+.breadcrumb ul {
+  @apply flex items-center gap-x-4 gap-y-2 flex-wrap;
+}
+
+.breadcrumb ul li a {
+  @apply flex items-center gap-x-2 text-light-primary-text text-base;
+}
+
+.breadcrumb li > span {
+  @apply text-light-disabled-text text-sm leading-[22px];
+}

@@ -1,0 +1,116 @@
+/*!-----------------------------------------------------------------------------------
+Product details Css
+-------------------------------------------------------------------------------------*/
+
+#product-details-tabs ul.filter-list {
+  @apply flex flex-wrap gap-4 mb-10 p-0! border-none! bg-transparent! font-medium!;
+}
+
+#product-details-tabs ul.filter-list li button {
+  @apply text-light-primary-text text-sm p-3 rounded-[100px];
+}
+
+#product-details-tabs ul.filter-list li button.active {
+  @apply bg-[rgba(0,171,85,0.08)] text-primary;
+}
+
+#product-details-tabs .product-details-tab {
+  @apply rounded-3xl border border-gray-300 p-0!;
+}
+
+#product-details-tabs .product-details-tab .product-details-tab-title {
+  @apply bg-gray-200 py-4 px-6 rounded-tl-3xl rounded-tr-3xl;
+}
+
+#product-details-tabs .product-details-tab .product-details-tab-content {
+  @apply p-6;
+}
+
+#product-details-tabs
+  .product-details-tab#description
+  .product-details-tab-content
+  ul,
+.custom-list-style {
+  @apply flex flex-col gap-y-6;
+}
+
+#product-details-tabs
+  .product-details-tab#description
+  .product-details-tab-content
+  ul
+  li,
+.custom-list-style li {
+  @apply relative pl-10 before:absolute before:left-0 before:top-0 before:size-6 before:bg-primary before:rounded-full before:content-["䤈"] before:text-white before:inline-flex before:items-center before:justify-center;
+}
+
+#product-details-tabs
+  .product-details-tab#description
+  .product-details-tab-content
+  ul
+  li::before,
+.custom-list-style li::before {
+  font-family: "hgi-stroke-rounded";
+}
+
+#product-details-tabs .comment-list-title .nice-select .list {
+  @apply right-0! left-auto!;
+}
+
+#product-details-tabs .comment-list .comment-body,
+#product-details-accordion .comment-list .comment-body,
+#quick-view-product-details-accordion .comment-list .comment-body {
+  @apply pb-6;
+}
+
+/* Height Range Slider */
+.height-range-slider-section .noUi-target,
+.weight-range-slider-section .noUi-target {
+  @apply cursor-pointer border-none shadow-none h-2! bg-gray-200!;
+}
+
+.height-range-slider-section .noUi-target:focus,
+.weight-range-slider-section .noUi-target:focus {
+  @apply outline-none;
+}
+
+.height-range-slider-section .noUi-horizontal .noUi-handle,
+.weight-range-slider-section .noUi-horizontal .noUi-handle {
+  @apply before:hidden after:hidden cursor-pointer bg-white -top-1 right-[-15px] size-4 border-2 border-primary shadow-none transition-transform duration-100 rounded-full;
+}
+
+.height-range-slider-section .noUi-connect,
+.weight-range-slider-section .noUi-connect {
+  @apply bg-primary;
+}
+
+/* Product details Accordion */
+
+#product-details-accordion .accordion-item,
+#quick-view-product-details-accordion .accordion-item {
+  @apply border-none py-0 mb-6 last:mb-0;
+}
+
+#product-details-accordion .accordion-item .accordion-header,
+#quick-view-product-details-accordion .accordion-item .accordion-header {
+  @apply bg-gray-200 py-4 px-6 rounded-2xl cursor-pointer;
+}
+
+#product-details-accordion .accordion-item .accordion-header.active,
+#quick-view-product-details-accordion .accordion-item .accordion-header.active {
+  @apply rounded-tl-2xl rounded-tr-2xl rounded-bl-none rounded-br-none;
+}
+
+#product-details-accordion .accordion-item .accordion-header i,
+#quick-view-product-details-accordion .accordion-item .accordion-header i {
+  @apply -rotate-90 transform transition-transform duration-300;
+}
+
+#product-details-accordion .accordion-item .accordion-header.active i,
+#quick-view-product-details-accordion .accordion-item .accordion-header.active i {
+  @apply rotate-0;
+}
+
+#product-details-accordion .accordion-item .accordion-body,
+#quick-view-product-details-accordion .accordion-item .accordion-body {
+  @apply border border-gray-300 p-6 rounded-bl-2xl rounded-br-2xl border-t-0;
+}

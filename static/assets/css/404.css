@@ -1,0 +1,18 @@
+/*!-----------------------------------------------------------------------------------
+404 Css
+-------------------------------------------------------------------------------------*/
+.notfound {
+  @apply pb-[70px] relative flex justify-center;
+}
+
+.notfound .notfound-section {
+  @apply max-w-[565px] text-center mx-auto;
+}
+
+.notfound .notfound-section h2 {
+  @apply pt-10 pb-4;
+}
+
+.notfound .notfound-section p {
+  @apply max-w-[392px] mx-auto pb-6 text-light-secondary-text;
+}

@@ -1,0 +1,168 @@
+/*!-----------------------------------------------------------------------------------
+Slider Css
+-------------------------------------------------------------------------------------*/
+
+.home-one-hero-slider .slick-dots,
+.home-four-hero-slider .slick-dots,
+.home-five-hero-slider .slick-dots,
+.banner-left-sidebar-slider .slick-dots {
+  @apply absolute bg-transparent left-1/2 -translate-x-1/2 z-11 flex justify-center gap-x-4 bottom-4;
+}
+
+.banner-category-hero-slider .slick-dots {
+  @apply absolute bg-transparent left-1/2 -translate-x-1/2 z-11 flex justify-center gap-x-4 -bottom-12;
+}
+
+.home-one-hero-slider .slick-dots button,
+.home-four-hero-slider .slick-dots button,
+.home-five-hero-slider .slick-dots button,
+.banner-left-sidebar-slider .slick-dots button,
+.banner-category-hero-slider .slick-dots button {
+  @apply size-3.5 text-[0px] rounded-full bg-gray-300 cursor-pointer transition-all duration-300 ease-in-out;
+}
+
+.home-one-hero-slider .slick-dots .slick-active button,
+.home-four-hero-slider .slick-dots .slick-active button,
+.home-five-hero-slider .slick-dots .slick-active button,
+.banner-left-sidebar-slider .slick-dots .slick-active button,
+.banner-category-hero-slider .slick-dots .slick-active button {
+  @apply w-[78px] bg-primary;
+}
+
+.home-one-hero-slider-dots-shape,
+.home-five-hero-slider-dots-shape,
+.home-four-hero-slider-dots-shape {
+  @apply hidden lg:block lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:bottom-0 lg:z-9 w-[332px] h-[61px] lg:bg-white lg:before:absolute lg:before:left-0 lg:before:top-0 lg:before:z-10 lg:before:w-[86px] lg:before:h-full  lg:before:bg-[url('../images/banner-left-shape.png')] lg:before:bg-no-repeat lg:after:absolute lg:after:right-0 lg:after:top-0 lg:after:z-10 lg:after:bg-[url('../images/banner-right-shape.png')] lg:after:bg-no-repeat lg:after:w-[86px] lg:after:h-full;
+}
+
+.home-one-hero-slider-dots-shape {
+  @apply lg:before:bg-primary-darker lg:after:bg-primary-darker;
+}
+
+.home-four-hero-slider-dots-shape {
+  @apply lg:before:bg-[#FFEB69] lg:after:bg-[#FFEB69];
+}
+
+.home-five-hero-slider-dots-shape {
+  @apply lg:before:bg-[#8EBDD1] lg:after:bg-[#8EBDD1];
+}
+
+.home-one-hot-deals-slider .slick-dots {
+  @apply w-full mt-8 flex px-4 lg:px-0;
+}
+
+.home-one-hot-deals-slider .slick-dots li {
+  @apply grow bg-gray-300 h-0.5;
+}
+
+.home-one-hot-deals-slider .slick-dots li.slick-active {
+  @apply bg-primary rounded-[47px] h-1.5 -translate-y-0.5;
+}
+
+.home-one-hot-deals-slider .slick-dots li button {
+  @apply text-[0px];
+}
+
+.home-five-deal-of-the-day-slider .slick-dots {
+  @apply w-full mt-8 flex justify-center gap-x-4;
+}
+
+.home-five-deal-of-the-day-slider .slick-dots button {
+  @apply size-3.5 text-[0px] rounded-full bg-gray-300 cursor-pointer transition-all duration-300 ease-in-out;
+}
+
+.home-five-deal-of-the-day-slider .slick-dots .slick-active button {
+  @apply bg-primary;
+}
+
+.home-two-top-offer-slider-nav span {
+  @apply bg-white/48! hover:bg-white!;
+}
+
+.home-two-top-offer-slider-nav span:hover i {
+  @apply text-black!;
+}
+
+.best-selling-products-slider-nav .slider-btn,
+.banner-left-sidebar-slider-nav .slider-btn,
+.about-us-testimonial-slider-nav .slider-btn,
+.product-details-big-slider-nav .slider-btn,
+.product-details-big-slider-nav-2 .slider-btn {
+  @apply bg-white hover:bg-primary;
+}
+
+.best-selling-products-slider-nav .slider-btn:hover i,
+.home-one-category-slider-nav .slider-btn:hover i,
+.home-one-hero-slider-nav .slider-btn:hover i,
+.home-one-newly-launched-products-slider-nav .slider-btn:hover i,
+.new-branded-products-nav .slider-btn:hover i,
+.new-branded-products-multi-vendor-nav .slider-btn:hover i,
+.banner-category-hero-slider-nav .slider-btn:hover i,
+.banner-left-sidebar-slider-nav .slider-btn:hover i,
+.about-us-testimonial-slider-nav .slider-btn:hover i,
+.frequently-products-slider-nav .slider-btn:hover i,
+.related-products-slider-4-nav .slider-btn:hover i,
+.related-post-slider-nav .slider-btn:hover i,
+.product-details-big-slider-nav .slider-btn:hover i,
+.product-details-big-slider-nav-2 .slider-btn:hover i,
+.related-products-slider-nav .slider-btn:hover i,
+.home-two-category-slider-nav .slider-btn:hover i,
+.home-two-category-promo-slider-nav .slider-btn:hover i,
+.home-four-picks-slider-nav .slider-btn:hover i,
+.premium-pack-nav .slider-btn:hover i,
+.farm-fresh-grocery-nav .slider-btn:hover i {
+  @apply text-white;
+}
+
+.home-one-category-slider-nav .slider-btn,
+.home-one-hero-slider-nav .slider-btn,
+.new-branded-products-nav .slider-btn,
+.new-branded-products-multi-vendor-nav .slider-btn,
+.frequently-products-slider-nav .slider-btn,
+.related-products-slider-4-nav .slider-btn,
+.related-post-slider-nav .slider-btn,
+.related-products-slider-nav .slider-btn,
+.home-two-category-slider-nav .slider-btn,
+.home-two-category-promo-slider-nav .slider-btn,
+.home-four-picks-slider-nav .slider-btn,
+.premium-pack-nav .slider-btn,
+.farm-fresh-grocery-nav .slider-btn {
+  @apply bg-[rgba(145,158,171,0.08)] hover:bg-primary;
+}
+
+.home-one-hero-slider-nav .slider-btn i,
+.home-four-hero-slider-nav .slider-btn i,
+.home-five-hero-slider-nav .slider-btn i {
+  @apply text-white;
+}
+
+.home-one-top-rate-slider-nav .slider-btn,
+.home-one-top-items-slider-nav .slider-btn {
+  @apply bg-[rgba(255,255,255,0.48)] hover:bg-white size-9;
+}
+
+.home-one-newly-launched-products-slider-nav .slider-btn {
+  @apply bg-white/48 hover:bg-primary;
+}
+
+.banner-category-hero-slider-nav .slider-btn {
+  @apply bg-white hover:bg-primary shadow-light-z-24;
+}
+
+.home-four-hero-slider-nav .slider-btn {
+  @apply bg-black hover:bg-white;
+}
+
+.home-five-hero-slider-nav .slider-btn {
+  @apply bg-[rgba(145,158,171,0.08)] hover:bg-white;
+}
+
+.home-four-hero-slider-nav .slider-btn:hover i,
+.home-five-hero-slider-nav .slider-btn:hover i {
+  @apply text-black;
+}
+
+.home-two-beauty-launched-product-nav .slider-btn,
+.home-two-newly-launched-product-nav .slider-btn {
+  @apply bg-white/48 hover:bg-white;
+}

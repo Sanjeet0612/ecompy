@@ -1,0 +1,39 @@
+/*!-----------------------------------------------------------------------------------
+  Theme Name: Sellzy - Multipurpose eCommerce HTML Template
+  Author: sellzy
+  Description: Sellzy - Multipurpose eCommerce HTML Template
+  Version: 1.0.0
+-----------------------------------------------------------------------------------*/
+
+/*! ************ TABLE OF CONTENTS ***************
+tailwind css
+menu css
+preloader css
+select css
+404 css
+breadcrumb css
+slider css
+accordion css
+payment method css
+comments css
+widget css
+product details css
+table css
+others css
+
+----------------------------------------*/
+
+@import "./tailwind.css";
+@import "./menu.css";
+@import "./preloader.css";
+@import "./select.css";
+@import "./404.css";
+@import "./breadcrumb.css";
+@import "./slider.css";
+@import "./accordion.css";
+@import "./payment-method.css";
+@import "./comments.css";
+@import "./widget.css";
+@import "./product-details.css";
+@import "./table.css";
+@import "./others.css";

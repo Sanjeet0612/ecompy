@@ -1,0 +1,51 @@
+/*!-----------------------------------------------------------------------------------
+Accordian Css
+-------------------------------------------------------------------------------------*/
+
+.accordion-item {
+  @apply py-8 border-b border-gray-300;
+}
+
+.accordion-item:first-child {
+  @apply pt-0;
+}
+
+.accordion-item:last-child {
+  @apply border-b-0 pb-0;
+}
+
+.accordion-item .accordion-header {
+  @apply flex items-center justify-between gap-x-2;
+}
+
+.accordion-item .accordion-header h4 {
+  @apply text-base leading-6 font-semibold font-dm-sans;
+}
+
+.accordion-item .accordion-header i {
+  @apply text-light-primary-text text-xl;
+}
+
+.accordion-item .accordion-header.active i.hgi-minus-sign {
+  @apply inline-block;
+}
+
+.accordion-item .accordion-header i.hgi-minus-sign {
+  @apply hidden;
+}
+
+.accordion-item .accordion-header.active i.hgi-plus-sign {
+  @apply hidden;
+}
+
+.accordion-item .accordion-header i.hgi-plus-sign {
+  @apply inline-block;
+}
+
+.accordion-item .accordion-body {
+  @apply pt-4 hidden;
+}
+
+.accordion .accordion-item:first-child .accordion-body {
+  @apply block;
+}

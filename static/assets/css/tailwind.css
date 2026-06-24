@@ -1,0 +1,309 @@
+/*!----------------------------------------
+ Tailwind css
+----------------------------------------*/
+
+@import "tailwindcss";
+
+@source "./*.html";
+
+@theme {
+  --font-public-sans: "Public Sans", sans-serif;
+  --font-urbanist: "Urbanist", sans-serif;
+  --font-dm-sans: "DM Sans", sans-serif;
+
+  --color-light-primary-text: #212529;
+  --color-light-secondary-text: #495057;
+  --color-light-disabled-text: #919eab;
+
+  --color-dark-primary-text: #ffffff;
+  --color-dark-secondary-text: #919eab;
+  --color-dark-disabled-text: #637381;
+
+  --color-primary-lighter: #caf8e4;
+  --color-primary-light: #5ed9ba;
+  --color-primary: #088178;
+  --color-primary-dark: #056d6e;
+  --color-primary-darker: #04535c;
+
+  --color-secondary-lighter: #d6e4ff;
+  --color-secondary-light: #84a9ff;
+  --color-secondary: #3366ff;
+  --color-secondary-dark: #1939b7;
+  --color-secondary-darker: #091a7a;
+
+  --color-info-lighter: #d0f2ff;
+  --color-info-light: #74caff;
+  --color-info: #1890ff;
+  --color-info-dark: #0c53b7;
+  --color-info-darker: #04297a;
+
+  --color-success-lighter: #e9fcd4;
+  --color-success-light: #aaf27f;
+  --color-success: #54d62c;
+  --color-success-dark: #229a16;
+  --color-success-darker: #08660d;
+
+  --color-warning-lighter: #fff7cd;
+  --color-warning-light: #ffe16a;
+  --color-warning: #ffc107;
+  --color-warning-dark: #b78103;
+  --color-warning-darker: #7a4f01;
+
+  --color-error-lighter: #fcd1ca;
+  --color-error-light: #ef6168;
+  --color-error: #cb0233;
+  --color-error-dark: #ae013c;
+  --color-error-darker: #920140;
+
+  --color-gray-100: #f9fafb;
+  --color-gray-200: #f4f6f8;
+  --color-gray-300: #dfe3e8;
+  --color-gray-400: #c4cdd5;
+  --color-gray-500: #919eab;
+  --color-gray-600: #637381;
+  --color-gray-700: #454f5b;
+  --color-gray-800: #212b36;
+  --color-gray-900: #161c24;
+
+  --shadow-light-z-1: 0px 1px 2px 0px rgba(145, 158, 171, 0.12);
+  --shadow-light-z-8: 0px 8px 16px 0px rgba(145, 158, 171, 0.12);
+  --shadow-light-z-12: 0px 12px 24px -4px rgba(145, 158, 171, 0.12);
+  --shadow-light-z-16: 0px 16px 32px -4px rgba(145, 158, 171, 0.12);
+  --shadow-light-z-20: 0px 20px 40px -4px rgba(145, 158, 171, 0.12);
+  --shadow-light-z-24: 0px 24px 48px 0px rgba(145, 158, 171, 0.12);
+
+  --shadow-dark-z-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.12);
+  --shadow-dark-z-8: 0px 8px 16px 0px rgba(0, 0, 0, 0.12);
+  --shadow-dark-z-12: 0px 12px 24px -4px rgba(0, 0, 0, 0.12);
+  --shadow-dark-z-16: 0px 16px 32px -4px rgba(0, 0, 0, 0.12);
+  --shadow-dark-z-20: 0px 20px 40px -4px rgba(0, 0, 0, 0.12);
+  --shadow-dark-z-24: 0px 24px 48px 0px rgba(0, 0, 0, 0.12);
+
+  --shadow-color-primary: 0px 6px 15px 0px rgba(8, 129, 120, 0.16);
+  --shadow-color-secondary: 0px 8px 16px 0px rgba(51, 102, 255, 0.24);
+  --shadow-color-info: 0px 8px 16px 0px rgba(24, 144, 255, 0.24);
+  --shadow-color-success: 0px 8px 16px 0px rgba(84, 214, 44, 0.24);
+  --shadow-color-warning: 0px 8px 16px 0px rgba(255, 193, 7, 0.24);
+  --shadow-color-error: 0px 8px 16px 0px rgba(255, 72, 66, 0.24);
+
+  --radius-5xl: 3rem;
+
+  --animate-fadeInDown: fadeInDown 700ms ease-in-out 0s 1 normal none running;
+
+  --animate-marquee: marquee-animation 20s linear infinite;
+
+  --animate-bounce: bounce 1.4s infinite ease-in-out both;
+
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+    }
+    100% {
+      opacity: 1;
+      transform: translateZ(0);
+    }
+  }
+
+  @keyframes marquee-animation {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes bounce {
+    0%,
+    80%,
+    100% {
+      transform: scale(0);
+    }
+
+    40% {
+      transform: scale(1);
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply text-base font-dm-sans antialiased font-normal bg-white text-light-secondary-text select-none scroll-smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold font-urbanist text-light-primary-text;
+  }
+
+  h1 {
+    @apply lg:text-[64px] lg:leading-20 text-[40px] leading-[50px];
+  }
+
+  h2 {
+    @apply lg:text-5xl lg:leading-16 text-[32px] leading-[42px];
+  }
+
+  h3 {
+    @apply lg:text-[32px] lg:leading-12 text-2xl leading-9;
+  }
+
+  h4 {
+    @apply lg:text-2xl lg:leading-9 text-xl leading-[30px];
+  }
+
+  h5 {
+    @apply lg:text-xl lg:leading-[30px] text-lg leading-7;
+  }
+
+  h6 {
+    @apply lg:text-lg lg:leading-7 text-[17px] leading-[26px];
+  }
+
+  .btn i.hgi,
+  a i.hgi {
+    @apply font-normal;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) a {
+    @apply hover:text-primary transition-all duration-300 ease-in-out;
+  }
+
+  button,
+  a {
+    @apply cursor-pointer;
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+
+  @variant xl {
+    max-width: 1632px;
+  }
+
+  @variant 2xl {
+    padding-inline: 0;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg gap-2 whitespace-nowrap transition-all font-semibold outline-none shrink-0 [&_svg]:shrink-0;
+  }
+
+  .btn-small {
+    @apply text-[13px] leading-[22px] px-2.5 py-1 [&_svg]:size-[18px];
+  }
+
+  .btn-medium {
+    @apply text-base px-4 py-1.5 [&_svg]:size-5;
+  }
+
+  .btn-large {
+    @apply text-base leading-[26px] px-[22px] py-[11px] [&_svg]:size-[22px];
+  }
+
+  .btn-default {
+    @apply bg-gray-300 text-gray-800 hover:bg-gray-400 shadow-light-z-8 hover:shadow-none;
+  }
+
+  .btn-default.outline {
+    @apply text-light-primary-text bg-transparent ring ring-[rgba(145,158,171,0.32)] hover:bg-[rgba(145,158,171,0.08)];
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-dark shadow-color-primary hover:shadow-none;
+  }
+
+  .btn-primary.outline {
+    @apply ring bg-transparent shadow-none ring-[rgba(0,171,85,0.48)] text-primary hover:bg-[rgba(0,171,85,0.08)] hover:ring-primary;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-white ring ring-secondary hover:bg-secondary-dark shadow-color-secondary hover:shadow-none;
+  }
+
+  .btn-secondary.outline {
+    @apply ring bg-transparent shadow-none ring-secondary text-secondary hover:bg-[rgba(51,102,255,0.08)];
+  }
+
+  .btn-info {
+    @apply bg-info text-white hover:bg-info-dark shadow-color-info hover:shadow-none;
+  }
+
+  .btn-info.outline {
+    @apply ring bg-transparent shadow-none ring-[rgba(24,144,255,0.48)] text-info hover:bg-[rgba(24,144,255,0.08)] hover:ring-info;
+  }
+
+  .btn-success {
+    @apply bg-success text-gray-800 hover:bg-success-dark shadow-color-success hover:shadow-none;
+  }
+
+  .btn-success.outline {
+    @apply ring bg-transparent shadow-none ring-[rgba(84,214,44,0.48)] text-success hover:bg-[rgba(84,214,44,0.08)] hover:ring-success;
+  }
+
+  .btn-warning {
+    @apply bg-warning text-gray-800 hover:bg-warning-dark shadow-color-warning hover:shadow-none hover:text-white;
+  }
+
+  .btn-warning.outline {
+    @apply ring bg-transparent shadow-none ring-[rgba(255,193,7,0.48)] text-warning hover:bg-[rgba(255,193,7,0.08)] hover:ring-warning;
+  }
+
+  .btn-error {
+    @apply bg-error text-white hover:bg-error-dark shadow-color-error hover:shadow-none;
+  }
+
+  .btn-error.outline {
+    @apply ring bg-transparent shadow-none ring-[rgba(255,72,66,0.48)] text-error hover:bg-[rgba(255,72,66,0.08)] hover:ring-error;
+  }
+
+  .btn-disabled {
+    @apply bg-[rgba(145,158,171,0.24)] text-[rgba(145,158,171,0.8)];
+  }
+
+  .btn-disabled.outline {
+    @apply ring bg-transparent shadow-none ring-[rgba(145,158,171,0.24)] text-[rgba(145,158,171,0.8)];
+  }
+
+  .input-group {
+    @apply has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2 relative bg-transparent rounded-lg flex items-center  ring-1 ring-[rgba(145,158,171,0.32)] focus-within:ring-light-primary-text outline-none shadow-none;
+  }
+
+  .input-group-addon[data-align="inline-end"] {
+    @apply order-last;
+  }
+
+  .input-group-addon[data-align="inline-start"] {
+    @apply order-first;
+  }
+
+  .form-control {
+    @apply w-full bg-transparent placeholder:text-light-disabled-text text-light-primary-text text-base outline-none shadow-none;
+  }
+
+  .input-group.medium {
+    @apply py-4 px-3;
+  }
+
+  .input-group.small {
+    @apply py-2 px-3.5;
+  }
+
+  .scroll-to-top.hide {
+    @apply opacity-0 invisible;
+  }
+
+  .scroll-to-top.active {
+    @apply opacity-100 visible;
+  }
+}

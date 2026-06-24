@@ -1,0 +1,15 @@
+/*!-----------------------------------------------------------------------------------
+Payment Method Css
+-------------------------------------------------------------------------------------*/
+
+.payment-method.selected {
+  @apply rounded-[20px] border-primary bg-gray-100;
+}
+
+.payment-method {
+  @apply rounded-[80px];
+}
+
+.payment-method .payment-content {
+  @apply hidden;
+}

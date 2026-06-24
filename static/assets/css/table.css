@@ -1,0 +1,32 @@
+/*!-----------------------------------------------------------------------------------
+Table css
+-------------------------------------------------------------------------------------*/
+
+.wishlist-table,
+.cart-items-table,
+.compare-table,
+.order-history-table {
+  @apply border-0 border-collapse border-spacing-0;
+}
+
+.wishlist-table thead {
+  @apply border-0;
+}
+
+.wishlist-table th {
+  @apply hidden lg:table-cell;
+}
+
+.wishlist-table td {
+  @apply flex items-center justify-between lg:table-cell before:content-[attr(data-title)_':'] lg:before:hidden;
+}
+
+.wishlist-table tbody tr,
+.cart-items-table tbody tr,
+.compare-table tbody tr {
+  @apply border-b border-b-gray-300 last:border-b-0;
+}
+
+.compare-table tbody tr td {
+  @apply border-r border-r-gray-300 last:border-r-0;
+}
