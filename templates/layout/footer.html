@@ -555,3 +555,29 @@ $("#signupForm").submit(function(e){
 });
 </script>
 <!---Signup Section End  -->
+
+<!---Login Section Start--->
+<script>
+  $("#loginForm").submit(function(e){
+
+    e.preventDefault();
+
+    $.ajax({
+        url: "/user/api/login",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            email: $("#login-email").val(),
+            password: $("#login-password").val()
+        }),
+        success: function(res){
+            alert(res.message);
+        },
+        error: function(xhr){
+            alert(xhr.responseJSON.detail);
+        }
+    });
+
+});
+</script>
+<!---Login Section End----->

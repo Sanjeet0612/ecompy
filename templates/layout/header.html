@@ -206,7 +206,7 @@
       >
         <div class="image-wrapper mx-auto">
           <img
-            src="./assets/images/authentication/login-illustration.png"
+            src="/static/assets/images/authentication/login-illustration.png"
             alt="login"
           />
         </div>
@@ -266,10 +266,11 @@
           </button>
         </div>
         <div class="login-form">
-          <form class="flex flex-col gap-y-6">
+          <form class="flex flex-col gap-y-6" id="loginForm">
             <div class="relative w-full">
               <input
                 type="email"
+                name="email"
                 id="login-email"
                 class="peer form-control input-group medium rounded-[80px] px-3.5 placeholder-transparent focus:placeholder-transparent focus:outline-none"
                 placeholder="Email *"
@@ -285,6 +286,7 @@
             <div class="relative w-full">
               <input
                 type="password"
+                name="upassword"
                 id="login-password"
                 class="peer form-control input-group medium rounded-[80px] px-3.5 placeholder-transparent focus:placeholder-transparent focus:outline-none"
                 placeholder="Password *"

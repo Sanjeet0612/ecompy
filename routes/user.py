@@ -1,12 +1,16 @@
 from fastapi import APIRouter
+from fastapi import HTTPException
 from config.database import SessionLocal
 from models.user import User
 from schemas.user import UserCreate
+from schemas.login import LoginUser
 from utils.security import hash_password
+from utils.security import verify_password
+
 
 router = APIRouter(prefix="/user", tags=["User"])
 
-
+# Signup Section
 @router.post("/api/signup")
 def signup(user: UserCreate):
 
@@ -40,3 +44,36 @@ def signup(user: UserCreate):
 
     finally:
         db.close()
+
+# Login Section
+@router.post("/api/login")
+def login(data: LoginUser):
+
+    db = SessionLocal()
+
+    try:
+        # 1. user find karo
+        user = db.query(User).filter(User.email == data.email).first()
+
+        if not user:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid email or password"
+            )
+
+        # 2. password verify karo
+        if not verify_password(data.password, user.password):
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid email or password"
+            )
+
+        return {
+            "status": True,
+            "message": "Login successful ✔️",
+            "user_id": user.id,
+            "name": user.name
+        }
+
+    finally:
+        db.close()        
