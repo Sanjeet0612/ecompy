@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from config.database import SessionLocal
 from models.user import User
 from schemas.user import UserCreate
+from utils.security import hash_password
 
 router = APIRouter(prefix="/user", tags=["User"])
 
@@ -18,11 +19,13 @@ def signup(user: UserCreate):
         if existing:
             return {"status": False, "message": "Email already exists"}
 
+        hashed_pw = hash_password(user.password)
+
         new_user = User(
             name=user.name,
             email=user.email,
             phone=user.phone,
-            password=user.password
+            password=hashed_pw
         )
 
         db.add(new_user)
