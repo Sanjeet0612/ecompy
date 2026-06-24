@@ -571,32 +571,33 @@ $("#loginForm").submit(function(e){
             password: $("#login-password").val()
         }),
         success: function(res){
-            $("#loginmsg").html(res.message)
-                        .css({
+
+            if(res.status){
+
+                // JWT token save
+                localStorage.setItem("token", res.access_token);
+
+                $("#loginmsg").html(res.message)
+                    .css({
                         "color": "green",
                         "text-align": "center"
                     });
+
+                setTimeout(function(){
+                    window.location.href = "/profile";
+                }, 1000);
+            }
         },
         error: function(xhr){
             let msg = xhr.responseJSON?.detail;
 
-            if(Array.isArray(msg)) {
-                $("#loginmsg")
-                    .html(msg[0].msg)
-                    .css({
-                        "color": "red",
-                        "text-align": "center"
-                    });
-            } else {
-                $("#loginmsg")
-                    .html(msg || "Login failed")
-                    .css({
-                        "color": "red",
-                        "text-align": "center"
-                    });
-            }
-                    }
+            $("#loginmsg").html(msg || "Login failed")
+                .css({
+                    "color": "red",
+                    "text-align": "center"
                 });
+        }
+    });
 
 });
 </script>
