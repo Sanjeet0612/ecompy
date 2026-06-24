@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Form
 from config.database import SessionLocal
 from models.user import User
-from sqlalchemy import select
+
 
 router = APIRouter(prefix="/user", tags=["User"])
 
 @router.post("/api/signup")
 def signup(
-    name: str = Form(...),
+    name: str = Form(..., min_length=2, max_length=50),
     email: str = Form(...),
     phone: str = Form(None),
-    password: str = Form(...)
+    password: str = Form(..., min_length=6)
 ):
 
     db = SessionLocal()
