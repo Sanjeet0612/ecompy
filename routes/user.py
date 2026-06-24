@@ -6,6 +6,9 @@ from schemas.user import UserCreate
 from schemas.login import LoginUser
 from utils.security import hash_password
 from utils.security import verify_password
+from utils.jwt import create_access_token
+from fastapi import Depends
+from utils.auth import get_current_user
 
 
 router = APIRouter(prefix="/user", tags=["User"])
@@ -46,34 +49,40 @@ def signup(user: UserCreate):
         db.close()
 
 # Login Section
+
 @router.post("/api/login")
 def login(data: LoginUser):
 
     db = SessionLocal()
 
     try:
-        # 1. user find karo
         user = db.query(User).filter(User.email == data.email).first()
 
         if not user:
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid email or password"
-            )
+            raise HTTPException(status_code=400, detail="Invalid credentials")
 
-        # 2. password verify karo
         if not verify_password(data.password, user.password):
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid email or password"
-            )
+            raise HTTPException(status_code=400, detail="Invalid credentials")
+
+        token = create_access_token({
+            "user_id": user.id,
+            "email": user.email
+        })
 
         return {
             "status": True,
-            "message": "Login successful ✔️",
-            "user_id": user.id,
-            "name": user.name
+            "message": "Login successful",
+            "access_token": token,
+            "token_type": "bearer"
         }
 
     finally:
-        db.close()        
+        db.close()
+
+
+@router.get("/profile")
+def profile(user=Depends(get_current_user)):
+    return {
+        "status": True,
+        "user": user
+    }

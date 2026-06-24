@@ -558,7 +558,7 @@ $("#signupForm").submit(function(e){
 
 <!---Login Section Start--->
 <script>
-  $("#loginForm").submit(function(e){
+$("#loginForm").submit(function(e){
 
     e.preventDefault();
 
@@ -571,12 +571,32 @@ $("#signupForm").submit(function(e){
             password: $("#login-password").val()
         }),
         success: function(res){
-            alert(res.message);
+            $("#loginmsg").html(res.message)
+                        .css({
+                        "color": "green",
+                        "text-align": "center"
+                    });
         },
         error: function(xhr){
-            alert(xhr.responseJSON.detail);
-        }
-    });
+            let msg = xhr.responseJSON?.detail;
+
+            if(Array.isArray(msg)) {
+                $("#loginmsg")
+                    .html(msg[0].msg)
+                    .css({
+                        "color": "red",
+                        "text-align": "center"
+                    });
+            } else {
+                $("#loginmsg")
+                    .html(msg || "Login failed")
+                    .css({
+                        "color": "red",
+                        "text-align": "center"
+                    });
+            }
+                    }
+                });
 
 });
 </script>
