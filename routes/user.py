@@ -11,6 +11,7 @@ from fastapi import Depends
 from utils.auth import get_current_user
 
 
+
 router = APIRouter(prefix="/user", tags=["User"])
 
 # Signup Section
@@ -79,10 +80,20 @@ def login(data: LoginUser):
     finally:
         db.close()
 
+# Profile Section
 
 @router.get("/profile")
 def profile(user=Depends(get_current_user)):
     return {
         "status": True,
         "user": user
+    }
+
+# Logout Section
+
+@router.post("/logout")
+def logout(user=Depends(get_current_user)):
+    return {
+        "status": True,
+        "message": "Logout successful"
     }

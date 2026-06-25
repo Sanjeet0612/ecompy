@@ -1,0 +1,46 @@
+{% include "layout/header.html" %}
+
+{% include "layout/footer.html" %}
+
+<script>
+    // 🔥 PROFILE PAGE AUTO LOAD (IMPORTANT FIX)
+$(document).ready(function(){
+
+    let token = localStorage.getItem("token");
+
+    console.log("TOKEN:", token);
+
+    if(!token){
+        window.location.href = "/login";
+        return;
+    }
+
+    $.ajax({
+        url: "/user/profile",
+        type: "GET",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+
+        success: function(res){
+
+            console.log("PROFILE DATA:", res);
+
+            if(res && res.user && res.user.email){
+                $("#user-data").html(res.user.email);
+            } else {
+                console.log("Invalid response structure", res);
+            }
+        },
+
+        error: function(err){
+            console.log("ERROR:", err.responseJSON);
+
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+        }
+    });
+
+});
+    
+</script>

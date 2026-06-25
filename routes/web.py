@@ -31,9 +31,17 @@ def contact(request: Request):
     )
 
 @router.get("/blog")
-def contact(request: Request):
+def blog(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="blog.html",
+        context={}
+    )
+
+@router.get("/dashboard")
+def userDashboard(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="user_profile.html",
         context={}
     )

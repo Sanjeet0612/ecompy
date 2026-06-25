@@ -584,7 +584,7 @@ $("#loginForm").submit(function(e){
                     });
 
                 setTimeout(function(){
-                    window.location.href = "/profile";
+                    window.location.href = "/dashboard";
                 }, 1000);
             }
         },
@@ -600,5 +600,43 @@ $("#loginForm").submit(function(e){
     });
 
 });
+
 </script>
 <!---Login Section End----->
+
+<!---Logout Section Start---->
+<script>
+function logoutUser(){
+
+    let token = localStorage.getItem("token");
+
+    $.ajax({
+        url: "/user/logout",
+        type: "POST",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+
+        success: function(res){
+
+            console.log(res);
+
+            // 🔥 remove token
+            localStorage.removeItem("token");
+
+            // 🔥 redirect to home page
+            window.location.href = "/";
+
+        },
+
+        error: function(err){
+
+            console.log(err);
+
+            // even if error → force logout
+            localStorage.removeItem("token");
+            window.location.href = "/";
+        }
+    });
+}
+</script>
