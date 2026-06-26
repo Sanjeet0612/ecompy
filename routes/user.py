@@ -84,6 +84,7 @@ def login(data: LoginUser):
 
 @router.get("/profile")
 def profile(user=Depends(get_current_user)):
+    print(user)
     return {
         "status": True,
         "user": user
