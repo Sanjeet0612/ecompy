@@ -3397,7 +3397,9 @@
                             <label
                               class="flex flex-col items-center justify-center w-[128px] h-[128px] bg-[#F4F5F6] rounded-full cursor-pointer"
                             >
-                              <input type="file" class="hidden" />
+                              <!--<input type="file" class="hidden" />-->
+                               <img id="profile_preview" src="/static/assets/images/profile.png" class="w-[128px] h-[128px] rounded-full object-cover">
+                              <input type="file" id="profile_input" name="profile_image" class="hidden">
                               <svg
                                 class="w-6 h-6"
                                 viewBox="0 0 24 24"
@@ -3448,16 +3450,17 @@
                               <div class="relative w-full">
                                 <input
                                   type="text"
-                                  id="last_name"
+                                  id="created_at"
+                                  name="created_at"
                                   class="peer form-control input-group medium rounded-[80px] px-3.5 placeholder-transparent focus:placeholder-transparent focus:outline-none"
                                   placeholder="Last Name"
                                 />
 
                                 <label
-                                  for="last_name"
+                                  for="created_at"
                                   class="absolute left-[14px] top-1/2 -translate-y-1/2 text-xs leading-[18px] transition-all peer-placeholder-shown:text-light-disabled-text peer-focus:text-light-disabled-text peer-placeholder-shown:text-[16px] peer-placeholder-shown:top-1/2 peer-focus:text-[12px] peer-focus:top-0 peer-[:not(:placeholder-shown)]:text-[12px] peer-[:not(:placeholder-shown)]:top-0 bg-white peer-focus:px-1 peer-[:not(:placeholder-shown)]:px-1"
                                 >
-                                  Last Name
+                                  Registration Date
                                 </label>
                               </div>
                             </div>
@@ -3617,6 +3620,21 @@ $(document).ready(function(){
                 $("#email_address").val(res.user.email);
                 $("#phone_number").val(res.user.phone);
                 
+                let createdAt = res.user.created_at;
+
+                let date = new Date(createdAt);
+
+                let formatted = date.toLocaleString();
+
+                $("#created_at").val(formatted);
+
+
+                let image = res.user.profile_image;
+                $("#profile_preview").attr(
+                    "src",
+                    image ? image : "/static/assets/images/profile.png"
+                );
+
             } else {
                 console.log("Invalid response structure", res);
             }
@@ -3624,12 +3642,23 @@ $(document).ready(function(){
 
         error: function(err){
             console.log("ERROR:", err.responseJSON);
-
             localStorage.removeItem("token");
             window.location.href = "/login";
         }
     });
 
+});
+
+/* Profile Image Setion */
+$("#profile_input").on("change", function(){
+    let file = this.files[0];
+    if(file){
+        let reader = new FileReader();
+        reader.onload = function(e){
+            $("#profile_preview").attr("src", e.target.result);
+        }
+        reader.readAsDataURL(file);
+    }
 });
     
 </script>
