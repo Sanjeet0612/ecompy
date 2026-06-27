@@ -1,13 +1,10 @@
-from fastapi import APIRouter
-from fastapi import HTTPException
+from fastapi import APIRouter, HTTPException, Depends, Response
 from config.database import SessionLocal
 from models.user import User
 from schemas.user import UserCreate
 from schemas.login import LoginUser
-from utils.security import hash_password
-from utils.security import verify_password
+from utils.security import hash_password, verify_password
 from utils.jwt import create_access_token
-from fastapi import Depends
 from utils.auth import get_current_user
 
 
@@ -93,8 +90,11 @@ def profile(user=Depends(get_current_user)):
 # Logout Section
 
 @router.post("/logout")
-def logout(user=Depends(get_current_user)):
+def logout(response: Response, user=Depends(get_current_user)):
+
+    response.delete_cookie("access_token")
+
     return {
         "status": True,
-        "message": "Logout successful"
+        "message": "Logged out successfully"
     }
