@@ -518,9 +518,16 @@
     <script src="/static/assets/js/vendor/wow.min.js"></script>
     <!-- ========== Custom JS ========== -->
     <script src="/static/assets/js/main.js"></script>
+    
   </body>
 </html>
+<script src="/static/assets/js/auth.js"></script>
 
+<script>
+    $(document).ready(function () {
+        checkAuth();
+    });
+</script>
 <!----Signu Section Start-->
 <script>
 $("#signupForm").submit(function(e){
@@ -608,35 +615,14 @@ $("#loginForm").submit(function(e){
 <script>
 function logoutUser(){
 
-    let token = localStorage.getItem("token");
-
     $.ajax({
         url: "/user/logout",
         type: "POST",
-        headers: {
-            "Authorization": "Bearer " + token
-        },
-
-        success: function(res){
-
-            console.log(res);
-
-            // 🔥 remove token
-            localStorage.removeItem("token");
-
-            // 🔥 redirect to home page
+        success: function(){
             window.location.href = "/";
 
-        },
-
-        error: function(err){
-
-            console.log(err);
-
-            // even if error → force logout
-            localStorage.removeItem("token");
-            window.location.href = "/";
         }
     });
+
 }
 </script>

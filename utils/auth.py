@@ -1,24 +1,22 @@
-from fastapi import Header, HTTPException
+from fastapi import Request, HTTPException
 from utils.jwt import verify_token
 from config.database import SessionLocal
 from models.user import User
 
-def get_current_user(authorization: str = Header(None)):
-    if not authorization:
+def get_current_user(request: Request):
+
+    token = request.cookies.get("access_token")
+
+    if not token:
         raise HTTPException(status_code=401, detail="Token missing")
 
-    try:
-        token   = authorization.split(" ")[1]
-        payload = verify_token(token)
-        db      = SessionLocal()
-        user    = db.query(User).filter(User.id == payload["user_id"]).first()
+    payload = verify_token(token)
 
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
+    db = SessionLocal()
+    user = db.query(User).filter(User.id == payload["user_id"]).first()
+    db.close()
 
-    except:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
-    finally:
-        db.close()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user

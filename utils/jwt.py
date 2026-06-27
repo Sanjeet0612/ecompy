@@ -1,4 +1,4 @@
-from jose import jwt
+from jose import jwt, JWTError
 from datetime import datetime, timedelta
 
 SECRET_KEY = "mysecretkey123"
@@ -16,4 +16,9 @@ def create_access_token(data: dict):
 
 
 def verify_token(token: str):
-    return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+
+    except JWTError:
+        return None

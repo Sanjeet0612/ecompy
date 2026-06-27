@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, Response
+from fastapi import APIRouter, HTTPException, Depends, Response, Request
 from config.database import SessionLocal
 from models.user import User
 from schemas.user import UserCreate
@@ -49,17 +49,14 @@ def signup(user: UserCreate):
 # Login Section
 
 @router.post("/api/login")
-def login(data: LoginUser):
+def login(data: LoginUser, response: Response):
 
     db = SessionLocal()
 
     try:
         user = db.query(User).filter(User.email == data.email).first()
 
-        if not user:
-            raise HTTPException(status_code=400, detail="Invalid credentials")
-
-        if not verify_password(data.password, user.password):
+        if not user or not verify_password(data.password, user.password):
             raise HTTPException(status_code=400, detail="Invalid credentials")
 
         token = create_access_token({
@@ -67,11 +64,17 @@ def login(data: LoginUser):
             "email": user.email
         })
 
+        # 🔥 COOKIE SET
+        response.set_cookie(
+            key="access_token",
+            value=token,
+            httponly=True,
+            samesite="lax"
+        )
+
         return {
             "status": True,
-            "message": "Login successful",
-            "access_token": token,
-            "token_type": "bearer"
+            "message": "Login successful"
         }
 
     finally:
@@ -81,18 +84,29 @@ def login(data: LoginUser):
 
 @router.get("/profile")
 def profile(user=Depends(get_current_user)):
-    print(user)
+
     return {
         "status": True,
-        "user": user
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "phone": user.phone,
+            "created_at": user.created_at
+        }
     }
 
 # Logout Section
 
 @router.post("/logout")
-def logout(response: Response, user=Depends(get_current_user)):
+def logout(response: Response):
 
-    response.delete_cookie("access_token")
+    response.delete_cookie(
+        key="access_token",
+        httponly=True,
+        samesite="lax",
+        path="/"
+    )
 
     return {
         "status": True,
