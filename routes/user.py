@@ -1,11 +1,14 @@
 from fastapi import APIRouter, HTTPException, Depends, Response, Request
-from config.database import SessionLocal
+from config.database import get_db
 from models.user import User
 from schemas.user import UserCreate
 from schemas.login import LoginUser
+from schemas.PasswordUpdate import PasswordUpdate
 from utils.security import hash_password, verify_password
 from utils.jwt import create_access_token
 from utils.auth import get_current_user
+from sqlalchemy.orm import Session
+
 
 
 
@@ -13,9 +16,9 @@ router = APIRouter(prefix="/user", tags=["User"])
 
 # Signup Section
 @router.post("/api/signup")
-def signup(user: UserCreate):
+def signup(user: UserCreate, db: Session = Depends(get_db)):
 
-    db = SessionLocal()
+    #db = SessionLocal()
 
     try:
         # duplicate email check
@@ -49,9 +52,9 @@ def signup(user: UserCreate):
 # Login Section
 
 @router.post("/api/login")
-def login(data: LoginUser, response: Response):
+def login(data: LoginUser, response: Response, db: Session = Depends(get_db)):
 
-    db = SessionLocal()
+    #db = SessionLocal()
 
     try:
         user = db.query(User).filter(User.email == data.email).first()
@@ -96,15 +99,44 @@ def profile(user=Depends(get_current_user)):
         }
     }
 
+# Update Password 
+@router.post("/api/update-password")
+def update_password(data: PasswordUpdate,db: Session = Depends(get_db),user=Depends(get_current_user)):
+
+    db_user = db.query(User).filter(User.id == user.id).first()
+
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if not verify_password(data.old_password, db_user.password):
+        raise HTTPException(status_code=400, detail="Old password is incorrect")
+
+    if data.old_password == data.new_password:
+        raise HTTPException(status_code=400, detail="New password cannot be same as old password")
+
+    db_user.password = hash_password(data.new_password)
+
+    db.commit()
+    db.refresh(db_user)
+
+    return {
+        "status": True,
+        "message": "Password updated successfully"
+    }
+
+
+
 # Logout Section
 
 @router.post("/logout")
 def logout(response: Response):
 
-    response.delete_cookie(
+    response.set_cookie(
         key="access_token",
+        value=token,
         httponly=True,
         samesite="lax",
+        secure=False,   # production me True
         path="/"
     )
 

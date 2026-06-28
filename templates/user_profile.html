@@ -3562,16 +3562,19 @@
                       </div>
                     </div>
                   </div>
+
                   <div class="border border-gray-300 rounded-2xl">
                     <div class="py-4 px-6 bg-gray-200 rounded-t-2xl">
                       <h5 class="text-light-primary-text">Password Change</h5>
+                      <div id="messageBox" class="text-sm mt-2"></div>
                     </div>
                     <div class="px-6 py-6">
-                      <form class="flex flex-col gap-y-6">
+                      <form id="updatePasswordForm" action="/user/api/update-password" method="post" class="flex flex-col gap-y-6">
                         <div class="relative w-full">
                           <input
                             type="password"
-                            id="password"
+                            id="old_password"
+                            name="old_password"
                             class="peer form-control input-group medium rounded-[80px] px-3.5 placeholder-transparent focus:placeholder-transparent focus:outline-none"
                             placeholder="Password"
                           />
@@ -3587,6 +3590,7 @@
                           <input
                             type="password"
                             id="new_password"
+                            name="new_password"
                             class="peer form-control input-group medium rounded-[80px] px-3.5 placeholder-transparent focus:placeholder-transparent focus:outline-none"
                             placeholder="New Password"
                           />
@@ -3598,21 +3602,7 @@
                             New Password
                           </label>
                         </div>
-                        <div class="relative w-full">
-                          <input
-                            type="password"
-                            id="confirm_new_password"
-                            class="peer form-control input-group medium rounded-[80px] px-3.5 placeholder-transparent focus:placeholder-transparent focus:outline-none"
-                            placeholder="Confirm New Password"
-                          />
-
-                          <label
-                            for="confirm_new_password"
-                            class="absolute left-[14px] top-1/2 -translate-y-1/2 text-xs leading-[18px] transition-all peer-placeholder-shown:text-light-disabled-text peer-focus:text-light-disabled-text peer-placeholder-shown:text-[16px] peer-placeholder-shown:top-1/2 peer-focus:text-[12px] peer-focus:top-0 peer-[:not(:placeholder-shown)]:text-[12px] peer-[:not(:placeholder-shown)]:top-0 bg-white peer-focus:px-1 peer-[:not(:placeholder-shown)]:px-1"
-                          >
-                            Confirm New Password
-                          </label>
-                        </div>
+                        
                         <!-- Button -->
                         <div class="text-end">
                           <button
@@ -3684,6 +3674,45 @@ $("#profile_input").on("change", function(){
             $("#profile_preview").attr("src", e.target.result);
         }
         reader.readAsDataURL(file);
+    }
+});
+
+/* Update Password */
+
+document.getElementById("updatePasswordForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const messageBox = document.getElementById("messageBox");
+
+    const old_password = document.getElementById("old_password").value;
+    const new_password = document.getElementById("new_password").value;
+
+    try {
+        const res = await fetch(this.action, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                old_password,
+                new_password
+            })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.status) {
+            messageBox.innerHTML = data.message;
+            messageBox.style.color = "green";
+        } else {
+            messageBox.innerHTML =
+                data.message || data.detail || "Something went wrong";
+            messageBox.style.color = "red";
+        }
+
+    } catch (error) {
+        messageBox.innerHTML = "Server error!";
+        messageBox.style.color = "red";
     }
 });
     

@@ -75,8 +75,6 @@ def dashboard(
         }
     )
 
-
-
 @router.post("/profile/update")
 async def update_profile(
     request: Request,
