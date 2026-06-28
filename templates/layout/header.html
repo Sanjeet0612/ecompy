@@ -1122,13 +1122,12 @@
                     >About us</a
                   >
                 </li>
-                <li>
-                  <a id="accountStatus"
-                    href="#"
-                    class="text-sm leading-[22px] text-white pr-[19px] mr-[19px] py-3.5 relative after:absolute after:h-7.5 after:w-px after:bg-primary-light after:right-0 after:top-1/2 after:-translate-y-1/2"
-                    >My Account</a
-                  >
-                </li>
+                {% if user %}
+                  <li>
+                    <a id="accountStatus" href="#" class="text-sm leading-[22px] text-white pr-[19px] mr-[19px] py-3.5 relative after:absolute after:h-7.5 after:w-px after:bg-primary-light after:right-0 after:top-1/2 after:-translate-y-1/2">{{ user.name }}</a>
+                  </li>
+                {% endif %}  
+
                 <li>
                   <a
                     href="#"
@@ -1137,9 +1136,7 @@
                   >
                 </li>
                 <li>
-                  <a href="#" class="text-sm leading-[22px] text-white py-3.5"
-                    >Order Tracking</a
-                  >
+                  <a href="#" class="text-sm leading-[22px] text-white py-3.5">Order Tracking</a>
                 </li>
               </ul>
             </div>
@@ -1320,88 +1317,102 @@
                         <i class="hgi hgi-stroke hgi-lock-sync-01 text-2xl text-light-primary-text"></i>
                       </span>
                     </p>
-                    <p class="flex flex-col text-light-secondary-text text-sm leading-[22px]">
-                      Account
-                      <span id="accountStatus" class="text-base leading-6 text-light-primary-text">log in</span>
-                    </p>
+
+                    {% if user %}
+
+                      <p class="flex flex-col text-light-secondary-text text-sm leading-[22px]">
+                        My Account <span id="accountStatus" class="text-base leading-6 text-light-primary-text"></span>
+                      </p>
+
+                    {% else %}
+
+                      <p class="flex flex-col text-light-secondary-text text-sm leading-[22px]">
+                        Account <span id="accountStatus" class="text-base leading-6 text-light-primary-text">log in</span>
+                      </p>
+
+                    {% endif %}
+
+                    
+
+
                     <span><i class="hgi hgi-stroke hgi-arrow-down-01 text-2xl text-light-primary-text"></i></span>
 
                     <ul class="absolute right-0 top-full py-2 z-10 w-[250px] max-w-[250px] bg-white rounded-lg shadow-dark-z-24 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
-                        <!-- BEFORE LOGIN -->
-                        <div id="guestMenu">
+                        
+                        {% if user %}
+                            <!-- AFTER LOGIN -->
+                            <div id="userMenu">
 
-                            <li class="px-4 group/item">
-                                <a href="#" class="login-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
-                                    <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] inline-flex items-center justify-center rounded-full">
-                                        <i class="hgi hgi-stroke hgi-lock-sync-01 text-base text-light-primary-text group-hover/item:text-primary"></i>
-                                    </span>
-                                    Login
-                                </a>
-                            </li>
+                              <li class="px-4 group/item">
+                                  <a href="/dashboard" class="flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
+                                      <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] inline-flex items-center justify-center rounded-full">
+                                          <i class="hgi hgi-stroke hgi-id text-base text-light-primary-text group-hover/item:text-primary"></i>
+                                      </span>
+                                      Dashboard
+                                  </a>
+                              </li>
 
-                            <li class="px-4 group/item">
-                                <a href="#" class="register-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
-                                    <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] inline-flex items-center justify-center rounded-full">
-                                        <i class="hgi hgi-stroke hgi-id text-base text-light-primary-text group-hover/item:text-primary"></i>
-                                    </span>
-                                    Register
-                                </a>
-                            </li>
+                              <li class="px-4 group/item" onclick="logoutUser()">
+                                  <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] inline-flex items-center justify-center rounded-full">
+                                      <i class="hgi hgi-stroke hgi-lock-sync-01 text-base text-light-primary-text group-hover/item:text-primary"></i>
+                                  </span>
+                                  Logout
+                              </li>
 
-                            <li class="px-4 group/item">
-                                <a href="#" class="forgot-password-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
-                                    <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] transition-colors duration-300 inline-flex items-center justify-center rounded-full">
-                                        <i class="hgi hgi-stroke hgi-access text-base text-light-primary-text group-hover/item:text-primary"></i>
-                                    </span>
-                                    Forget Password
-                                </a>
-                            </li>
+                            </div>
+                        {% else %}
+                            <!-- BEFORE LOGIN -->
+                            <div id="guestMenu">
 
-                            <li class="px-4 group/item">
-                                <a href="#" class="reset-password-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
-                                    <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] transition-colors duration-300 inline-flex items-center justify-center rounded-full">
-                                        <i class="hgi hgi-stroke hgi-password-validation text-base text-light-primary-text group-hover/item:text-primary"></i>
-                                    </span>
-                                    Set Password
-                                </a>
-                            </li>
+                              <li class="px-4 group/item">
+                                  <a href="#" class="login-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
+                                      <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] inline-flex items-center justify-center rounded-full">
+                                          <i class="hgi hgi-stroke hgi-lock-sync-01 text-base text-light-primary-text group-hover/item:text-primary"></i>
+                                      </span>
+                                      Login
+                                  </a>
+                              </li>
 
-                            <li class="px-4 group/item">
-                                <a href="#" class="otp-verification-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
-                                    <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] transition-colors duration-300 inline-flex items-center justify-center rounded-full">
-                                        <i class="hgi hgi-stroke hgi-mobile-protection text-base text-light-primary-text group-hover/item:text-primary"></i>
-                                    </span>
-                                    OTP Verification
-                                </a>
-                            </li>
+                              <li class="px-4 group/item">
+                                  <a href="#" class="register-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
+                                      <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] inline-flex items-center justify-center rounded-full">
+                                          <i class="hgi hgi-stroke hgi-id text-base text-light-primary-text group-hover/item:text-primary"></i>
+                                      </span>
+                                      Register
+                                  </a>
+                              </li>
 
-                        </div>
-                        <!-- AFTER LOGIN -->
-                        <div id="userMenu" style="display:none;">
+                              <li class="px-4 group/item">
+                                  <a href="#" class="forgot-password-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
+                                      <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] transition-colors duration-300 inline-flex items-center justify-center rounded-full">
+                                          <i class="hgi hgi-stroke hgi-access text-base text-light-primary-text group-hover/item:text-primary"></i>
+                                      </span>
+                                      Forget Password
+                                  </a>
+                              </li>
 
-                            <li class="px-4 group/item">
-                                <a href="/dashboard" class="flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
-                                    <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] inline-flex items-center justify-center rounded-full">
-                                        <i class="hgi hgi-stroke hgi-id text-base text-light-primary-text group-hover/item:text-primary"></i>
-                                    </span>
-                                    Dashboard
-                                </a>
-                            </li>
+                              <li class="px-4 group/item">
+                                  <a href="#" class="reset-password-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
+                                      <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] transition-colors duration-300 inline-flex items-center justify-center rounded-full">
+                                          <i class="hgi hgi-stroke hgi-password-validation text-base text-light-primary-text group-hover/item:text-primary"></i>
+                                      </span>
+                                      Set Password
+                                  </a>
+                              </li>
 
-                            <li class="px-4 group/item" onclick="logoutUser()">
-                                <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] inline-flex items-center justify-center rounded-full">
-                                    <i class="hgi hgi-stroke hgi-lock-sync-01 text-base text-light-primary-text group-hover/item:text-primary"></i>
-                                </span>
-                                Logout
-                            </li>
+                              <li class="px-4 group/item">
+                                  <a href="#" class="otp-verification-page-btn flex items-center py-2 gap-x-2 relative text-light-primary-text group-hover/item:text-primary">
+                                      <span class="w-8 h-8 bg-[#F0F0F0] group-hover/item:bg-[rgba(0,171,85,0.08)] transition-colors duration-300 inline-flex items-center justify-center rounded-full">
+                                          <i class="hgi hgi-stroke hgi-mobile-protection text-base text-light-primary-text group-hover/item:text-primary"></i>
+                                      </span>
+                                      OTP Verification
+                                  </a>
+                              </li>
 
-                        </div>
+                            </div>
+                        {% endif %}
                     </ul>
                   </li>
-
-
-
-
                   <li class="flex items-center">
                     <button
                       class="flex items-center gap-x-4 cursor-pointer cart-sidebar-btn"
@@ -1657,21 +1668,16 @@
       <!-- Mobile Menu End -->
 
       <!-- header-bottom End -->
-      <div
-        class="border border-gray-300 hidden xl:flex header-bottom sticky-header border-r-0 border-l-0"
-      >
+      <div class="border border-gray-300 hidden xl:flex header-bottom sticky-header border-r-0 border-l-0">
         <div class="container">
           <div class="hidden relative items-center justify-between xl:flex">
             <div class="relative">
               <button
                 class="btn btn-primary btn-large rounded-lg"
                 id="dropdownButton"
-                data-state="close"
-              >
+                data-state="close">
                 <span class="inline-flex items-center">
-                  <i
-                    class="hgi hgi-stroke hgi-grid-view text-base text-white"
-                  ></i>
+                  <i class="hgi hgi-stroke hgi-grid-view text-base text-white"></i>
                 </span>
                 Explore All Categories
                 <span class="inline-flex items-center" id="dropdownIcon"

@@ -521,13 +521,7 @@
     
   </body>
 </html>
-<script src="/static/assets/js/auth.js"></script>
 
-<script>
-    $(document).ready(function () {
-        checkAuth();
-    });
-</script>
 <!----Signu Section Start-->
 <script>
 $("#signupForm").submit(function(e){
@@ -625,4 +619,12 @@ function logoutUser(){
     });
 
 }
+</script>
+
+<script>
+    setTimeout(function () {
+        document.querySelectorAll('.alert-message').forEach(function (el) {
+            el.style.display = 'none';
+        });
+    }, 5000);
 </script>
