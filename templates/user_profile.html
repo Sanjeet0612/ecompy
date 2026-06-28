@@ -3626,6 +3626,23 @@
 {% include "layout/footer.html" %}
 
 <script>
+async function checkAuth() {
+    try {
+        const res = await fetch("/user/profile", {
+            credentials: "include"
+        });
+
+        if (!res.ok) {
+            window.location.href = "/login";
+        }
+    } catch (err) {
+        window.location.href = "/login";
+    }
+}
+
+checkAuth();
+
+
   /*
 $(document).ready(function () {
 
