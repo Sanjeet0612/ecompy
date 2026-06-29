@@ -99,6 +99,7 @@ def profile(user=Depends(get_current_user)):
         }
     }
 
+
 # Update Password 
 @router.post("/api/update-password")
 def update_password(data: PasswordUpdate,db: Session = Depends(get_db),user=Depends(get_current_user)):
@@ -125,18 +126,13 @@ def update_password(data: PasswordUpdate,db: Session = Depends(get_db),user=Depe
     }
 
 
-
 # Logout Section
 
 @router.post("/logout")
 def logout(response: Response):
 
-    response.set_cookie(
+    response.delete_cookie(
         key="access_token",
-        value=token,
-        httponly=True,
-        samesite="lax",
-        secure=False,   # production me True
         path="/"
     )
 

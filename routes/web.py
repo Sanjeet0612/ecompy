@@ -31,7 +31,7 @@ def redirect_with_error(request: Request, message: str):
 def home(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="index.html",
+        name="frontend/index.html",
         context={}
     )
 
@@ -39,7 +39,7 @@ def home(request: Request):
 def about(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="about.html",
+        name="frontend/about.html",
         context={}
     )
 
@@ -47,7 +47,7 @@ def about(request: Request):
 def contact(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="contact.html",
+        name="frontend/contact.html",
         context={}
     )
 
@@ -55,7 +55,7 @@ def contact(request: Request):
 def blog(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="blog.html",
+        name="frontend/blog.html",
         context={}
     )
 
@@ -67,7 +67,7 @@ def dashboard(
 
     return templates.TemplateResponse(
         request=request,
-        name="user_profile.html",
+        name="frontend/user_profile.html",
         context={
             "user": current_user,
             "error": request.session.pop("error", None),

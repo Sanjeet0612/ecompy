@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+    
+
+<head>
+        <meta charset="utf-8" />
+        <title>Sign In | UBold - Multipurpose Admin & Dashboard Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="UBold is a modern, responsive admin dashboard available on ThemeForest. Ideal for building CRM, CMS, project management tools, and custom web applications with a clean UI, flexible layouts, and rich features." />
+        <meta name="keywords" content="UBold, admin dashboard, ThemeForest, Bootstrap 5 admin, Tailwind CSS, responsive admin, CRM dashboard, CMS admin, web app UI, admin theme, premium admin template" />
+        <meta name="author" content="Coderthemes" />
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="/static/admin/assets/images/favicon.ico" />
+ <!-- Theme Config Js -->
+<script src="/static/admin/assets/js/config-html.js"></script>
+
+<!-- Theme Config Js -->
+<script src="/static/admin/assets/js/config.js"></script>
+
+<!-- Vendor css -->
+<link href="/static/admin/assets/css/vendors.min.css" rel="stylesheet" type="text/css" />
+
+<!-- App css -->
+<link id="app-style" href="/static/admin/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body>
+        <div class="auth-box p-0 w-100">
+            <div class="row w-100 g-0">
+                
+                <div class="col">
+                    <div class="h-100 position-relative card-side-img rounded-0 overflow-hidden" style="background-image: url(/static/admin/assets/images/auth.jpg)">
+                        <div class="p-4 card-img-overlay auth-overlay d-flex align-items-end justify-content-center"></div>
+                    </div>
+                </div>
+                <div class="col-md-auto">
+                    <!--Auth Box content -->
+                    <div class="card auth-box-form border-0 mb-0">
+                        <div class="position-absolute top-0 end-0" style="width: 180px">
+                            <img src="/static/admin/assets/images/auth-card-bg.svg" class="auth-card-bg-img" alt="auth-card-bg" />
+                        </div>
+                        <div class="card-body min-vh-100 position-relative d-flex flex-column justify-content-center">
+                            <div class="auth-brand mb-0 text-center">
+                                <a href="index.html" class="logo-dark">
+                                    <img src="/static/admin/assets/images/logo-black.png" alt="dark logo" />
+                                </a>
+                                <a href="index.html" class="logo-light">
+                                    <img src="/static/admin/assets/images/logo.png" alt="logo" />
+                                </a>
+                            </div>
+
+                            <div class="mt-auto">
+                                <p class="text-muted text-center auth-sub-text mx-auto">Let’s get you signed in. Enter your email and password to continue.</p>
+                                <div id="login-error" class="alert alert-danger d-none"></div>
+
+                                <form class="mt-4" id="adminLoginForm">
+                                    <div class="mb-3">
+                                        <label for="userEmail" class="form-label">
+                                            Email address
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="app-search">
+                                            <input type="email" id="email" class="form-control"  placeholder="you@example.com" required />
+                                            <i data-lucide="mail" class="app-search-icon text-muted"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="userPassword" class="form-label">
+                                            Password
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="app-search">
+                                            <input type="password" id="password" class="form-control"  placeholder="••••••••" required />
+                                            <i data-lucide="lock-keyhole" class="app-search-icon text-muted"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input form-check-input-light fs-14" type="checkbox" checked id="rememberMe" />
+                                            <label class="form-check-label" for="rememberMe">Keep me signed in</label>
+                                        </div>
+
+                                        <a href="auth-split-reset-pass.html" class="text-decoration-underline link-offset-3 text-muted">Forgot Password?</a>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary fw-bold py-2">Sign In</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!--<p class="text-muted text-center mt-4 mb-0">
+                                New here?
+                                <a href="#" class="text-decoration-underline link-offset-3 fw-semibold">Create an account</a>
+                            </p>-->
+
+                            <p class="text-center text-muted mt-auto mb-0">
+                                ©
+                                <span data-current-year></span>
+                                eCom — by
+                                <span class="fw-bold">Jeet</span>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- End Auth Box Content -->
+                </div>
+            </div>
+        </div>
+        <!-- Vendor js -->
+        <script src="/static/admin/assets/js/vendors.min.js"></script>
+        <!-- App js -->
+        <script src="/static/admin/assets/js/app.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </body>
+</html>
+
+
+<script>
+$("#adminLoginForm").submit(function(e){
+
+    e.preventDefault();
+
+    $("#login-error").addClass("d-none").text("");
+
+    $.ajax({
+
+        url: "/admin/api/login",
+        type: "POST",
+        contentType: "application/json",
+
+        data: JSON.stringify({
+            email: $("#email").val(),
+            password: $("#password").val()
+        }),
+
+        success: function(res){
+            
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: res.message,
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = "/admin/dashboard";
+            });
+        },
+
+        error: function(xhr){
+            let message = "Something went wrong.";
+            if(xhr.responseJSON && xhr.responseJSON.detail){
+                message = xhr.responseJSON.detail;
+            }
+            Swal.fire({
+                icon: "error",
+                title: "Login Failed",
+                text: message
+            });
+        }
+
+    });
+
+});
+</script>

@@ -23,6 +23,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         #print("🔥 MIDDLEWARE HIT:", request.url.path)
         # 🔥 COOKIE se token lo
         token = request.cookies.get("access_token")
+
         #print("TOKEN:", token)
         user = None
 
