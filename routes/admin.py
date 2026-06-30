@@ -6,7 +6,7 @@ router = APIRouter(prefix="/admin")
 
 templates = Jinja2Templates(directory="templates")
 
-
+# Login Section Start
 @router.get("/")
 def admin_login(request: Request):
     return templates.TemplateResponse(
@@ -17,10 +17,9 @@ def admin_login(request: Request):
         }
     )
 
-
+# Dashboard Section Start
 @router.get("/dashboard")
 def dashboard(request: Request):
-
     admin = getattr(request.state, "admin", None)
 
     if not admin:
@@ -38,7 +37,31 @@ def dashboard(request: Request):
             "admin": admin
         }
     )
+# Category Section Start
+@router.get("/manage-category")
+def manage_category(request: Request):
 
+    admin = getattr(request.state, "admin",None)
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/manage_category.html",
+        context={
+            "title" : "Dashboard",
+            "breadcrumbs":[
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Categories", "url": "/admin/manage-category"},
+                {"name": "Manage Category", "url": None}
+            ],
+            "admin":admin
+        }
+    )
+
+
+
+
+# Product Section Start
 @router.get("/products")
 def products(request: Request):
 
@@ -54,8 +77,8 @@ def products(request: Request):
             "title": "Dashboard",
             "breadcrumbs": [
                 {"name": "Dashboard", "url": "/admin/dashboard"},
-                {"name": "Manage Products", "url": "/admin/products"},
-                {"name": "Add Product", "url": None}
+                {"name": "Products", "url": "/admin/products"},
+                {"name": "Manage Product", "url": None}
             ],
             "admin": admin
         }
@@ -74,6 +97,11 @@ def add_products(request: Request):
         name="admin/add_product.html",
         context={
             "title": "Dashboard",
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Products", "url": "/admin/add-product"},
+                {"name": "Add Product", "url": None}
+            ],
             "admin": admin
         }
     )

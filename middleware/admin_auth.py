@@ -8,48 +8,33 @@ class AdminAuthMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request, call_next):
 
-        path = request.url.path
+        path = request.url.path.rstrip("/")
 
-        # Public Admin Routes
         public_routes = [
-            "/admin/",
+            "/admin",
             "/admin/api/login"
         ]
 
-        # Public routes ko allow karo
         if path in public_routes:
             return await call_next(request)
 
-        # Sirf /admin routes ko protect karo
         if path.startswith("/admin"):
 
             token = request.cookies.get("admin_token")
 
             if not token:
-                return RedirectResponse(
-                    url="/admin/",
-                    status_code=302
-                )
+                return RedirectResponse("/admin/", 302)
 
-            payload = verify_token(token)
+            try:
+                payload = verify_token(token)
+            except:
+                payload = None
 
-            if not payload:
-                response = RedirectResponse(
-                    url="/admin/",
-                    status_code=302
-                )
+            if not payload or payload.get("type") != "admin":
+                response = RedirectResponse("/admin/", 302)
                 response.delete_cookie("admin_token")
                 return response
 
-            if payload.get("type") != "admin":
-                response = RedirectResponse(
-                    url="/admin/",
-                    status_code=302
-                )
-                response.delete_cookie("admin_token")
-                return response
-
-            # Request me admin data store kar do
             request.state.admin = payload
 
         return await call_next(request)

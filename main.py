@@ -10,6 +10,7 @@ from routes.admin_api import router as admin_api_router
 
 from middleware.auth_middleware import AuthMiddleware
 from middleware.admin_auth import AdminAuthMiddleware
+import models
 
 app = FastAPI(title=APP_NAME)
 
