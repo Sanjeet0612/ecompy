@@ -148,6 +148,144 @@
                         </div>
                     </div>
                     <!-- end modal-->
+
+                    <!-- Edit Category Modal -->
+                    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                
+                                <form id="editCategoryForm" enctype="multipart/form-data" action="javascript:void(0)">
+                                    <div class="modal-body">
+                                        <div class="row g-3">
+                                           <input type="hidden" name="id" id="editCategoryId">     
+                                            <!-- Category Name -->
+                                            <div class="col-md-6">
+                                                <label class="form-label">Category Name</label>
+                                                <input type="text" class="form-control" name="name" id="editCategoryName" required />
+                                            </div>
+
+                                            <!-- Slug -->
+                                            <div class="col-md-6">
+                                                <label class="form-label">Slug (Optional)</label>
+                                                <input type="text" class="form-control" name="slug" id="editCategorySlug" />
+                                            </div>
+
+                                            <!-- Image -->
+                                            <div class="col-md-12">
+                                                <label class="form-label">Category Image</label>
+                                                <img id="editCategoryPreview" src="" class="img-thumbnail mt-2" width="40">
+                                                <input type="file" class="form-control" name="image" id="editCategoryImage" accept="image/*" />
+                                            </div>
+
+                                            <!-- Status -->
+                                            <div class="col-md-6">
+                                                <label class="form-label">Status</label>
+                                                <select class="form-select" name="status" id="editCategoryStatus" required>
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Inactive</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Description -->
+                                            <!--<div class="col-md-12">
+                                                <label class="form-label">Description (Optional)</label>
+                                                <textarea class="form-control" name="description" id="categoryDescription" rows="3"></textarea>
+                                            </div>-->
+
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Add Category</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--View Category Model-->
+                    <div class="modal fade" id="viewCategoryModal" tabindex="-1" aria-labelledby="viewCategoryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewCategoryModalLabel">
+                                        View Category
+                                    </h5>
+
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal">
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <div class="row g-3">
+
+                                        <div class="col-md-12 text-center">
+                                            <img id="viewCategoryImage"
+                                                src="/static/images/no-image.png"
+                                                class="img-thumbnail"
+                                                style="max-width:120px;">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Category Name</label>
+                                            <input type="text"
+                                                class="form-control"
+                                                id="viewCategoryName"
+                                                readonly>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Slug</label>
+                                            <input type="text"
+                                                class="form-control"
+                                                id="viewCategorySlug"
+                                                readonly>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Status</label>
+                                            <input type="text"
+                                                class="form-control"
+                                                id="viewCategoryStatus"
+                                                readonly>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Created At</label>
+                                            <input type="text"
+                                                class="form-control"
+                                                id="viewCategoryCreatedAt"
+                                                readonly>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+
+
+                    <!-- end modal-->
                 </div>
                 <!-- container -->
 
@@ -165,8 +303,6 @@ let currentLimit = 10;
 let currentSearch = "";
 let currentStatus = "";
 const rowsPerPageOptions = [5, 10, 15, 20, 50, 100];
-
-
 
 $(document).ready(function(){
     renderRowsPerPageSelect();
@@ -305,12 +441,12 @@ function loadCategories(){
                             <td>
                                 <div class="d-flex justify-content-center gap-1">
 
-                                    <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
+                                    <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle view-category" data-id="${cat.id}" data-bs-toggle="modal" data-bs-target="#viewCategoryModal">
                                         <i data-lucide="eye"></i>
                                     </a>
 
-                                    <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle edit-category"
-                                       data-id="${cat.id}">
+                                    <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle edit-category "
+                                       data-id="${cat.id}" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
                                         <i data-lucide="square-pen"></i>
                                     </a>
 
@@ -401,10 +537,132 @@ function renderRowsPerPageSelect(){
     $("[data-table-set-rows-per-page]").html(html);
 }
 
+/* Edit Category Section Start*/
+
+$(document).on("click", ".edit-category", function (e) {
+
+    e.preventDefault();
+
+    let id = $(this).data("id");
+
+    $.ajax({
+        url: `/admin/category/${id}`,
+        type: "GET",
+
+        success: function(res){
+
+            if(res.status){
+
+                $("#editCategoryId").val(res.data.id);
+                $("#editCategoryName").val(res.data.name);
+                $("#editCategorySlug").val(res.data.slug);
+                $("#editCategoryStatus").val(res.data.status);
+                $("#editCategoryPreview").attr("src", res.data.image);
+
+                // Open Modal
+                $("#editCategoryModal").modal("show");
+            }
+
+        },
+
+        error:function(xhr){
+
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:xhr.responseJSON?.detail || "Something went wrong"
+            });
+
+        }
+
+    });
+
+});
+
+/* Update Category Section */
+$("#editCategoryForm").submit(function(e){
+
+    e.preventDefault();
+
+    let id = $("#editCategoryId").val();
+    let formData = new FormData(this);
+
+    $.ajax({
+
+        url: `/admin/category/update/${id}`,
+        type: "PUT",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success:function(res){
+
+            Swal.fire({
+                icon:"success",
+                title:"Success",
+                text:res.message,
+                timer:1500,
+                showConfirmButton:false
+            });
+
+            bootstrap.Modal.getInstance(
+                document.getElementById("editCategoryModal")
+            ).hide();
+            loadCategories();
+        },
+
+        error:function(xhr){
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:xhr.responseJSON?.detail || "Something went wrong"
+            });
+        }
+    });
+});
+
+/* View Category Section */
+$(document).on("click", ".view-category", function (e) {
+
+    e.preventDefault();
+
+    let id = $(this).data("id");
+
+    $.ajax({
+        url: `/admin/category/${id}`,
+        type: "GET",
+
+        success: function(res){
+
+            let cat = res.data;
+
+            $("#viewCategoryName").val(cat.name);
+            $("#viewCategorySlug").val(cat.slug);
+            $("#viewCategoryStatus").val(cat.status == 1 ? "Active" : "Inactive");
+            $("#viewCategoryCreatedAt").val(cat.created_at);
+
+            if(cat.image){
+                $("#viewCategoryImage").attr("src", cat.image);
+            } else {
+                $("#viewCategoryImage").attr("src", "/static/images/no-image.png");
+            }
+
+        },
+
+        error:function(xhr){
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: xhr.responseJSON?.detail || "Something went wrong"
+            });
+
+        }
+    });
+
+});
 
 </script>
-
-
 
 <script>
 let selectedIds = [];
@@ -594,7 +852,6 @@ $(document).on("click", "[data-table-delete-selected]", function(){
     });
 
 });
-
 
 $(document).on("click", ".delete-category", function(e){
 

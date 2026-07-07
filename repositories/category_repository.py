@@ -1,6 +1,6 @@
 from models.category import Category
 from datetime import datetime
-
+import os
 
 class CategoryRepository:
 
@@ -34,17 +34,28 @@ class CategoryRepository:
         return categories, total
 
     def get_by_id(self, db, category_id):
-        return db.query(Category).filter(Category.id == category_id).first()
-    
+        return db.query(Category).filter(Category.id == category_id, Category.deleted_at == None).first()
+
     def get_by_slug(self, db, slug):
         return db.query(Category).filter(Category.slug == slug).first()
 
     def update(self, db, category, data):
-        for key, value in data.items():
-            setattr(category, key, value)
+        category.name = data["name"]
+        category.slug = data["slug"]
+        category.status = data["status"]
+
+        if data.get("image"):
+            # Old image delete
+            if category.image:
+                old_image = category.image.lstrip("/")
+                if os.path.exists(old_image):
+                    os.remove(old_image)
+
+            category.image = data["image"]
 
         db.commit()
         db.refresh(category)
+
         return category
 
     def delete(self, db, category):

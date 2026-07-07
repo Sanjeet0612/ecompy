@@ -58,8 +58,27 @@ def manage_category(request: Request):
         }
     )
 
+# Sub Category Section Start
+@router.get("/manage-sub-category")
+def manage_sub_category(request: Request):
+    admin = getattr(request.state, "admin",None)
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/manage_sub_category.html",
+        context={
+            "title": "Dashboard",
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Products", "url": "/admin/manage-sub-category"},
+                {"name": "Manage Sub Category", "url": None}
+            ],
+            "admin": admin
+        }
 
-
+    )
 
 # Product Section Start
 @router.get("/products")
