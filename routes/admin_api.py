@@ -11,6 +11,8 @@ from schemas.category import CategoryResponse
 
 from repositories.sub_category_repository import SubCategoryRepository
 
+from repositories.brand_repository import BrandRepository
+
 from schemas.admin import AdminLogin
 from utils.security import verify_password
 from utils.jwt import create_access_token
@@ -75,19 +77,19 @@ async def create_category(
     if not admin:
         raise HTTPException(status_code=403, detail="Not authorized")
 
-    # 🔥 Auto slug
+    # Auto slug
     if not slug:
         slug = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')
 
-    # 🔥 Duplicate check
+    # Duplicate check
     existing = CategoryRepository().get_by_slug(db, slug)
     if existing:
         raise HTTPException(status_code=400, detail="Category already exists")
 
-    # 🔥 Image upload
+    # Image upload
     image_path = None
 
-    if image:
+    if image and image.filename:
 
         allowed_types = ["image/jpeg", "image/png", "image/webp"]
 
@@ -657,8 +659,116 @@ def delete_subcategory(
             "message": str(e)
         }
 
+# Brand Section Start
+@router.post("/brand/create")
+async def create_brand(
+    request: Request,
+    name: str = Form(...),
+    slug: str = Form(None),
+    status: int = Form(1),
+    image: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+    admin = getattr(request.state, "admin", None)
+    if not admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
 
+    # Auto slug
+    if not slug:
+        slug = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')
 
+    # Duplicate check
+    existing = BrandRepository().get_by_slug(db, slug)
+    if existing:
+        raise HTTPException(status_code=400, detail="Brand already exists")
+
+    # Image upload
+    image_path = None
+
+    if image and image.filename:
+
+        allowed_types = ["image/jpeg", "image/png", "image/webp"]
+
+        if image.content_type not in allowed_types:
+            raise HTTPException(status_code=400, detail="Invalid image type")
+
+        contents = await image.read()
+
+        if len(contents) > 500 * 1024:
+            raise HTTPException(status_code=400, detail="Image size too large")
+
+        folder = "static/uploads/brand/"
+        os.makedirs(folder, exist_ok=True)
+
+        filename = f"{uuid.uuid4()}.jpg"
+        file_location = f"{folder}{filename}"
+
+        with open(file_location, "wb") as f:
+            f.write(contents)
+
+        image_path = f"/static/uploads/brand/{filename}"
+
+        result = BrandRepository().create(db, {
+            "name": name,
+            "slug": slug,
+            "status": status,
+            "logo": image_path
+        })
+
+        if not result["status"]:
+            return result
+
+        brand = result["data"]
+
+        return {
+            "status": True,
+            "message": result["message"],
+            "data": {
+                "id": brand.id,
+                "name": brand.name,
+                "slug": brand.slug,
+                "logo": brand.logo,
+                "status": brand.status
+            }
+        }
+
+@router.get("/brand/list")
+def list_brands(
+    page: int = 1,
+    limit: int = 10,
+    search: str = None,
+    status: str = None,
+    db: Session = Depends(get_db)
+):
+    
+    result = BrandRepository().get_all(
+        db=db,
+        page=page,
+        limit=limit,
+        search=search,
+        status=status
+    )
+
+    data = []
+
+    for item in result["data"]:
+        data.append({
+            "id": item.id,
+            "name": item.name,
+            "slug": item.slug,
+            "logo": item.logo,
+            "status": item.status,
+            "updated_at": item.updated_at
+        })
+
+    return {
+        "status": True,
+        "data": data,
+        "total": result["total"],
+        "page": result["page"],
+        "limit": result["limit"],
+        "pages": result["pages"]
+    }
 
 # Logout Section Start
 @router.post("/api/logout")
