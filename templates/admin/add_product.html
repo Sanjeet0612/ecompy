@@ -35,26 +35,176 @@
                                                 <div class="col-12">
                                                     <div class="mb-3">
                                                         <label for="productName" class="form-label">Product Name <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" id="productName" placeholder="Enter product name" required="" />
+                                                        <input type="text" class="form-control" name="productName" id="productName" placeholder="Enter product name" required="" />
                                                     </div>
                                                 </div>
 
-                                                <div class="col-lg-6">
-                                                    <div class="mb-3">
-                                                        <label for="skuId" class="form-label">SKU <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" id="skuId" placeholder="SOFA-10058" required="" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="mb-3">
-                                                        <label for="stockNumber" class="form-label">Stock <span class="text-danger">*</span></label>
-                                                        <input type="number" class="form-control" id="stockNumber" placeholder="250" />
+                                                
+                                                
+                                                <!-- Product Type -->
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <label class="form-label fw-bold">Product Type</label>
+
+        <div class="d-flex gap-4 mt-2">
+
+            <div class="form-check">
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="has_variant"
+                    id="simple_product"
+                    value="0"
+                    checked
+                >
+                <label class="form-check-label" for="simple_product">
+                    Simple Product
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="has_variant"
+                    id="variant_product"
+                    value="1"
+                >
+                <label class="form-check-label" for="variant_product">
+                    Variant Product
+                </label>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Simple Product -->
+<div id="simpleProductSection">
+
+    <div class="row">
+
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label class="form-label">
+                    SKU <span class="text-danger">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    name="sku"
+                    id="skuId"
+                    placeholder="Enter SKU">
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label class="form-label">
+                    Price <span class="text-danger">*</span>
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    name="price"
+                    placeholder="Enter Price">
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label class="form-label">
+                    Stock <span class="text-danger">*</span>
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    name="stock"
+                    id="stockNumber"
+                    placeholder="Enter Stock">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Variant Product -->
+<div id="variantProductSection" style="display:none;">
+
+    <div class="card border">
+        <div class="card-header">
+            <h6 class="mb-0">Variant Configuration</h6>
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+                <label class="form-label">Attributes</label>
+
+                <select class="form-select" multiple id="attribute_ids">
+                    {% for attribute in attributes %}
+                        <option value="{{ attribute.id }}">
+                            {{ attribute.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div id="attributeValuesContainer"></div>
+
+            <button
+                type="button"
+                class="btn btn-primary mt-3"
+                id="generateVariantBtn">
+
+                Generate Variants
+
+            </button>
+
+            <div id="variantTable" class="mt-4"></div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label class="form-label">Short Description <span class="text-muted">(Required)</span></label>
+                                                        <div id="snow-editor">
+                                                            <p>
+                                                                Introducing the <strong><em>Azure Comfort Single Sofa</em></strong
+                                                                >, a perfect blend of modern design and luxurious comfort.
+                                                            </p>
+
+                                                            <p>This premium blue single sofa is designed to elevate any living space with its sleek profile and rich, durable fabric. It’s the perfect seating option for your living room, lounge area, or cozy reading nook.</p>
+
+                                                            <ul>
+                                                                <li>Crafted with a solid mahogany frame for enhanced durability.</li>
+                                                                <li>Upholstered in a high-quality blue fabric that offers both style and comfort.</li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- end Snow-editor -->
                                                     </div>
                                                 </div>
 
                                                 <div class="col-12">
                                                     <div>
-                                                        <label class="form-label">Product Description <span class="text-muted">(Optional)</span></label>
+                                                        <label class="form-label">Product Description <span class="text-muted">(Required)</span></label>
                                                         <div id="snow-editor">
                                                             <p>
                                                                 Introducing the <strong><em>Azure Comfort Single Sofa</em></strong
@@ -89,7 +239,7 @@
                                                 <div class="col-12">
                                                     <form action="https://coderthemes.com/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
                                                         <div class="fallback">
-                                                            <input name="file" type="file" />
+                                                            <input name="file" type="file" name="mainImage" />
                                                         </div>
 
                                                         <div class="dz-message needsclick">
@@ -135,7 +285,69 @@
                                         </div>
                                         <!-- end card-body-->
                                     </div>
+
+                                    <!------Gallery Image Start-->
+                                    <div class="card">
+                                        <div class="card-header d-block p-3">
+                                            <h4 class="card-title mb-1">Gallery Image</h4>
+                                            <p class="text-muted mb-0">To upload a product image, please use the option below to select and upload the relevant file.</p>
+                                        </div>
+                                        <!-- end card-header -->
+
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <form action="https://coderthemes.com/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+                                                        <div class="fallback">
+                                                            <input name="file" type="file" name="galleryImage" />
+                                                        </div>
+
+                                                        <div class="dz-message needsclick">
+                                                            <div class="avatar-lg mx-auto mb-3">
+                                                                <span class="avatar-title bg-info-subtle text-info rounded-circle">
+                                                                    <i data-lucide="cloud-upload" class="fs-24"></i>
+                                                                </span>
+                                                            </div>
+                                                            <h4 class="mb-2">Drop files here or click to upload.</h4>
+                                                            <p class="text-muted fst-italic mb-3">You can drag images here, or browse files via the button below.</p>
+                                                            <button type="button" class="btn btn-sm shadow btn-default">Browse Images</button>
+                                                        </div>
+                                                    </form>
+
+                                                    <!-- Preview -->
+                                                    <div class="dropzone-previews mt-3" id="file-previews"></div>
+
+                                                    <!-- file preview template -->
+                                                    <div class="d-none" id="uploadPreviewTemplate">
+                                                        <div class="card mt-1 mb-0 border-dashed border">
+                                                            <div class="p-2">
+                                                                <div class="row align-items-center">
+                                                                    <div class="col-auto">
+                                                                        <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="" />
+                                                                    </div>
+                                                                    <div class="col ps-0">
+                                                                        <a href="javascript:void(0);" class="fw-semibold" data-dz-name></a>
+                                                                        <p class="mb-0 text-muted" data-dz-size></p>
+                                                                    </div>
+                                                                    <div class="col-auto">
+                                                                        <!-- Button -->
+                                                                        <a href="#" class="btn btn-link btn-lg text-danger" data-dz-remove>
+                                                                            <span class="dropzone-close"></span>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- end file preview template -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end card-body-->
+                                    </div>
+                                    <!----Gallery Image End -->
                                     <!-- end card-->
+
                                 </div>
                                 <!-- end col-->
 
@@ -149,30 +361,35 @@
 
                                         <div class="card-body">
                                             <div class="mb-3">
-                                                <label for="basePrice" class="form-label">Base Price <span class="text-danger">*</span></label>
+                                                <label for="featured" class="form-label">Featured <span class="text-muted">(Optional)</span></label>
                                                 <div class="app-search">
-                                                    <input type="number" class="form-control" id="basePrice" placeholder="Enter base price (e.g., 199.99)" />
-                                                    <i data-lucide="dollar-sign" class="app-search-icon text-muted"></i>
+                                                    <select class="form-select form-control my-1 my-md-0" name="featured" id="featured">
+                                                        <option value="0">No</option>
+                                                        <option value="1">Yes</option>
+                                                    </select>
+                                                    <i data-lucide="badge-percent" class="app-search-icon text-muted"></i>
                                                 </div>
                                             </div>
 
+
+
                                             <div class="mb-3">
-                                                <label for="discount" class="form-label">Discount Type <span class="text-muted">(Optional)</span></label>
+                                                <label for="discount" class="form-label">Commission Type <span class="text-muted">(Optional)</span></label>
                                                 <div class="app-search">
-                                                    <select class="form-select form-control my-1 my-md-0" id="discount">
-                                                        <option selected>Choose Discount</option>
-                                                        <option value="No Discount">No Discount</option>
-                                                        <option value="Flat Discount">Flat Discount</option>
-                                                        <option value="Percentage Discount">Percentage Discount</option>
+                                                    <select class="form-select form-control my-1 my-md-0" name="commission_type" id="commission_type">
+                                                        <option selected>Choose Commission Type</option>
+                                                        <option value="">No Commission</option>
+                                                        <option value="fixed">Fixed</option>
+                                                        <option value="percentage">Percentage</option>
                                                     </select>
                                                     <i data-lucide="badge-percent" class="app-search-icon text-muted"></i>
                                                 </div>
                                             </div>
 
                                             <div class="mb-0">
-                                                <label for="discountValue" class="form-label">Discount Value <span class="text-muted">(Optional)</span></label>
+                                                <label for="discountValue" class="form-label">Commission Value <span class="text-muted">(Optional)</span></label>
                                                 <div class="app-search">
-                                                    <input type="number" class="form-control" id="discountValue" placeholder="Enter discount amount or percentage" />
+                                                    <input type="text" class="form-control" name="commissionValue" id="commissionValue" placeholder="Enter Commision amount or percentage" />
                                                     <i data-lucide="tag" class="app-search-icon text-muted"></i>
                                                 </div>
                                             </div>
@@ -187,35 +404,42 @@
                                         <!-- end card-header -->
 
                                         <div class="card-body">
-                                            <div class="mb-3">
-                                                <label for="brand" class="form-label">Brand</label>
-                                                <div class="app-search">
-                                                    <input type="text" class="form-control" id="brand" placeholder="Enter brand name" />
-                                                    <i data-lucide="layers" class="app-search-icon text-muted"></i>
-                                                </div>
-                                            </div>
+                                            
 
                                             <div class="mb-3">
                                                 <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
                                                 <div class="app-search">
-                                                    <select class="form-select form-control my-1 my-md-0" id="category">
-                                                        <option selected>Choose Category</option>
-                                                        <option value="Furniture">Furniture</option>
-                                                        <option value="Electronics">Electronics</option>
-                                                        <option value="Fashion">Fashion</option>
+                                                    <select name="category_id" id="category_id" class="form-select">
+                                                        <option value="">Select Category</option>
+
+                                                        {% for category in categories %}
+                                                        <option value="{{ category.id }}">
+                                                            {{ category.name }}
+                                                        </option>
+                                                        {% endfor %}
                                                     </select>
-                                                    <i data-lucide="layout-grid" class="app-search-icon text-muted"></i>
+                                                    
                                                 </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="brand" class="form-label">Brand</label>
+                                                <select name="brand_id" id="brand_id" class="form-select">
+                                                    <option value="">Select Brand</option>
+
+                                                    {% for brand in brands %}
+                                                    <option value="{{ brand.id }}">
+                                                        {{ brand.name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="subCategory" class="form-label">Sub Category <span class="text-danger">*</span></label>
                                                 <div class="app-search">
-                                                    <select class="form-select form-control my-1 my-md-0" id="subCategory">
-                                                        <option selected>Choose Sub Category</option>
-                                                        <option value="Chairs">Chairs</option>
-                                                        <option value="Sofas">Sofas</option>
-                                                        <option value="Tables">Tables</option>
+                                                    <select class="form-select form-control my-1 my-md-0" name="subcategory_id" id="subcategory_id">
+                                                        <option value="">Select Sub Category</option>
                                                     </select>
                                                     <i data-lucide="list-check" class="app-search-icon text-muted"></i>
                                                 </div>
@@ -224,7 +448,7 @@
                                             <div class="mb-3">
                                                 <label for="statusOne" class="form-label">Status <span class="text-danger">*</span></label>
                                                 <div class="app-search">
-                                                    <select class="form-select form-control my-1 my-md-0" id="statusOne">
+                                                    <select class="form-select form-control my-1 my-md-0" name="status" id="statusOne">
                                                         <option selected>Choose Status</option>
                                                         <option value="Published">Published</option>
                                                         <option value="Inactive">Inactive</option>
@@ -238,7 +462,7 @@
                                             <div class="mb-0">
                                                 <label for="tags" class="form-label">Tags</label>
                                                 <div class="app-search">
-                                                    <input type="text" class="form-control" id="tags" placeholder="Enter tags separated by commas" />
+                                                    <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter tags separated by commas" />
                                                     <i data-lucide="tag" class="app-search-icon text-muted"></i>
                                                 </div>
                                             </div>
@@ -281,3 +505,84 @@
             <!-- ============================================================== -->
 
 {% include "/admin/layout/footer.html" %}
+
+<script>
+    $("#category_id").on("change", function () {
+
+    let categoryId = $(this).val();
+
+    $("#subcategory_id").html(
+        '<option value="">Loading...</option>'
+    );
+
+    if (categoryId == "") {
+
+        $("#subcategory_id").html(
+            '<option value="">Select Sub Category</option>'
+        );
+
+        return;
+    }
+
+    $.ajax({
+
+        url: "/admin/subcategories/" + categoryId,
+
+        type: "GET",
+
+        success: function (response) {
+
+            let options =
+                '<option value="">Select Sub Category</option>';
+
+            if (response.status) {
+
+                response.data.forEach(function (item) {
+
+                    options +=
+                        `<option value="${item.id}">
+                            ${item.name}
+                        </option>`;
+
+                });
+
+            }
+
+            $("#subcategory_id").html(options);
+
+        },
+
+        error: function () {
+
+            $("#subcategory_id").html(
+                '<option value="">No Data Found</option>'
+            );
+
+        }
+
+    });
+
+});
+
+
+/* Varient section */
+$(document).ready(function () {
+
+    $("input[name='has_variant']").change(function () {
+
+        if ($(this).val() == "0") {
+
+            $("#simpleProductSection").show();
+            $("#variantProductSection").hide();
+
+        } else {
+
+            $("#simpleProductSection").hide();
+            $("#variantProductSection").show();
+
+        }
+
+    });
+
+});
+</script>

@@ -13,6 +13,8 @@ from schemas.category import CategoryResponse
 from repositories.sub_category_repository import SubCategoryRepository
 
 from repositories.brand_repository import BrandRepository
+from repositories.attribute_repository import AttributeRepository
+
 
 from schemas.admin import AdminLogin
 from utils.security import verify_password
@@ -529,6 +531,34 @@ def get_subcategory(
         }
     }
 
+# Selecte all sub category basis on category Id
+@router.get("/subcategories/{category_id}")
+def get_subcategories(
+    category_id: int,
+    db: Session = Depends(get_db)
+):
+    subcategories = (
+        db.query(SubCategory)
+        .filter(
+            SubCategory.category_id == category_id,
+            SubCategory.status == 1,
+            SubCategory.deleted_at == None
+        )
+        .order_by(SubCategory.name.asc())
+        .all()
+    )
+
+    return {
+        "status": True,
+        "data": [
+            {
+                "id": sub.id,
+                "name": sub.name
+            }
+            for sub in subcategories
+        ]
+    }
+
 @router.post("/subcategory/update")
 async def update_subcategory(
     request: Request,
@@ -865,10 +895,76 @@ def delete_brands(
             "message": str(e)
         }
 
+# Attribute Create
+@router.post("/attribute/create")
+async def create_attribute(
+    request: Request,
+    name: str = Form(...),
+    status: int = Form(1),
+    db: Session = Depends(get_db)
+):
+    admin = getattr(request.state, "admin", None)
+    if not admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
 
 
+    # Duplicate check
+    existing = AttributeRepository().get_by_name(db, name)
+    if existing:
+        raise HTTPException(status_code=400, detail="Attribute already exists")
 
 
+    attribute = AttributeRepository().create(db, {
+            "name": name,
+            "status": status
+        })
+
+    return {
+        "status": True,
+        "message": "Attribute created successfully.",
+        "data": {
+            "id": attribute.id,
+            "name": attribute.name,
+            "status": attribute.status
+        }
+    }
+
+
+@router.get("/attribute/list")
+def list_brands(
+    page: int = 1,
+    limit: int = 10,
+    search: str = None,
+    status: str = None,
+    db: Session = Depends(get_db)
+):
+    
+    result = BrandRepository().get_all(
+        db=db,
+        page=page,
+        limit=limit,
+        search=search,
+        status=status
+    )
+
+    data = []
+
+    for item in result["data"]:
+        data.append({
+            "id": item.id,
+            "name": item.name,
+            "status": item.status,
+            "updated_at": item.updated_at
+        })
+
+    return {
+        "status": True,
+        "data": data,
+        "total": result["total"],
+        "page": result["page"],
+        "limit": result["limit"],
+        "pages": result["pages"]
+    }
 
 
 

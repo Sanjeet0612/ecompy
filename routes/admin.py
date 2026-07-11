@@ -1,6 +1,12 @@
-from fastapi import APIRouter, Request
+from fastapi import (APIRouter,Request,Depends,Form,File,UploadFile,HTTPException)
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
+from sqlalchemy.orm import Session
+
+from config.database import get_db
+from models.category import Category
+from models.brand import Brand
+from models.attribute import Attribute
 
 router = APIRouter(prefix="/admin")
 
@@ -125,25 +131,84 @@ def products(request: Request):
         }
     )
 
+# Attribute Section Start
+@router.get("/manage-attribute")
+def manage_attribute(request: Request):
+    admin = getattr(request.state, "admin", None)
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/manage_attribute.html",
+        context={
+            "title": "Dashboard",
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Brand", "url": "/admin/manage-brand"},
+                {"name": "Manage Brand", "url": None}
+            ],
+            "admin": admin
+        }
+
+    )
+
+
 @router.get("/add-product")
-def add_products(request: Request):
+def add_products(
+    request: Request,
+    db: Session = Depends(get_db)
+):
 
     admin = getattr(request.state, "admin", None)
 
     if not admin:
         return RedirectResponse(url="/admin/", status_code=302)
 
+    categories = (
+        db.query(Category)
+        .filter(
+            Category.status == 1,
+            Category.deleted_at == None
+        )
+        .order_by(Category.name.asc())
+        .all()
+    )
+
+    brands = (
+        db.query(Brand)
+        .filter(
+            Brand.status == 1,
+            Brand.deleted_at == None
+        )
+        .order_by(Brand.name.asc())
+        .all()
+    )
+
+    attributes = (
+        db.query(Attribute)
+        .filter(
+            Attribute.status == 1,
+            Attribute.deleted_at == None
+        )
+        .order_by(Attribute.name.asc())
+        .all()
+    )
+
     return templates.TemplateResponse(
         request=request,
         name="admin/add_product.html",
         context={
-            "title": "Dashboard",
+            "title": "Add Product",
             "breadcrumbs": [
                 {"name": "Dashboard", "url": "/admin/dashboard"},
-                {"name": "Products", "url": "/admin/add-product"},
+                {"name": "Products", "url": "/admin/products"},
                 {"name": "Add Product", "url": None}
             ],
-            "admin": admin
+            "admin": admin,
+            "categories": categories,
+            "brands": brands,
+            "attributes": attributes,
         }
     )
 
