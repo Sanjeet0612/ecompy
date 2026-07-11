@@ -44,6 +44,16 @@ class CategoryRepository:
         category.slug = data["slug"]
         category.status = data["status"]
 
+        category.commission_type = data.get(
+            "commission_type",
+            category.commission_type
+        )
+
+        category.commission_value = data.get(
+            "commission_value",
+            category.commission_value
+        )
+
         if data.get("image"):
             # Old image delete
             if category.image:

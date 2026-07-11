@@ -65,7 +65,8 @@
                                                 </th>
                                                 <th data-table-sort="product">Category Name</th>
                                                 <th data-table-sort>Slug</th>
-                                                
+                                                <th data-table-sort>Commission Type</th>
+                                                <th data-table-sort>Commision Value</th>
                                                 <th data-table-sort>Last Modify</th>
                                                 <th data-table-sort data-column="status">Status</th>
                                                 <th class="text-center" style="width: 1%">Actions</th>
@@ -119,6 +120,24 @@
                                             <div class="col-md-12">
                                                 <label class="form-label">Category Image</label>
                                                 <input type="file" class="form-control" name="image" id="categoryImage" accept="image/*" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Commission Type</label>
+                                                <select name="commission_type" class="form-control">
+                                                    <option value="percentage">Percentage</option>
+                                                    <option value="fixed">Fixed</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Commission Value</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="commission_value"
+                                                    class="form-control"
+                                                    value="0"
+                                                    step="0.01">
                                             </div>
 
                                             <!-- Status -->
@@ -179,6 +198,25 @@
                                                 <label class="form-label">Category Image</label>
                                                 <img id="editCategoryPreview" src="" class="img-thumbnail mt-2" width="40">
                                                 <input type="file" class="form-control" name="image" id="editCategoryImage" accept="image/*" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Commission Type</label>
+                                                <select name="commission_type" id="editcommission_type" class="form-control">
+                                                    <option value="percentage">Percentage</option>
+                                                    <option value="fixed">Fixed</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Commission Value</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="commission_value"
+                                                    id="editcommission_value"
+                                                    class="form-control"
+                                                    value="0"
+                                                    step="0.01">
                                             </div>
 
                                             <!-- Status -->
@@ -433,6 +471,8 @@ function loadCategories(){
                             </td>
 
                             <td>${cat.slug}</td>
+                            <td>${cat.commission_type}</td>
+                            <td>${cat.commission_value}</td>
 
                             <td>${createdAt} <small class="text-muted">${time}</small></td>
 
@@ -558,6 +598,8 @@ $(document).on("click", ".edit-category", function (e) {
                 $("#editCategorySlug").val(res.data.slug);
                 $("#editCategoryStatus").val(res.data.status);
                 $("#editCategoryPreview").attr("src", res.data.image);
+                $("#editcommission_type").val(res.data.commission_type);
+                $("#editcommission_value").val(res.data.commission_value);
 
                 // Open Modal
                 $("#editCategoryModal").modal("show");

@@ -5,4 +5,5 @@ from .attribute import Attribute
 from .attribute_value import AttributeValue
 from .product import Product
 from .product_image import ProductImage
-from .product_attribute import ProductAttribute
+from .ProductVariant import ProductVariant
+from .ProductVariantValue import ProductVariantValue

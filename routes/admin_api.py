@@ -1,6 +1,7 @@
 import os, uuid, re
 from models.category import Category
 from models.subcategory import SubCategory
+from models.brand import Brand
 from fastapi import (APIRouter, Depends, HTTPException, Response, UploadFile, File, Form, Request)
 from sqlalchemy.orm import Session
 
@@ -70,6 +71,8 @@ async def create_category(
     name: str = Form(...),
     slug: str = Form(None),
     status: int = Form(1),
+    commission_type: str = Form("percentage"),
+    commission_value: float = Form(0.00),
     image: UploadFile = File(None),
     db: Session = Depends(get_db)
 ):
@@ -117,6 +120,8 @@ async def create_category(
         "name": name,
         "slug": slug,
         "status": status,
+        "commission_type":commission_type,
+        "commission_value":commission_value,
         "image": image_path
     })
 
@@ -165,6 +170,8 @@ def category_list(
                 "slug": cat.slug,
                 "image": cat.image,
                 "status": cat.status,
+                "commission_type": cat.commission_type,
+                "commission_value": cat.commission_value,
                 "created_at": cat.created_at.strftime("%Y-%m-%d %H:%M:%S") if cat.created_at else None
             }
             for cat in categories
@@ -252,6 +259,8 @@ def get_category(request: Request, category_id: int, db: Session = Depends(get_d
             "slug": category.slug,
             "image": category.image,
             "status": category.status,
+            "commission_type": category.commission_type,
+            "commission_value": category.commission_value,
             "created_at": category.created_at.strftime("%d %b %Y %I:%M %p")
         }
     }
@@ -265,6 +274,8 @@ async def update_category(
     name: str = Form(...),
     slug: str = Form(None),
     status: int = Form(...),
+    commission_type: str = Form("percentage"),
+    commission_value: float = Form(0.00),
     image: UploadFile = File(None),
     db: Session = Depends(get_db)
 ):
@@ -330,7 +341,9 @@ async def update_category(
         "name": name,
         "slug": slug,
         "status": status,
-        "image": image_path
+        "image": image_path,
+        "commission_type":commission_type,
+        "commission_value":commission_value
     }
 
     category = CategoryRepository().update(db, category, data)
@@ -343,7 +356,9 @@ async def update_category(
             "name": category.name,
             "slug": category.slug,
             "image": category.image,
-            "status": category.status
+            "status": category.status,
+            "commission_type": category.commission_type,
+            "commission_value": category.commission_value
         }
     }
 
@@ -769,6 +784,96 @@ def list_brands(
         "limit": result["limit"],
         "pages": result["pages"]
     }
+
+# Brand Bulk Deleted
+@router.post("/brand/bulk-delete")
+def bulk_delete_brands(request: Request,payload: dict,db: Session = Depends(get_db),):
+
+    admin = getattr(request.state, "admin", None)
+
+    # 1. AUTH CHECK
+    if not admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    # 2. GET IDS
+    ids = payload.get("ids", [])
+
+    if not ids or not isinstance(ids, list):
+        raise HTTPException(status_code=400, detail="Invalid IDs")
+
+    # 3. VALIDATE IDS (remove invalid values)
+    clean_ids = []
+    for i in ids:
+        try:
+            clean_ids.append(int(i))
+        except:
+            continue
+
+    if not clean_ids:
+        raise HTTPException(status_code=400, detail="No valid IDs found")
+
+    # 4. CHECK EXISTING DATA
+    brand = db.query(Brand)\
+        .filter(Brand.id.in_(clean_ids),
+                Brand.deleted_at == None)\
+        .all()
+
+    if not brand:
+        raise HTTPException(status_code=404, detail="No Brand found")
+
+    # 5. SOFT DELETE (SAFE)
+    db.query(Brand)\
+        .filter(Brand.id.in_(clean_ids))\
+        .update(
+            {
+                "deleted_at": datetime.utcnow()
+            },
+            synchronize_session=False
+        )
+
+    db.commit()
+
+    return {
+        "status": True,
+        "message": f"{len(clean_ids)} Brand deleted successfully",
+        "deleted_ids": clean_ids
+    }
+
+# Brand Single Delete
+@router.delete("/brand/delete/{id}")
+def delete_brands(
+    request: Request,
+    id: int,
+    db: Session = Depends(get_db)
+):
+
+    try:
+        # ---------------- AUTH CHECK ----------------
+        admin = getattr(request.state, "admin", None)
+
+        if not admin:
+            raise HTTPException(status_code=403, detail="Not authorized")
+
+        # ---------------- DELETE ----------------
+        result = BrandRepository().delete(db, id)
+
+        return result
+
+    except Exception as e:
+        return {
+            "status": False,
+            "message": str(e)
+        }
+
+
+
+
+
+
+
+
+
+
 
 # Logout Section Start
 @router.post("/api/logout")

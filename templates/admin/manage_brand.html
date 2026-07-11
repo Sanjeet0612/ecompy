@@ -608,6 +608,7 @@ $(document).on("change", "[data-table-filter='status']", function () {
 });
 
 /*DELETE*/
+let selectedIds = [];
 function toggleBulkDeleteButton(){
 
     let btn = $("[data-table-delete-selected]");
@@ -684,7 +685,7 @@ $(document).on("click", "[data-table-delete-selected]", function(){
         if(result.isConfirmed){
 
             $.ajax({
-                url: "/admin/category/bulk-delete",
+                url: "/admin/brand/bulk-delete",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -703,7 +704,7 @@ $(document).on("click", "[data-table-delete-selected]", function(){
                             showConfirmButton: false
                         });
 
-                        // 🔥 RESET STATE
+                        //  RESET STATE
                         selectedIds = [];
 
                         // uncheck all checkboxes
@@ -715,7 +716,7 @@ $(document).on("click", "[data-table-delete-selected]", function(){
                         $("[data-table-delete-selected]").text("Delete");
 
                         // reload table
-                        loadCategories();
+                        loadBrands();
                     }
                 },
 
@@ -734,4 +735,60 @@ $(document).on("click", "[data-table-delete-selected]", function(){
 
 });
 
+/* Single Row Delete */
+
+$(document).on("click", ".delete-brand", function (e) {
+    e.preventDefault();
+
+    const id = $(this).data("id");
+
+    Swal.fire({
+        icon: "warning",
+        title: "Are you sure?",
+        text: "This brand will be deleted.",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: `/admin/brand/delete/${id}`, // ya jo tumhara route hai
+                type: "DELETE",                   // ya POST
+
+                success: function (res) {
+
+                    if (res.status) {
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Deleted!",
+                            text: res.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        loadBrands(); // Table reload
+                    }
+
+                },
+
+                error: function () {
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Something went wrong."
+                    });
+
+                }
+
+            });
+
+        }
+
+    });
+
+});
 </script>    

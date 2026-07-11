@@ -4,6 +4,7 @@ from sqlalchemy.sql import func
 from config.database import Base
 
 
+
 class Product(Base):
     __tablename__ = "products"
 
@@ -19,6 +20,8 @@ class Product(Base):
 
     short_description = Column(Text, nullable=True)
     description = Column(Text, nullable=True)
+    main_image = Column(String(255), nullable=True)
+    has_variant = Column(SmallInteger, default=0)
 
     status = Column(SmallInteger, default=1)
     approval_status = Column(SmallInteger, default=0)
@@ -30,9 +33,9 @@ class Product(Base):
     sort_order = Column(Integer, default=0)
 
     commission_type = Column(Enum("fixed", "percentage"), default="percentage")
-    commission_value = Column(DECIMAL(10,2), default=0)
+    commission_value = Column(DECIMAL(10,2), default=0.00)
 
-    approved_by = Column(Integer, nullable=True)
+    approved_by = Column(Integer,ForeignKey("users.id"),nullable=True)
     approved_at = Column(DateTime, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -41,4 +44,4 @@ class Product(Base):
 
     # Relationships
     images = relationship("ProductImage", back_populates="product", cascade="all, delete-orphan")
-    variants = relationship("ProductAttribute", back_populates="product", cascade="all, delete-orphan")
+    variants = relationship("ProductVariant",back_populates="product",cascade="all, delete-orphan")

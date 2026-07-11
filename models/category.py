@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, SmallInteger
+from sqlalchemy import Column, Integer, String, DateTime, SmallInteger, Enum, Numeric
 from sqlalchemy.sql import func
 from config.database import Base
 from sqlalchemy.orm import relationship
@@ -14,6 +14,18 @@ class Category(Base):
     slug = Column(String(180), unique=True, nullable=False)
 
     image = Column(String(255), nullable=True)
+
+    commission_type = Column(
+        Enum("fixed", "percentage"),
+        nullable=False,
+        default="percentage"
+    )
+
+    commission_value = Column(
+        Numeric(10, 2),
+        nullable=False,
+        default=0.00
+    )
 
     status = Column(SmallInteger, default=1)
 
