@@ -10,7 +10,7 @@ class Product(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    vendor_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    vendor_id = Column(Integer, nullable=False, default=0)
     category_id = Column(Integer, ForeignKey("categories.id", ondelete="CASCADE"), nullable=False)
     subcategory_id = Column(Integer, ForeignKey("sub_categories.id", ondelete="CASCADE"), nullable=False)
     brand_id = Column(Integer, ForeignKey("brands.id", ondelete="CASCADE"), nullable=False)
@@ -22,6 +22,10 @@ class Product(Base):
     description = Column(Text, nullable=True)
     main_image = Column(String(255), nullable=True)
     has_variant = Column(SmallInteger, default=0)
+
+    sku = Column(String(100), nullable=True)
+    price = Column(DECIMAL(10, 2), default=0.00)
+    stock = Column(Integer, default=0)
 
     status = Column(SmallInteger, default=1)
     approval_status = Column(SmallInteger, default=0)

@@ -15,11 +15,19 @@ class ProductCreate(BaseModel):
     name: str
     slug: str
 
+    sku: Optional[str] = None
+    price: Optional[float] = 0
+    stock: Optional[int] = 0
+
+    commission_type: Optional[str] = "percentage"
+    commission_value: Optional[float] = 0
+
     short_description: Optional[str] = None
     description: Optional[str] = None
 
     main_image: Optional[str] = None
     has_variant: int = 0
+    status: int = 1
 
 
 # =========================================
@@ -33,6 +41,10 @@ class ProductUpdate(BaseModel):
 
     name: str
     slug: str
+
+    sku: Optional[str] = None
+    price: Optional[float] = 0
+    stock: Optional[int] = 0
 
     short_description: Optional[str] = None
     description: Optional[str] = None

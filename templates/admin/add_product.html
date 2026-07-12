@@ -20,6 +20,7 @@
 
 
                     <div class="row">
+                    <form id="productForm" enctype="multipart/form-data">
                         <div class="col-xxl-12">
                             <div class="row">
                                 <div class="col-xxl-8">
@@ -42,310 +43,278 @@
                                                 
                                                 
                                                 <!-- Product Type -->
-<div class="row mb-4">
-    <div class="col-lg-12">
-        <label class="form-label fw-bold">Product Type</label>
+                                                <div class="row mb-4">
+                                                    <div class="col-lg-12">
+                                                        <label class="form-label fw-bold">Product Type</label>
 
-        <div class="d-flex gap-4 mt-2">
+                                                        <div class="d-flex gap-4 mt-2">
 
-            <div class="form-check">
-                <input
-                    class="form-check-input"
-                    type="radio"
-                    name="has_variant"
-                    id="simple_product"
-                    value="0"
-                    checked
-                >
-                <label class="form-check-label" for="simple_product">
-                    Simple Product
-                </label>
-            </div>
+                                                            <div class="form-check">
+                                                                <input
+                                                                    class="form-check-input"
+                                                                    type="radio"
+                                                                    name="has_variant"
+                                                                    id="simple_product"
+                                                                    value="0"
+                                                                    checked
+                                                                >
+                                                                <label class="form-check-label" for="simple_product">
+                                                                    Simple Product
+                                                                </label>
+                                                            </div>
 
-            <div class="form-check">
-                <input
-                    class="form-check-input"
-                    type="radio"
-                    name="has_variant"
-                    id="variant_product"
-                    value="1"
-                >
-                <label class="form-check-label" for="variant_product">
-                    Variant Product
-                </label>
-            </div>
+                                                            <div class="form-check">
+                                                                <input
+                                                                    class="form-check-input"
+                                                                    type="radio"
+                                                                    name="has_variant"
+                                                                    id="variant_product"
+                                                                    value="1"
+                                                                >
+                                                                <label class="form-check-label" for="variant_product">
+                                                                    Variant Product
+                                                                </label>
+                                                            </div>
 
-        </div>
-    </div>
-</div>
-
-<!-- Simple Product -->
-<div id="simpleProductSection">
-
-    <div class="row">
-
-        <div class="col-lg-4">
-            <div class="mb-3">
-                <label class="form-label">
-                    SKU <span class="text-danger">*</span>
-                </label>
-
-                <input
-                    type="text"
-                    class="form-control"
-                    name="sku"
-                    id="skuId"
-                    placeholder="Enter SKU">
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="mb-3">
-                <label class="form-label">
-                    Price <span class="text-danger">*</span>
-                </label>
-
-                <input
-                    type="number"
-                    class="form-control"
-                    name="price"
-                    placeholder="Enter Price">
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="mb-3">
-                <label class="form-label">
-                    Stock <span class="text-danger">*</span>
-                </label>
-
-                <input
-                    type="number"
-                    class="form-control"
-                    name="stock"
-                    id="stockNumber"
-                    placeholder="Enter Stock">
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
-<!-- Variant Product -->
-<div id="variantProductSection" style="display:none;">
-
-    <div class="card border">
-        <div class="card-header">
-            <h6 class="mb-0">Variant Configuration</h6>
-        </div>
-
-        <div class="card-body">
-
-            <div class="mb-3">
-                <label class="form-label">Attributes</label>
-
-                <select class="form-select" multiple id="attribute_ids">
-                    {% for attribute in attributes %}
-                        <option value="{{ attribute.id }}">
-                            {{ attribute.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div id="attributeValuesContainer"></div>
-
-            <button
-                type="button"
-                class="btn btn-primary mt-3"
-                id="generateVariantBtn">
-
-                Generate Variants
-
-            </button>
-
-            <div id="variantTable" class="mt-4"></div>
-
-        </div>
-    </div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-                                                <div class="col-12">
-                                                    <div>
-                                                        <label class="form-label">Short Description <span class="text-muted">(Required)</span></label>
-                                                        <div id="snow-editor">
-                                                            <p>
-                                                                Introducing the <strong><em>Azure Comfort Single Sofa</em></strong
-                                                                >, a perfect blend of modern design and luxurious comfort.
-                                                            </p>
-
-                                                            <p>This premium blue single sofa is designed to elevate any living space with its sleek profile and rich, durable fabric. It’s the perfect seating option for your living room, lounge area, or cozy reading nook.</p>
-
-                                                            <ul>
-                                                                <li>Crafted with a solid mahogany frame for enhanced durability.</li>
-                                                                <li>Upholstered in a high-quality blue fabric that offers both style and comfort.</li>
-                                                            </ul>
                                                         </div>
-                                                        <!-- end Snow-editor -->
                                                     </div>
                                                 </div>
 
-                                                <div class="col-12">
-                                                    <div>
-                                                        <label class="form-label">Product Description <span class="text-muted">(Required)</span></label>
-                                                        <div id="snow-editor">
-                                                            <p>
-                                                                Introducing the <strong><em>Azure Comfort Single Sofa</em></strong
-                                                                >, a perfect blend of modern design and luxurious comfort.
-                                                            </p>
+                                                <!-- Simple Product -->
+                                                <div id="simpleProductSection">
 
-                                                            <p>This premium blue single sofa is designed to elevate any living space with its sleek profile and rich, durable fabric. It’s the perfect seating option for your living room, lounge area, or cozy reading nook.</p>
+                                                    <div class="row">
 
-                                                            <ul>
-                                                                <li>Crafted with a solid mahogany frame for enhanced durability.</li>
-                                                                <li>Upholstered in a high-quality blue fabric that offers both style and comfort.</li>
-                                                            </ul>
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">
+                                                                    SKU <span class="text-danger">*</span>
+                                                                </label>
+
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    name="sku"
+                                                                    id="skuId"
+                                                                    placeholder="Enter SKU">
+                                                            </div>
                                                         </div>
-                                                        <!-- end Snow-editor -->
+
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">
+                                                                    Price <span class="text-danger">*</span>
+                                                                </label>
+
+                                                                <input
+                                                                    type="number"
+                                                                    class="form-control"
+                                                                    name="price"
+                                                                    placeholder="Enter Price">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">
+                                                                    Stock <span class="text-danger">*</span>
+                                                                </label>
+
+                                                                <input
+                                                                    type="number"
+                                                                    class="form-control"
+                                                                    name="stock"
+                                                                    id="stockNumber"
+                                                                    placeholder="Enter Stock">
+                                                            </div>
+                                                        </div>
+
                                                     </div>
+
                                                 </div>
+
+                                                <!-- Variant Product -->
+                                                <div id="variantProductSection" style="display:none;">
+
+                                                    <div class="card border">
+                                                        <div class="card-header">
+                                                            <h6 class="mb-0">Variant Configuration</h6>
+                                                        </div>
+
+                                                        <div class="card-body">
+
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Attributes</label>
+
+                                                                <select class="form-select" multiple id="attribute_ids">
+                                                                    {% for attribute in attributes %}
+                                                                        <option value="{{ attribute.id }}">
+                                                                            {{ attribute.name }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+
+                                                            <div id="attributeValuesContainer"></div>
+
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-primary mt-3"
+                                                                id="generateVariantBtn">
+
+                                                                Generate Variants
+
+                                                            </button>
+
+                                                            <div id="variantTable" class="mt-4"></div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+
+                                                <!-- Short Description -->
+<div class="col-12">
+    <div>
+        <label class="form-label">
+            Short Description <span class="text-muted">(Required)</span>
+        </label>
+
+        <div id="shortDescriptionEditor" style="height:200px;">
+            <p></p>
+        </div>
+
+        <input
+            type="hidden"
+            name="short_description"
+            id="short_description">
+    </div>
+</div>
+
+<!-- Product Description -->
+<div class="col-12 mt-4">
+    <div>
+        <label class="form-label">
+            Product Description <span class="text-muted">(Required)</span>
+        </label>
+
+        <div id="productDescriptionEditor" style="height:300px;">
+            <p></p>
+        </div>
+
+        <input
+            type="hidden"
+            name="description"
+            id="description">
+    </div>
+</div>
+
+
+
+
+
+
+
+                                                
                                             </div>
                                         </div>
                                         <!-- end card-body-->
                                     </div>
                                     <!-- end card-->
 
+                                    <!------ Main Product Image Start ------>
                                     <div class="card">
-                                        <div class="card-header d-block p-3">
-                                            <h4 class="card-title mb-1">Product Image</h4>
-                                            <p class="text-muted mb-0">To upload a product image, please use the option below to select and upload the relevant file.</p>
+
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-1">
+                                                Main Product Image
+                                            </h4>
+
+                                            <p class="text-muted mb-0">
+                                                Upload the main product image. Only one image is allowed.
+                                            </p>
                                         </div>
-                                        <!-- end card-header -->
 
                                         <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <form action="https://coderthemes.com/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                                                        <div class="fallback">
-                                                            <input name="file" type="file" name="mainImage" />
-                                                        </div>
 
-                                                        <div class="dz-message needsclick">
-                                                            <div class="avatar-lg mx-auto mb-3">
-                                                                <span class="avatar-title bg-info-subtle text-info rounded-circle">
-                                                                    <i data-lucide="cloud-upload" class="fs-24"></i>
-                                                                </span>
-                                                            </div>
-                                                            <h4 class="mb-2">Drop files here or click to upload.</h4>
-                                                            <p class="text-muted fst-italic mb-3">You can drag images here, or browse files via the button below.</p>
-                                                            <button type="button" class="btn btn-sm shadow btn-default">Browse Images</button>
-                                                        </div>
-                                                    </form>
+                                            <div id="mainImageDropzone" class="dropzone border rounded">
 
-                                                    <!-- Preview -->
-                                                    <div class="dropzone-previews mt-3" id="file-previews"></div>
+                                                <div class="dz-message needsclick">
 
-                                                    <!-- file preview template -->
-                                                    <div class="d-none" id="uploadPreviewTemplate">
-                                                        <div class="card mt-1 mb-0 border-dashed border">
-                                                            <div class="p-2">
-                                                                <div class="row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="" />
-                                                                    </div>
-                                                                    <div class="col ps-0">
-                                                                        <a href="javascript:void(0);" class="fw-semibold" data-dz-name></a>
-                                                                        <p class="mb-0 text-muted" data-dz-size></p>
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <!-- Button -->
-                                                                        <a href="#" class="btn btn-link btn-lg text-danger" data-dz-remove>
-                                                                            <span class="dropzone-close"></span>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="avatar-lg mx-auto mb-3">
+                                                        <span class="avatar-title bg-info-subtle text-info rounded-circle">
+                                                            <i data-lucide="cloud-upload" class="fs-24"></i>
+                                                        </span>
                                                     </div>
-                                                    <!-- end file preview template -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end card-body-->
-                                    </div>
 
-                                    <!------Gallery Image Start-->
-                                    <div class="card">
-                                        <div class="card-header d-block p-3">
-                                            <h4 class="card-title mb-1">Gallery Image</h4>
-                                            <p class="text-muted mb-0">To upload a product image, please use the option below to select and upload the relevant file.</p>
+                                                    <h4 class="mb-2">
+                                                        Drop main image here
+                                                    </h4>
+
+                                                    <p class="text-muted">
+                                                        or click to browse.
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div id="mainImagePreview" class="dropzone-previews mt-3"></div>
+                                              
                                         </div>
-                                        <!-- end card-header -->
+
+                                    </div>
+                                    <!------ Main Product Image End ------>
+
+                                   <!------ Gallery Images Start ------>
+                                    <div class="card">
+
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-1">
+                                                Product Gallery
+                                            </h4>
+
+                                            <p class="text-muted mb-0">
+                                                Upload multiple gallery images for this product.
+                                            </p>
+                                        </div>
 
                                         <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <form action="https://coderthemes.com/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                                                        <div class="fallback">
-                                                            <input name="file" type="file" name="galleryImage" />
-                                                        </div>
 
-                                                        <div class="dz-message needsclick">
-                                                            <div class="avatar-lg mx-auto mb-3">
-                                                                <span class="avatar-title bg-info-subtle text-info rounded-circle">
-                                                                    <i data-lucide="cloud-upload" class="fs-24"></i>
-                                                                </span>
-                                                            </div>
-                                                            <h4 class="mb-2">Drop files here or click to upload.</h4>
-                                                            <p class="text-muted fst-italic mb-3">You can drag images here, or browse files via the button below.</p>
-                                                            <button type="button" class="btn btn-sm shadow btn-default">Browse Images</button>
-                                                        </div>
-                                                    </form>
+                                            <div id="galleryImageDropzone" class="dropzone border rounded">
 
-                                                    <!-- Preview -->
-                                                    <div class="dropzone-previews mt-3" id="file-previews"></div>
+                                                <div class="dz-message needsclick">
 
-                                                    <!-- file preview template -->
-                                                    <div class="d-none" id="uploadPreviewTemplate">
-                                                        <div class="card mt-1 mb-0 border-dashed border">
-                                                            <div class="p-2">
-                                                                <div class="row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="" />
-                                                                    </div>
-                                                                    <div class="col ps-0">
-                                                                        <a href="javascript:void(0);" class="fw-semibold" data-dz-name></a>
-                                                                        <p class="mb-0 text-muted" data-dz-size></p>
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <!-- Button -->
-                                                                        <a href="#" class="btn btn-link btn-lg text-danger" data-dz-remove>
-                                                                            <span class="dropzone-close"></span>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="avatar-lg mx-auto mb-3">
+                                                        <span class="avatar-title bg-info-subtle text-info rounded-circle">
+                                                            <i data-lucide="cloud-upload" class="fs-24"></i>
+                                                        </span>
                                                     </div>
-                                                    <!-- end file preview template -->
+
+                                                    <h4 class="mb-2">
+                                                        Drop gallery images here
+                                                    </h4>
+
+                                                    <p class="text-muted">
+                                                        or click to browse.
+                                                    </p>
+
                                                 </div>
+
                                             </div>
+
+                                            <div
+                                                id="galleryImagePreview"
+                                                class="dropzone-previews mt-3">
+                                            </div>
+
                                         </div>
-                                        <!-- end card-body-->
+
                                     </div>
-                                    <!----Gallery Image End -->
+                                    <!------ Gallery Images End ------>
+
                                     <!-- end card-->
 
                                 </div>
@@ -389,7 +358,7 @@
                                             <div class="mb-0">
                                                 <label for="discountValue" class="form-label">Commission Value <span class="text-muted">(Optional)</span></label>
                                                 <div class="app-search">
-                                                    <input type="text" class="form-control" name="commissionValue" id="commissionValue" placeholder="Enter Commision amount or percentage" />
+                                                    <input type="text" class="form-control" name="commission_value" id="commission_value" placeholder="Enter Commision amount or percentage" />
                                                     <i data-lucide="tag" class="app-search-icon text-muted"></i>
                                                 </div>
                                             </div>
@@ -450,10 +419,9 @@
                                                 <div class="app-search">
                                                     <select class="form-select form-control my-1 my-md-0" name="status" id="statusOne">
                                                         <option selected>Choose Status</option>
-                                                        <option value="Published">Published</option>
-                                                        <option value="Inactive">Inactive</option>
-                                                        <option value="Schedule">Schedule</option>
-                                                        <option value="Draft">Draft</option>
+                                                        <option value="1">Published</option>
+                                                        <option value="0">Inactive</option>
+                                                        <option value="2">Draft</option>
                                                     </select>
                                                     <i data-lucide="wand-sparkles" class="app-search-icon text-muted"></i>
                                                 </div>
@@ -476,8 +444,12 @@
                                 <a href="#!" class="btn btn-danger fw-semibold"> Discard </a>
                                 <a href="#!" class="btn btn-secondary"> Save as Draft </a>
                                 <a href="#!" class="btn btn-success"> Publish </a>
+                                <button type="submit" class="btn btn-primary">
+                                    Save Product
+                                </button>
                             </div>
                         </div>
+                    </form>
                         <!-- end col-->
                     </div>
                     <!-- end row-->
@@ -505,6 +477,46 @@
             <!-- ============================================================== -->
 
 {% include "/admin/layout/footer.html" %}
+
+/* Editor Section */
+<script>
+    const shortEditor = new Quill("#shortDescriptionEditor", {
+        theme: "snow"
+    });
+
+    const productEditor = new Quill("#productDescriptionEditor", {
+        theme: "snow"
+    });
+
+    Dropzone.autoDiscover = false;
+
+let mainImageFiles = [];
+let galleryImageFiles = [];
+
+let mainDropzone = new Dropzone("#mainImageDropzone", {
+    url: "/",
+    autoProcessQueue: false,
+    maxFiles: 1,
+    acceptedFiles: "image/*",
+    addRemoveLinks: true
+});
+
+mainDropzone.on("maxfilesexceeded", function(file) {
+    this.removeFile(file);
+    alert("Only one main image is allowed");
+});
+
+
+let galleryDropzone = new Dropzone("#galleryImageDropzone", {
+    url: "/",
+    autoProcessQueue: false,
+    maxFiles: 10,
+    acceptedFiles: "image/*",
+    addRemoveLinks: true
+});
+</script>
+
+
 
 <script>
     $("#category_id").on("change", function () {
@@ -579,6 +591,303 @@ $(document).ready(function () {
 
             $("#simpleProductSection").hide();
             $("#variantProductSection").show();
+
+        }
+
+    });
+
+});
+
+$(document).ready(function () {
+
+    $("#attribute_ids").on("change", function () {
+
+        let attributeIds = $(this).val();
+
+        if (!attributeIds || attributeIds.length === 0) {
+            $("#attributeValuesContainer").html("");
+            return;
+        }
+
+        $.ajax({
+            url: "/admin/product/get-attribute-values",
+            type: "POST",
+            contentType: "application/json",
+
+            data: JSON.stringify({
+                attribute_ids: attributeIds
+            }),
+
+            success: function (response) {
+
+                let html = "";
+
+                if (response.status && response.data.length > 0) {
+
+                    html += `
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Select Values
+                            </label>
+
+                            <div class="row">
+                    `;
+
+                    response.data.forEach(function(item){
+
+                        html += `
+                            <div class="col-md-3 mb-2">
+
+                                <div class="form-check">
+
+                                    <input
+                                        class="form-check-input attribute-value"
+                                        type="checkbox"
+                                        value="${item.id}"
+                                        data-attribute="${item.attribute_id}"
+                                        id="value_${item.id}"
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="value_${item.id}"
+                                    >
+                                        ${item.value}
+                                    </label>
+
+                                </div>
+
+                            </div>
+                        `;
+
+                    });
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+
+                }
+
+                $("#attributeValuesContainer").html(html);
+
+            },
+
+            error: function (xhr) {
+
+                console.log(xhr.responseText);
+
+            }
+
+        });
+
+    });
+
+});
+
+
+
+
+$("#generateVariantBtn").click(function () {
+
+    let selected = [];
+
+    $(".attribute-value:checked").each(function () {
+
+        selected.push({
+            attribute_id: $(this).data("attribute"),
+            value_id: $(this).val(),
+            value: $(this).next("label").text().trim()
+        });
+
+    });
+
+    let grouped = {};
+
+selected.forEach(function (item) {
+
+    if (!grouped[item.attribute_id]) {
+        grouped[item.attribute_id] = [];
+    }
+
+    grouped[item.attribute_id].push({
+        value_id: item.value_id,
+        value: item.value
+    });
+
+});
+
+/*------------------------*/
+
+let attributes = Object.values(grouped);
+
+function generateCombinations(arrays) {
+
+    if (arrays.length === 0) return [];
+
+    let result = [[]];
+
+    arrays.forEach(function (array) {
+
+        let temp = [];
+
+        result.forEach(function (resultItem) {
+
+            array.forEach(function (value) {
+
+                temp.push([...resultItem, value]);
+
+            });
+
+        });
+
+        result = temp;
+
+    });
+
+    return result;
+}
+
+let variants = generateCombinations(attributes);
+
+/*------------------------------*/
+
+let html = `
+<table class="table table-bordered align-middle">
+    <thead>
+        <tr>
+            <th width="25%">Variant</th>
+            <th width="20%">SKU</th>
+            <th width="15%">Price</th>
+            <th width="15%">Stock</th>
+            <th width="10%">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+`;
+
+variants.forEach(function (variant, index) {
+
+    let variantName = variant.map(v => v.value).join(" / ");
+    let valueIds = variant.map(v => v.value_id).join(",");
+
+    html += `
+        <tr>
+
+            <td>
+                ${variantName}
+
+                <input type="hidden"
+                       name="variant_value_ids[]"
+                       value="${valueIds}">
+
+                <input type="hidden"
+                       name="variant_names[]"
+                       value="${variantName}">
+            </td>
+
+            <td>
+                <input type="text"
+                       class="form-control"
+                       name="variant_sku[]">
+            </td>
+
+            <td>
+                <input type="number"
+                       class="form-control"
+                       name="variant_price[]">
+            </td>
+
+            <td>
+                <input type="number"
+                       class="form-control"
+                       name="variant_stock[]">
+            </td>
+
+            <td>
+                <select class="form-select"
+                        name="variant_status[]">
+
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+
+                </select>
+            </td>
+
+        </tr>
+    `;
+
+});
+
+html += `
+    </tbody>
+</table>
+`;
+
+$("#variantTable").html(html);
+
+});
+
+
+
+</script>
+
+<script>
+    $("#productForm").submit(function(e){
+
+    e.preventDefault();
+
+    $("#short_description").val(
+        shortEditor.root.innerHTML
+    );
+
+    $("#description").val(
+        productEditor.root.innerHTML
+    );
+
+    let formData = new FormData(this);
+
+        // Main Image
+    if(mainDropzone.files.length > 0){
+        formData.append(
+            "main_image",
+            mainDropzone.files[0]
+        );
+    }
+
+
+    // Gallery Images
+    galleryDropzone.files.forEach((file,index)=>{
+
+        formData.append(
+            "gallery_images[]",
+            file
+        );
+
+    });
+
+
+
+
+
+
+    $.ajax({
+
+        url: "/admin/product/create",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success:function(response){
+
+            console.log(response);
+
+        },
+
+        error:function(xhr){
+
+            console.log(xhr.responseJSON);
 
         }
 

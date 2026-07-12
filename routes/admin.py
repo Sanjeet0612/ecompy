@@ -8,6 +8,8 @@ from models.category import Category
 from models.brand import Brand
 from models.attribute import Attribute
 
+from repositories.attribute_repository import AttributeRepository
+
 router = APIRouter(prefix="/admin")
 
 templates = Jinja2Templates(directory="templates")
@@ -151,6 +153,34 @@ def manage_attribute(request: Request):
             "admin": admin
         }
 
+    )
+
+# Attribute Value Section Start
+@router.get("/manage-attribute-value")
+def manage_attribute_value(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    admin = getattr(request.state, "admin", None)
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+
+    attributes = AttributeRepository().get_active_attributes(db)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/manage_attribute_value.html",
+        context={
+            "title": "Manage Attribute Value",
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Attribute Value", "url": "/admin/manage-attribute-value"},
+                {"name": "Manage Attribute Value", "url": None}
+            ],
+            "admin": admin,
+            "attributes": attributes
+        }
     )
 
 

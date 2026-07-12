@@ -69,6 +69,19 @@ class AttributeRepository:
         db.refresh(attribute)
         return attribute
     
+
+    def get_active_attributes(self, db):
+        return (
+            db.query(Attribute)
+            .filter(
+                Attribute.status == 1,
+                Attribute.deleted_at == None
+            )
+            .order_by(Attribute.name.asc())
+            .all()
+        )
+
+
     # ---------------- DELETE ----------------
     def delete(self, db, attribute_id):
         try:
