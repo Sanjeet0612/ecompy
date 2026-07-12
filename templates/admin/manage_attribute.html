@@ -64,7 +64,6 @@
                                                     <input data-table-select-all class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" value="option" />
                                                 </th>
                                                 <th data-table-sort="product">Attribute Name</th>
-                                                <th data-table-sort>Slug</th>
                                                 <th data-table-sort>Last Modify</th>
                                                 <th data-table-sort data-column="status">Status</th>
                                                 <th class="text-center" style="width: 1%">Actions</th>
@@ -109,10 +108,10 @@
                                             </div>
 
                                             <!-- Slug -->
-                                            <div class="col-md-6">
+                                            <!--<div class="col-md-6">
                                                 <label class="form-label">Slug (Optional)</label>
                                                 <input type="text" class="form-control" name="slug" id="attributeSlug" />
-                                            </div>
+                                            </div>-->
 
                                            
                                             <!-- Status -->
@@ -141,11 +140,11 @@
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="addCategoryModalLabel">Add New Attribute</h5>
+                                    <h5 class="modal-title" id="addCategoryModalLabel">Edit New Attribute</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 
-                                <form id="editAttributeForm" enctype="multipart/form-data" action="javascript:void(0)">
+                                <form id="editAttributeForm"  action="javascript:void(0)">
                                     <div class="modal-body">
                                         <div class="row g-3">
                                            <input type="hidden" name="id" id="editAttribute">     
@@ -154,12 +153,12 @@
                                                 <label class="form-label">Attribute Name</label>
                                                 <input type="text" class="form-control" name="name" id="editAttributeName" required />
                                             </div>
-
+                                            <input type="hidden" name="id" id="editAttributeId">   
                                             <!-- Slug -->
-                                            <div class="col-md-6">
+                                            <!--<div class="col-md-6">
                                                 <label class="form-label">Slug (Optional)</label>
                                                 <input type="text" class="form-control" name="slug" id="editAttributeSlug" />
-                                            </div>
+                                            </div>-->
 
                                            
                                             <!-- Status -->
@@ -218,13 +217,7 @@
                                                 readonly>
                                         </div>
 
-                                        <div class="col-md-6">
-                                            <label class="form-label">Slug</label>
-                                            <input type="text"
-                                                class="form-control"
-                                                id="viewAttributeSlug"
-                                                readonly>
-                                        </div>
+                                        
 
                                         <div class="col-md-6">
                                             <label class="form-label">Status</label>
@@ -421,7 +414,7 @@
                                 </div>
                             </td>
 
-                            <td>${item.slug}</td>
+                           
                             <td>
                                 ${updatedAt}
                                 <br>
@@ -772,4 +765,89 @@ $(document).on("click", ".delete-attribute", function (e) {
     });
 
 });
+
+/* Edit Attribute Section Start*/
+
+$(document).on("click", ".edit-attribute", function (e) {
+
+    e.preventDefault();
+
+    let id = $(this).data("id");
+
+    $.ajax({
+        url: `/admin/attribute/${id}`,
+        type: "GET",
+
+        success: function(res){
+
+            if(res.status){
+
+                $("#editAttributeId").val(res.data.id);
+                $("#editAttributeName").val(res.data.name);
+                $("#editAttributeStatus").val(res.data.status);
+                // Open Modal
+                $("#editAttributeModal").modal("show");
+            }
+
+        },
+
+        error:function(xhr){
+
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:xhr.responseJSON?.detail || "Something went wrong"
+            });
+
+        }
+
+    });
+
+});
+
+/* Update Category Section */
+$("#editAttributeForm").submit(function(e){
+
+    e.preventDefault();
+
+    let id = $("#editAttributeId").val();
+    let formData = new FormData(this);
+
+    $.ajax({
+
+        url: `/admin/attribute/update/${id}`,
+        type: "PUT",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success:function(res){
+
+            Swal.fire({
+                icon:"success",
+                title:"Success",
+                text:res.message,
+                timer:1500,
+                showConfirmButton:false
+            });
+
+            bootstrap.Modal.getInstance(
+                document.getElementById("editAttributeModal")
+            ).hide();
+            loadBrands();
+        },
+
+        error:function(xhr){
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:xhr.responseJSON?.detail || "Something went wrong"
+            });
+        }
+    });
+});
+
+
+
+
 </script>    

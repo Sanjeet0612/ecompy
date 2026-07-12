@@ -113,52 +113,24 @@ class BrandRepository:
 
     # ---------------- UPDATE ----------------
     def update(self, db, brand, data):
-        try:
-            # Duplicate Check
-            existing = db.query(Brand).filter(
-                Brand.id != brand.id,
-                Brand.deleted_at == None,
-                (
-                    (Brand.name == data["name"]) |
-                    (Brand.slug == data["slug"])
-                )
-            ).first()
+        brand.name = data["name"]
+        brand.slug = data["slug"]
+        brand.status = data["status"]
 
-            if existing:
+       
+        if data.get("image"):
+            # Old image delete
+            if brand.image:
+                old_image = brand.image.lstrip("/")
+                if os.path.exists(old_image):
+                    os.remove(old_image)
 
-                if existing.name == data["name"]:
-                    return {
-                        "status": False,
-                        "message": "Brand name already exists"
-                    }
+            brand.image = data["image"]
 
-                return {
-                    "status": False,
-                    "message": "Brand slug already exists"
-                }
+        db.commit()
+        db.refresh(brand)
 
-            # Update Fields
-            for key, value in data.items():
-                setattr(brand, key, value)
-
-            brand.updated_at = datetime.utcnow()
-
-            db.commit()
-            db.refresh(brand)
-
-            return {
-                "status": True,
-                "message": "Brand updated successfully",
-                "data": brand
-            }
-
-        except Exception as e:
-            db.rollback()
-
-        return {
-            "status": False,
-            "message": str(e)
-        }     
+        return brand
     
     # ---------------- DELETE ----------------
     def delete(self, db, brand_id):

@@ -146,37 +146,37 @@
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                                    <h5 class="modal-title" id="addCategoryModalLabel">Edit Brand</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 
-                                <form id="editCategoryForm" enctype="multipart/form-data" action="javascript:void(0)">
+                                <form id="editBrandForm" enctype="multipart/form-data" action="javascript:void(0)">
                                     <div class="modal-body">
                                         <div class="row g-3">
-                                           <input type="hidden" name="id" id="editCategoryId">     
-                                            <!-- Category Name -->
+                                           <input type="hidden" name="id" id="editBrandId">     
+                                            <!-- Brand Name -->
                                             <div class="col-md-6">
-                                                <label class="form-label">Category Name</label>
-                                                <input type="text" class="form-control" name="name" id="editCategoryName" required />
+                                                <label class="form-label">Brand Name</label>
+                                                <input type="text" class="form-control" name="name" id="editBrandName" required />
                                             </div>
 
                                             <!-- Slug -->
                                             <div class="col-md-6">
                                                 <label class="form-label">Slug (Optional)</label>
-                                                <input type="text" class="form-control" name="slug" id="editCategorySlug" />
+                                                <input type="text" class="form-control" name="slug" id="editBrandSlug" />
                                             </div>
 
                                             <!-- Image -->
                                             <div class="col-md-12">
-                                                <label class="form-label">Category Image</label>
-                                                <img id="editCategoryPreview" src="" class="img-thumbnail mt-2" width="40">
-                                                <input type="file" class="form-control" name="image" id="editCategoryImage" accept="image/*" />
+                                                <label class="form-label">Brand Logo</label>
+                                                <img id="editBrandPreview" src="" class="img-thumbnail mt-2" width="40">
+                                                <input type="file" class="form-control" name="image" id="editBrandImage" accept="image/*" />
                                             </div>
 
                                             <!-- Status -->
                                             <div class="col-md-6">
                                                 <label class="form-label">Status</label>
-                                                <select class="form-select" name="status" id="editCategoryStatus" required>
+                                                <select class="form-select" name="status" id="editBrandStatus" required>
                                                     <option value="1">Active</option>
                                                     <option value="0">Inactive</option>
                                                 </select>
@@ -193,7 +193,7 @@
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">Add Category</button>
+                                        <button type="submit" class="btn btn-primary">Update Brand</button>
                                     </div>
                                 </form>
                             </div>
@@ -791,4 +791,91 @@ $(document).on("click", ".delete-brand", function (e) {
     });
 
 });
+
+/* Edit Attribute Section Start*/
+
+$(document).on("click", ".edit-brand", function (e) {
+
+    e.preventDefault();
+
+    let id = $(this).data("id");
+
+    $.ajax({
+        url: `/admin/brand/${id}`,
+        type: "GET",
+
+        success: function(res){
+
+            if(res.status){
+
+                $("#editBrandId").val(res.data.id);
+                $("#editBrandName").val(res.data.name);
+                $("#editBrandSlug").val(res.data.slug);
+                $("#editBrandStatus").val(res.data.status);
+                $("#editBrandPreview").attr("src", res.data.image);
+                // Open Modal
+                $("#editBrandModal").modal("show");
+            }
+
+        },
+
+        error:function(xhr){
+
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:xhr.responseJSON?.detail || "Something went wrong"
+            });
+
+        }
+
+    });
+
+});
+
+/* Update Attribute Section */
+$("#editBrandForm").submit(function(e){
+
+    e.preventDefault();
+
+    let id = $("#editBrandId").val();
+    let formData = new FormData(this);
+
+    $.ajax({
+
+        url: `/admin/brand/update/${id}`,
+        type: "PUT",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success:function(res){
+
+            Swal.fire({
+                icon:"success",
+                title:"Success",
+                text:res.message,
+                timer:1500,
+                showConfirmButton:false
+            });
+
+            bootstrap.Modal.getInstance(
+                document.getElementById("editBrandModal")
+            ).hide();
+            loadBrands();
+        },
+
+        error:function(xhr){
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:xhr.responseJSON?.detail || "Something went wrong"
+            });
+        }
+    });
+});
+
+
+
+
 </script>    

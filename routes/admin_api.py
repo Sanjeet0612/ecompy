@@ -1,7 +1,8 @@
-import os, uuid, re
+import os, uuid, re, math
 from models.category import Category
 from models.subcategory import SubCategory
 from models.brand import Brand
+from models.attribute import Attribute
 from fastapi import (APIRouter, Depends, HTTPException, Response, UploadFile, File, Form, Request)
 from sqlalchemy.orm import Session
 
@@ -815,6 +816,132 @@ def list_brands(
         "pages": result["pages"]
     }
 
+
+# Edit Brand By id
+@router.get("/brand/{brand_id}")
+def get_brand(request: Request, brand_id: int, db: Session = Depends(get_db)):
+
+    admin = getattr(request.state, "admin", None)
+
+    # 1. AUTH CHECK
+    if not admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+
+    brand = BrandRepository().get_by_id(db, brand_id)
+
+    if not brand:
+        raise HTTPException(status_code=404, detail="Brand not found")
+
+    return {
+        "status": True,
+        "data": {
+            "id": brand.id,
+            "name": brand.name,
+            "slug": brand.slug,
+            "status": brand.status,
+            "image": brand.logo,
+            "created_at": brand.created_at.strftime("%d %b %Y %I:%M %p")
+        }
+    }
+
+# Update Brand By id
+@router.put("/brand/update/{brand_id}")
+async def update_category(
+    request: Request,
+    brand_id: int,
+    name: str = Form(...),
+    slug: str = Form(None),
+    status: int = Form(...),
+    image: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+
+    admin = getattr(request.state, "admin", None)
+
+    # 1. AUTH CHECK
+    if not admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+
+    brand = BrandRepository().get_by_id(db, brand_id)
+
+    if not brand:
+        raise HTTPException(status_code=404, detail="Brand not found")
+
+    # Auto Slug
+    if not slug:
+        slug = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip("-")
+
+    # Duplicate Slug Check
+    duplicate = (
+        db.query(Brand)
+        .filter(
+            Brand.slug == slug,
+            Brand.id != brand_id,
+            Brand.deleted_at == None
+        )
+        .first()
+    )
+
+    if duplicate:
+        raise HTTPException(status_code=400, detail="Slug already exists")
+
+    image_path = None
+
+    if image and image.filename:
+
+        allowed = ["image/jpeg", "image/png", "image/webp"]
+
+        if image.content_type not in allowed:
+            raise HTTPException(status_code=400, detail="Invalid Logo")
+
+        contents = await image.read()
+
+        if len(contents) > 500 * 1024:
+            raise HTTPException(status_code=400, detail="Logo too large")
+
+        folder = "static/uploads/brand/"
+        os.makedirs(folder, exist_ok=True)
+
+        ext = image.filename.split(".")[-1]
+        filename = f"{uuid.uuid4()}.{ext}"
+
+        file_location = os.path.join(folder, filename)
+
+        with open(file_location, "wb") as f:
+            f.write(contents)
+
+        image_path = f"/static/uploads/brand/{filename}"
+
+    data = {
+        "name": name,
+        "slug": slug,
+        "status": status,
+        "image": image_path
+    }
+
+    brand = BrandRepository().update(db, brand, data)
+
+    return {
+        "status": True,
+        "message": "Brand updated successfully",
+        "data": {
+            "id": brand.id,
+            "name": brand.name,
+            "slug": brand.slug,
+            "image": brand.logo,
+            "status": brand.status
+           
+        }
+    }
+
+
+
+
+
+
+
 # Brand Bulk Deleted
 @router.post("/brand/bulk-delete")
 def bulk_delete_brands(request: Request,payload: dict,db: Session = Depends(get_db),):
@@ -928,18 +1055,17 @@ async def create_attribute(
             "status": attribute.status
         }
     }
-
-
+# Attribute List
 @router.get("/attribute/list")
-def list_brands(
+def list_attribute(
     page: int = 1,
     limit: int = 10,
     search: str = None,
     status: str = None,
     db: Session = Depends(get_db)
 ):
-    
-    result = BrandRepository().get_all(
+
+    attributes, total = AttributeRepository().get_all(
         db=db,
         page=page,
         limit=limit,
@@ -949,7 +1075,7 @@ def list_brands(
 
     data = []
 
-    for item in result["data"]:
+    for item in attributes:
         data.append({
             "id": item.id,
             "name": item.name,
@@ -957,18 +1083,162 @@ def list_brands(
             "updated_at": item.updated_at
         })
 
+    pages = math.ceil(total / limit) if total > 0 else 1
+
     return {
         "status": True,
         "data": data,
-        "total": result["total"],
-        "page": result["page"],
-        "limit": result["limit"],
-        "pages": result["pages"]
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": pages
     }
 
+# Edit attribute By id
+@router.get("/attribute/{attribute_id}")
+def get_attribute(request: Request, attribute_id: int, db: Session = Depends(get_db)):
+
+    admin = getattr(request.state, "admin", None)
+
+    # 1. AUTH CHECK
+    if not admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
 
 
+    attribute = AttributeRepository().get_by_id(db, attribute_id)
 
+    if not attribute:
+        raise HTTPException(status_code=404, detail="Attribute not found")
+
+    return {
+        "status": True,
+        "data": {
+            "id": attribute.id,
+            "name": attribute.name,
+            "status": attribute.status,
+            "created_at": attribute.created_at.strftime("%d %b %Y %I:%M %p")
+        }
+    }
+# Update attribute By id
+@router.put("/attribute/update/{attribute_id}")
+async def update_attribute(
+    request: Request,
+    attribute_id: int,
+    name: str = Form(...),
+    status: int = Form(...),
+    db: Session = Depends(get_db)
+):
+
+    admin = getattr(request.state, "admin", None)
+
+    # 1. AUTH CHECK
+    if not admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+
+    attribute = AttributeRepository().get_by_id(db, attribute_id)
+
+    if not attribute:
+        raise HTTPException(status_code=404, detail="Attribute not found")
+
+    
+    data = {
+        "name": name,
+        "status": status
+    }
+
+    attribute = AttributeRepository().update(db, attribute, data)
+
+    return {
+        "status": True,
+        "message": "Attribute updated successfully",
+        "data": {
+            "id": attribute.id,
+            "name": attribute.name,
+            "status": attribute.status
+           
+        }
+    }
+
+# Attribute Single Delete
+@router.delete("/attribute/delete/{id}")
+def delete_attribute(
+    request: Request,
+    id: int,
+    db: Session = Depends(get_db)
+):
+
+    try:
+        # ---------------- AUTH CHECK ----------------
+        admin = getattr(request.state, "admin", None)
+
+        if not admin:
+            raise HTTPException(status_code=403, detail="Not authorized")
+
+        # ---------------- DELETE ----------------
+        result = AttributeRepository().delete(db, id)
+
+        return result
+
+    except Exception as e:
+        return {
+            "status": False,
+            "message": str(e)
+        }
+
+# Attribute Bulk Deleted
+@router.post("/attribute/bulk-delete")
+def bulk_delete_attribute(request: Request,payload: dict,db: Session = Depends(get_db),):
+
+    admin = getattr(request.state, "admin", None)
+
+    # 1. AUTH CHECK
+    if not admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    # 2. GET IDS
+    ids = payload.get("ids", [])
+
+    if not ids or not isinstance(ids, list):
+        raise HTTPException(status_code=400, detail="Invalid IDs")
+
+    # 3. VALIDATE IDS (remove invalid values)
+    clean_ids = []
+    for i in ids:
+        try:
+            clean_ids.append(int(i))
+        except:
+            continue
+
+    if not clean_ids:
+        raise HTTPException(status_code=400, detail="No valid IDs found")
+
+    # 4. CHECK EXISTING DATA
+    attribute = db.query(Attribute)\
+        .filter(Attribute.id.in_(clean_ids),
+                Attribute.deleted_at == None)\
+        .all()
+
+    if not attribute:
+        raise HTTPException(status_code=404, detail="No Attribute found")
+
+    # 5. SOFT DELETE (SAFE)
+    db.query(Attribute)\
+        .filter(Attribute.id.in_(clean_ids))\
+        .update(
+            {
+                "deleted_at": datetime.utcnow()
+            },
+            synchronize_session=False
+        )
+
+    db.commit()
+
+    return {
+        "status": True,
+        "message": f"{len(clean_ids)} Attribute deleted successfully",
+        "deleted_ids": clean_ids
+    }
 
 
 # Logout Section Start

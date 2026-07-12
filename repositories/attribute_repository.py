@@ -69,9 +69,34 @@ class AttributeRepository:
         db.refresh(attribute)
         return attribute
     
-    
+    # ---------------- DELETE ----------------
+    def delete(self, db, attribute_id):
+        try:
 
-    def delete(self, db, attribute):
-        attribute.deleted_at = datetime.now()
-        db.commit()
-        return True
+            attribute = db.query(Attribute).filter(
+                Attribute.id == attribute_id,
+                Attribute.deleted_at == None
+            ).first()
+
+            if not attribute:
+                return {
+                    "status": False,
+                    "message": "Attribute not found"
+                }
+
+            attribute.deleted_at = datetime.utcnow()
+
+            db.commit()
+
+            return {
+                "status": True,
+                "message": "Attribute deleted successfully"
+            }
+
+        except Exception as e:
+            db.rollback()
+
+            return {
+                "status": False,
+                "message": str(e)
+            }
