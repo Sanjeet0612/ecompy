@@ -1,6 +1,7 @@
 from models.brand import Brand
 from datetime import datetime
 from sqlalchemy import or_
+import os
 
 class BrandRepository:
 
@@ -120,12 +121,12 @@ class BrandRepository:
        
         if data.get("image"):
             # Old image delete
-            if brand.image:
-                old_image = brand.image.lstrip("/")
+            if brand.logo:
+                old_image = brand.logo.lstrip("/")
                 if os.path.exists(old_image):
                     os.remove(old_image)
 
-            brand.image = data["image"]
+            brand.logo = data["image"]
 
         db.commit()
         db.refresh(brand)
