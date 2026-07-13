@@ -28,6 +28,7 @@ class ProductCreate(BaseModel):
     main_image: Optional[str] = None
     has_variant: int = 0
     status: int = 1
+    
 
 
 # =========================================

@@ -27,5 +27,6 @@ class ProductVariantValue(Base):
     )
 
     attribute_value = relationship(
-        "AttributeValue"
+        "AttributeValue",
+        back_populates="product_variant_values"
     )

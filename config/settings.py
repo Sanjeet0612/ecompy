@@ -15,3 +15,5 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 EXPIRY_MINUTES = int(os.getenv("EXPIRY_MINUTES"))
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")

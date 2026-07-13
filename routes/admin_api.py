@@ -25,7 +25,10 @@ from schemas.product import ProductCreate
 from schemas.admin import AdminLogin
 from utils.security import verify_password
 from utils.jwt import create_access_token
+from utils.gemini import generate_product_content
+from utils.file_upload import (upload_image,PRODUCT_MAIN_PATH,PRODUCT_GALLERY_PATH)
 from datetime import datetime
+from typing import Optional
 
 router = APIRouter(prefix="/admin")
 
@@ -1520,31 +1523,31 @@ async def get_attribute_values(
 
 
 #-----------------------Product Save Section start---------------------------
-"""
+
 @router.post("/product/create")
 async def create_product(
     request: Request,
-
     category_id: int = Form(...),
     subcategory_id: int = Form(...),
     brand_id: int = Form(...),
-
     productName: str = Form(...),
-    
     short_description: str = Form(None),
     description: str = Form(None),
-
     has_variant: int = Form(...),
-
     sku: str = Form(None),
     price: float = Form(0),
     stock: int = Form(0),
-
     commission_type: str = Form("percentage"),
     commission_value: float = Form(0),
-
     status: int = Form(1),
-
+    variant_value_ids: Optional[list[str]] = Form(None, alias="variant_value_ids[]"),
+    variant_names: Optional[list[str]] = Form(None, alias="variant_names[]"),
+    variant_sku: Optional[list[str]] = Form(None, alias="variant_sku[]"),
+    variant_price: Optional[list[float]] = Form(None, alias="variant_price[]"),
+    variant_stock: Optional[list[int]] = Form(None, alias="variant_stock[]"),
+    variant_status: Optional[list[int]] = Form(None, alias="variant_status[]"),
+    main_image: UploadFile = File(None),
+    gallery_images: list[UploadFile] = File(alias="gallery_images[]"),
     db: Session = Depends(get_db)
 ):
 
@@ -1552,7 +1555,27 @@ async def create_product(
 
     if not admin:
         raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Main Image Section 
+    main_image_name = None
 
+    if main_image:
+        main_image_name = await upload_image(
+            main_image,
+            PRODUCT_MAIN_PATH
+        )
+    # Gallery Section
+    gallery_image_names = []
+    
+    for image in gallery_images:
+        if image.filename:
+            filename = await upload_image(
+                image,
+                PRODUCT_GALLERY_PATH
+            )
+            gallery_image_names.append(filename)
+
+    
     try:
 
         product_data = ProductCreate(
@@ -1574,13 +1597,39 @@ async def create_product(
             short_description=short_description,
             description=description,
 
-            main_image=None,
+            main_image=main_image_name,
 
             has_variant=has_variant,
             status=status
         )
 
-        product = ProductRepository(db).create(product_data)
+        product_repository = ProductRepository(db)
+        product = product_repository.create(product_data)
+        product_repository.save_gallery_images(product.id,gallery_image_names)
+
+        # Variant Section
+
+        variants = []
+
+        if has_variant == 1:
+
+            for i in range(len(variant_sku)):
+
+                variants.append({
+                    "attribute_value_ids": [
+                        int(x)
+                        for x in variant_value_ids[i].split(",")
+                    ],
+                    "sku": variant_sku[i],
+                    "price": variant_price[i],
+                    "stock": variant_stock[i],
+                    "status": variant_status[i]
+                })
+
+            variant_data = product_repository.save_variants(product.id,variants)
+
+            product_repository.save_variant_values(variant_data)
+            
 
         db.commit()
 
@@ -1600,39 +1649,13 @@ async def create_product(
             "status": False,
             "message": str(e)
         }
-"""
-
-
-@router.post("/product/create")
-async def create_product(
-    request: Request,
-    db: Session = Depends(get_db)
-):
-
-    admin = getattr(request.state, "admin", None)
-
-    if not admin:
-        raise HTTPException(status_code=403, detail="Not authorized")
-
-
-    form_data = await request.form()
-
-    print("============ PRODUCT DATA ============")
-
-    for key, value in form_data.multi_items():
-        print(key, "=>", value)
-
-    print("=======================================")
-
-    return {
-        "status": True,
-        "message": "Check terminal"
-    }
 
 
 
 
 
+
+@router.post("/admin/product/generate-ai")
 
 
 

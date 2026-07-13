@@ -13,7 +13,7 @@ class ProductImage(Base):
 
     image = Column(String(255), nullable=False)
 
-    is_thumbnail = Column(SmallInteger, default=0)
+    #is_thumbnail = Column(SmallInteger, default=0)
 
     sort_order = Column(Integer, default=0)
 

@@ -866,11 +866,6 @@ $("#variantTable").html(html);
 
     });
 
-
-
-
-
-
     $.ajax({
 
         url: "/admin/product/create",
@@ -879,15 +874,94 @@ $("#variantTable").html(html);
         processData: false,
         contentType: false,
 
-        success:function(response){
+        success: function(res) {
 
-            console.log(response);
+            if(res.status){
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: res.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+
+                    $("#productForm")[0].reset();
+
+                    mainDropzone.removeAllFiles(true);
+                    galleryDropzone.removeAllFiles(true);
+
+                    // Agar Quill Editor use kar rahe ho
+                    quill.root.innerHTML = "";
+                    quillShort.root.innerHTML = "";
+
+                });
+
+            }else{
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: res.message
+                });
+
+            }
 
         },
 
-        error:function(xhr){
+        error: function(xhr){
 
-            console.log(xhr.responseJSON);
+            let message = "Something went wrong.";
+
+            const fieldNames = {
+                category_id: "Category",
+                subcategory_id: "Sub Category",
+                brand_id: "Brand",
+                productName: "Product Name",
+                status: "Status",
+                sku: "SKU",
+                price: "Price",
+                stock: "Stock",
+                main_image: "Main Image"
+            };
+
+            if(xhr.responseJSON){
+
+                // FastAPI Validation Error (422)
+                if(xhr.responseJSON.detail){
+
+                    if(Array.isArray(xhr.responseJSON.detail)){
+
+                        message = xhr.responseJSON.detail.map(function(err){
+
+                            let field = fieldNames[err.loc[1]] || err.loc[1];
+
+                            return field + " : " + err.msg;
+
+                        }).join("<br>");
+
+                    }else{
+
+                        message = xhr.responseJSON.detail;
+
+                    }
+
+                }
+
+                // Custom API Error
+                else if(xhr.responseJSON.message){
+
+                    message = xhr.responseJSON.message;
+
+                }
+
+            }
+
+            Swal.fire({
+                icon: "error",
+                title: "Validation Error",
+                html: "<pre style='text-align:left'>" + message + "</pre>"
+            });
 
         }
 

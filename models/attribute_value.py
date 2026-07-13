@@ -34,3 +34,9 @@ class AttributeValue(Base):
 
     # Relationship
     attribute = relationship("Attribute", back_populates="attribute_values")
+
+    product_variant_values = relationship(
+        "ProductVariantValue",
+        back_populates="attribute_value",
+        cascade="all, delete-orphan"
+)

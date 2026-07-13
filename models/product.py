@@ -23,7 +23,7 @@ class Product(Base):
     main_image = Column(String(255), nullable=True)
     has_variant = Column(SmallInteger, default=0)
 
-    sku = Column(String(100), nullable=True)
+    sku = Column(String(100), unique=True, nullable=True)
     price = Column(DECIMAL(10, 2), default=0.00)
     stock = Column(Integer, default=0)
 
@@ -36,8 +36,15 @@ class Product(Base):
 
     sort_order = Column(Integer, default=0)
 
-    commission_type = Column(Enum("fixed", "percentage"), default="percentage")
-    commission_value = Column(DECIMAL(10,2), default=0.00)
+    commission_type = Column(
+        Enum("fixed", "percentage"),
+        nullable=True
+    )
+
+    commission_value = Column(
+        DECIMAL(10,2),
+        nullable=True
+    )
 
     approved_by = Column(Integer,ForeignKey("users.id"),nullable=True)
     approved_at = Column(DateTime, nullable=True)
