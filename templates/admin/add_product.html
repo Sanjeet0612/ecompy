@@ -175,41 +175,57 @@
 
 
 
-                                                <!-- Short Description -->
-<div class="col-12">
-    <div>
-        <label class="form-label">
-            Short Description <span class="text-muted">(Required)</span>
-        </label>
+                                            <!-- Short Description -->
+                                            <div class="col-12">
+                                                <div>
+                                                    <label class="form-label">
+                                                        Short Description <span class="text-muted">(Required)</span>
+                                                    </label>
 
-        <div id="shortDescriptionEditor" style="height:200px;">
-            <p></p>
-        </div>
+                                                    <div id="shortDescriptionEditor" style="height:200px;">
+                                                        <p></p>
+                                                    </div>
 
-        <input
-            type="hidden"
-            name="short_description"
-            id="short_description">
-    </div>
+                                                    <input
+                                                        type="hidden"
+                                                        name="short_description"
+                                                        id="short_description">
+                                                </div>
+                                            </div>
+
+                                            <!-- Product Description -->
+                                            <div class="col-12 mt-4">
+                                                <div>
+                                                    <label class="form-label">
+                                                        Product Description <span class="text-muted">(Required)</span>
+                                                    </label>
+
+                                                    <div id="productDescriptionEditor" style="height:300px;">
+                                                        <p></p>
+                                                    </div>
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="description"
+                                                        id="description">
+                                                </div>
+                                            </div>
+
+                                    <div class="col-12">
+    <label class="form-label">Features</label>
+    <textarea
+        class="form-control"
+        id="featured"
+        rows="5"
+        placeholder="Enter product features (one per line or comma separated)"></textarea>
 </div>
 
-<!-- Product Description -->
-<div class="col-12 mt-4">
-    <div>
-        <label class="form-label">
-            Product Description <span class="text-muted">(Required)</span>
-        </label>
-
-        <div id="productDescriptionEditor" style="height:300px;">
-            <p></p>
-        </div>
-
-        <input
-            type="hidden"
-            name="description"
-            id="description">
-    </div>
-</div>
+                                    <button
+                                        type="button"
+                                        id="generateContentBtn"
+                                        class="btn btn-primary">
+                                        Generate AI Content
+                                    </button>
 
 
 
@@ -488,26 +504,36 @@
         theme: "snow"
     });
 
+    // Short Description
+    shortEditor.on("text-change", function () {
+        $("#short_description").val(shortEditor.root.innerHTML);
+    });
+
+    // Product Description
+    productEditor.on("text-change", function () {
+        $("#description").val(productEditor.root.innerHTML);
+    });
+
     Dropzone.autoDiscover = false;
 
-let mainImageFiles = [];
-let galleryImageFiles = [];
+    let mainImageFiles = [];
+    let galleryImageFiles = [];
 
-let mainDropzone = new Dropzone("#mainImageDropzone", {
-    url: "/",
-    autoProcessQueue: false,
-    maxFiles: 1,
-    acceptedFiles: "image/*",
-    addRemoveLinks: true
-});
+    let mainDropzone = new Dropzone("#mainImageDropzone", {
+        url: "/",
+        autoProcessQueue: false,
+        maxFiles: 1,
+        acceptedFiles: "image/*",
+        addRemoveLinks: true
+    });
 
-mainDropzone.on("maxfilesexceeded", function(file) {
-    this.removeFile(file);
-    alert("Only one main image is allowed");
-});
+    mainDropzone.on("maxfilesexceeded", function(file) {
+        this.removeFile(file);
+        alert("Only one main image is allowed");
+    });
 
 
-let galleryDropzone = new Dropzone("#galleryImageDropzone", {
+    let galleryDropzone = new Dropzone("#galleryImageDropzone", {
     url: "/",
     autoProcessQueue: false,
     maxFiles: 10,
@@ -963,6 +989,63 @@ $("#variantTable").html(html);
                 html: "<pre style='text-align:left'>" + message + "</pre>"
             });
 
+        }
+
+    });
+
+});
+</script>
+
+<script>
+    $("#generateContentBtn").click(function () {
+
+    let product_name = $("#productName").val();
+
+    if (product_name == "") {
+        toastr.error("Please enter product name.");
+        return;
+    }
+
+    $.ajax({
+        url: "/admin/generate-content",
+        type: "POST",
+        data: {
+            product_name: product_name,
+            category: $("#category_id option:selected").text(),
+            brand: $("#brand_id option:selected").text(),
+            features: $("#featured").val()
+        },
+
+        success: function (response) {
+            //console.log(response.data.description);
+
+            if (!response.status) {
+                toastr.error(response.message);
+                return;
+            }
+
+            // Short Description
+            shortEditor.root.innerHTML = response.data.short_description;
+            $("#short_description").val(response.data.short_description);
+
+            // Product Description
+            productEditor.root.innerHTML = response.data.description;
+            $("#description").val(response.data.description);
+
+            // SEO
+            $("#seo_title").val(response.data.seo_title);
+            $("#meta_description").val(response.data.meta_description);
+
+            // Tags
+            $("#tags").val(response.data.tags.join(", "));
+
+            toastr.success("AI content generated successfully.");
+
+            
+        },
+
+        error: function () {
+            toastr.error("Something went wrong.");
         }
 
     });

@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from config.database import get_db
 from repositories.admin_repository import AdminRepository
 from repositories.category_repository import CategoryRepository
-from schemas.category import CategoryResponse
+#from schemas.category import CategoryResponse
 
 from repositories.sub_category_repository import SubCategoryRepository
 
@@ -25,12 +25,16 @@ from schemas.product import ProductCreate
 from schemas.admin import AdminLogin
 from utils.security import verify_password
 from utils.jwt import create_access_token
-from utils.gemini import generate_product_content
+#from utils.gemini import generate_product_content
+import utils.ai.gemini as gemini
 from utils.file_upload import (upload_image,PRODUCT_MAIN_PATH,PRODUCT_GALLERY_PATH)
 from datetime import datetime
 from typing import Optional
 
+
 router = APIRouter(prefix="/admin")
+print("Gemini Module:", gemini)
+print("Function:", gemini.generate_product_content)
 
 # Login section Start
 @router.post("/api/login")
@@ -1655,7 +1659,31 @@ async def create_product(
 
 
 
-@router.post("/admin/product/generate-ai")
+@router.post("/generate-content")
+async def generate_content(
+    product_name: str = Form(...),
+    category: str = Form(""),
+    sub_category: str = Form(""),
+    brand: str = Form(""),
+    features: str = Form("")
+):
+
+    result = gemini.generate_product_content(
+        product_name=product_name,
+        category=category,
+        sub_category =sub_category,
+        brand=brand,
+        features=features
+    )
+
+    if result.get("status") is False:
+        return result
+
+    return {
+        "status": True,
+        "message": "Content generated successfully.",
+        "data": result
+    }
 
 
 
