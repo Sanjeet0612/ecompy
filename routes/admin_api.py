@@ -1,10 +1,11 @@
-import os, uuid, re, math
+import os, uuid, re, math, json
 from fastapi import Body
 from models.category import Category
 from models.subcategory import SubCategory
 from models.brand import Brand
 from models.attribute import Attribute
 from models.attribute_value import AttributeValue
+from models.product import Product
 from fastapi import (APIRouter, Depends, HTTPException, Response, UploadFile, File, Form, Request)
 from sqlalchemy.orm import Session
 
@@ -18,14 +19,16 @@ from repositories.sub_category_repository import SubCategoryRepository
 from repositories.brand_repository import BrandRepository
 from repositories.attribute_repository import AttributeRepository
 from repositories.attribute_repository_value import AttributeValueRepository
-
+from repositories.ai_setting_repository import aiSettingRepository
 from repositories.product_repository import ProductRepository
+from repositories.product_specification_repository import ProductSpecificationRepository
 from schemas.product import ProductCreate
+from sqlalchemy.exc import IntegrityError
 
 from schemas.admin import AdminLogin
 from utils.security import verify_password
 from utils.jwt import create_access_token
-#from utils.gemini import generate_product_content
+from utils.slug import generate_unique_slug
 import utils.ai.gemini as gemini
 from utils.file_upload import (upload_image,PRODUCT_MAIN_PATH,PRODUCT_GALLERY_PATH)
 from datetime import datetime
@@ -33,8 +36,6 @@ from typing import Optional
 
 
 router = APIRouter(prefix="/admin")
-print("Gemini Module:", gemini)
-print("Function:", gemini.generate_product_content)
 
 # Login section Start
 @router.post("/api/login")
@@ -1537,12 +1538,17 @@ async def create_product(
     productName: str = Form(...),
     short_description: str = Form(None),
     description: str = Form(None),
+    specifications: str = Form(""),
     has_variant: int = Form(...),
     sku: str = Form(None),
     price: float = Form(0),
     stock: int = Form(0),
     commission_type: str = Form("percentage"),
     commission_value: float = Form(0),
+    seo_title: str = Form(None),
+    meta_description: str = Form(None),
+    meta_keywords: str = Form(None),
+    tags : str = Form(None),
     status: int = Form(1),
     variant_value_ids: Optional[list[str]] = Form(None, alias="variant_value_ids[]"),
     variant_names: Optional[list[str]] = Form(None, alias="variant_names[]"),
@@ -1552,6 +1558,7 @@ async def create_product(
     variant_status: Optional[list[int]] = Form(None, alias="variant_status[]"),
     main_image: UploadFile = File(None),
     gallery_images: list[UploadFile] = File(alias="gallery_images[]"),
+    
     db: Session = Depends(get_db)
 ):
 
@@ -1559,6 +1566,8 @@ async def create_product(
 
     if not admin:
         raise HTTPException(status_code=403, detail="Not authorized")
+    
+    slug = generate_unique_slug(db=db,model=Product,name=productName)
     
     # Main Image Section 
     main_image_name = None
@@ -1587,24 +1596,22 @@ async def create_product(
             category_id=category_id,
             subcategory_id=subcategory_id,
             brand_id=brand_id,
-
             name=productName,
-            slug = productName.strip().lower().replace(" ", "-"),
-
+            slug=slug,
             sku=sku,
             price=price,
             stock=stock,
-
             commission_type=commission_type,
             commission_value=commission_value,
-
             short_description=short_description,
             description=description,
-
+            seo_title=seo_title,
+            meta_description = meta_description,
+            meta_keywords = meta_keywords,
+            tags = tags,
             main_image=main_image_name,
-
             has_variant=has_variant,
-            status=status
+            status=status,
         )
 
         product_repository = ProductRepository(db)
@@ -1633,7 +1640,34 @@ async def create_product(
             variant_data = product_repository.save_variants(product.id,variants)
 
             product_repository.save_variant_values(variant_data)
-            
+
+        # Specification    
+
+        specifications_list = []
+
+        if specifications:
+            try:
+                specifications_list = json.loads(specifications)
+            except json.JSONDecodeError:
+                specifications_list = []
+
+        productSpecificationRepository = ProductSpecificationRepository()
+
+        for index, specification in enumerate(specifications_list):
+
+            title = specification.get("title", "").strip()
+            value = specification.get("value", "").strip()
+
+            if not title or not value:
+                continue
+
+            productSpecificationRepository.create(
+                db=db,
+                product_id=product.id,
+                title=title,
+                value=value,
+                sort_order=index + 1
+            )        
 
         db.commit()
 
@@ -1645,19 +1679,26 @@ async def create_product(
             }
         }
 
-    except Exception as e:
+    except IntegrityError as e:
 
         db.rollback()
 
+        if "slug" in str(e.orig):
+
+            return {
+                "status": False,
+                "message": "A product with this name already exists. Please use a different product name."
+            }
+
         return {
             "status": False,
-            "message": str(e)
+            "message": "Duplicate data found."
         }
 
 
 
 
-
+#-----------------------GIMINI GENERATE CONTENT Section start---------------------------
 
 @router.post("/generate-content")
 async def generate_content(
@@ -1665,15 +1706,18 @@ async def generate_content(
     category: str = Form(""),
     sub_category: str = Form(""),
     brand: str = Form(""),
-    features: str = Form("")
+    features: str = Form(""),
+    db: Session = Depends(get_db)
 ):
+    settings = aiSettingRepository.get_settings(db)
 
     result = gemini.generate_product_content(
         product_name=product_name,
         category=category,
         sub_category =sub_category,
         brand=brand,
-        features=features
+        features=features,
+        settings=settings
     )
 
     if result.get("status") is False:
@@ -1685,9 +1729,114 @@ async def generate_content(
         "data": result
     }
 
+#--------------------------AI SETTING SECTION-----------------------------------------
 
+# AI Setting List
+@router.get("/aisetting/list")
+def list_ai_setting(
+    db: Session = Depends(get_db)
+):
+    try:
 
+        setting = aiSettingRepository.get_settings(db)
 
+        if not setting:
+            return {
+                "status": False,
+                "message": "AI settings not found.",
+                "data": None
+            }
+
+        return {
+            "status": True,
+            "message": "AI settings fetched successfully.",
+            "data": {
+                "id": setting.id,
+                "provider": setting.provider,
+                "model": setting.model,
+                "temperature": float(setting.temperature),
+                "top_p": float(setting.top_p),
+                "max_output_tokens": setting.max_output_tokens,
+                "language": setting.language,
+                "description_length": setting.description_length,
+                "generate_seo": setting.generate_seo,
+                "generate_tags": setting.generate_tags,
+                "generate_specifications": setting.generate_specifications,
+                "system_prompt": setting.system_prompt,
+                "status": setting.status
+            }
+        }
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "message": str(e)
+        }
+
+# Update AI Settings
+@router.post("/aisetting/update")
+def update_ai_setting(
+    provider: str = Form(...),
+    model: str = Form(...),
+    temperature: float = Form(...),
+    top_p: float = Form(...),
+    max_output_tokens: int = Form(...),
+    language: str = Form(...),
+    description_length: str = Form(...),
+    generate_seo: int = Form(...),
+    generate_tags: int = Form(...),
+    generate_specifications: int = Form(...),
+    system_prompt: str = Form(""),
+    status: int = Form(...),
+    db: Session = Depends(get_db)
+):
+
+    try:
+
+        aiSetting = aiSettingRepository.get_settings(db)
+
+        if not aiSetting:
+
+            return {
+                "status": False,
+                "message": "AI settings not found."
+            }
+
+        data = {
+            "provider": provider,
+            "model": model,
+            "temperature": temperature,
+            "top_p": top_p,
+            "max_output_tokens": max_output_tokens,
+            "language": language,
+            "description_length": description_length,
+            "generate_seo": generate_seo,
+            "generate_tags": generate_tags,
+            "generate_specifications": generate_specifications,
+            "system_prompt": system_prompt,
+            "status": status
+        }
+
+        aiSettingRepository.update_settings(
+            db=db,
+            settings=aiSetting,
+            data=data
+        )
+
+        return {
+            "status": True,
+            "message": "AI settings updated successfully."
+        }
+
+    except Exception as e:
+
+        db.rollback()
+
+        return {
+            "status": False,
+            "message": str(e)
+        }    
 
 
 

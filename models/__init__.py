@@ -7,3 +7,4 @@ from .product import Product
 from .product_image import ProductImage
 from .product_variant import ProductVariant
 from .product_variant_value import ProductVariantValue
+from .product_specification import ProductSpecification

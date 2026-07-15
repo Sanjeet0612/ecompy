@@ -242,3 +242,25 @@ def add_products(
         }
     )
 
+# AI SETTING SECTION START
+@router.get("/manage-ai-setting")
+def manage_ai_setting(request: Request):
+
+    admin = getattr(request.state, "admin", None)
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/manage_ai_setting.html",
+        context={
+            "title": "Dashboard",
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "AI Setting", "url": "/admin/manage-ai-setting"},
+                {"name": "Manage AI Setting", "url": None}
+            ],
+            "admin": admin
+        }
+
+    )

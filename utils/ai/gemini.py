@@ -1,8 +1,6 @@
-import time
 from google import genai
-
-from config.settings import GEMINI_API_KEY, GEMINI_MODEL
-
+from google.genai import types
+from config.settings import GEMINI_API_KEY
 from utils.ai.prompts.product import build_product_prompt
 from utils.ai.parser import parse_json_response
 from utils.ai.validator import validate_product_response
@@ -17,7 +15,8 @@ def generate_product_content(
         category,
         sub_category,
         brand,
-        features
+        features,
+        settings
 ):
 
     prompt = build_product_prompt(
@@ -25,10 +24,14 @@ def generate_product_content(
         category=category,
         sub_category=sub_category,
         brand=brand,
-        features=features
+        features=features,
+        settings=settings
     )
 
-    data = generate_content(prompt)
+    data = generate_content(
+        prompt=prompt,
+        settings=settings
+    )
 
     if data.get("status") is False:
         return data
@@ -37,21 +40,35 @@ def generate_product_content(
     
 
 
-def generate_content(prompt: str):
-    
+def generate_content(prompt: str, settings):
+
+    model = settings.model if settings else "gemini-3.5-flash"
+    temperature = float(settings.temperature) if settings else 0.7
+    top_p = float(settings.top_p) if settings else 0.95
+    max_output_tokens = int(settings.max_output_tokens) if settings else 8192
+
     try:
         last_error = None
 
         for _ in range(MAX_RETRIES):
+
             try:
+
                 response = client.models.generate_content(
-                    model=GEMINI_MODEL,contents=prompt
+                    model=model,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=temperature,
+                        top_p=top_p,
+                        max_output_tokens=max_output_tokens
+                    )
                 )
 
                 data = parse_json_response(response.text)
                 return data
 
             except Exception as e:
+
                 last_error = e
 
                 if should_retry(e):
@@ -67,5 +84,5 @@ def generate_content(prompt: str):
         return {
             "status": False,
             "message": str(e),
-             "data": None
-        }    
+            "data": None
+        }

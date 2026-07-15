@@ -1,0 +1,990 @@
+{% include "admin/layout/header.html" %}
+      <!-- ============================================================== -->
+            <!-- Start Main Content -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="container-fluid">
+                    <div class="page-title-head d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="page-main-title m-0">Categories</h4>
+                        </div>
+
+                        <div class="text-end">
+                            <ol class="breadcrumb m-0 py-0">
+                                {% include "admin/layout/breadcrumbs.html" %}
+                            </ol>
+                        </div>
+                    </div>
+
+
+                   <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Input Textfield Type</h5>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <!-- Simple Input -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">Provider</label>
+                                                </div>
+                                                <div class="col-lg-8">
+
+                                                    <div
+                                                        id="providerList"
+                                                        class="d-flex flex-wrap gap-4">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+
+                                            <!-- Model -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label for="model" class="col-form-label">
+                                                        Model
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-lg-8">
+                                                    <select id="model" class="form-select">
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                            <!-- Placeholder -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label for="temperature" class="col-form-label">Temperature</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <input type="text" id="temperature" class="form-control rounded-pill" placeholder="Temperature">
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                           
+
+                                           
+
+                                         
+
+                                            
+
+                                            <!-- top_p -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label for="top_p" class="col-form-label">Top P</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <input type="text" id="top_p" class="form-control" placeholder="Helping text">
+                                                    <small class="form-text text-muted">A block of help text that breaks onto a new line and may extend beyond one line.</small>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                            <!-- Tags -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">Generate Tags</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control" id="generate_tags">
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        </select>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="badge-percent" class="lucide lucide-badge-percent app-search-icon text-muted"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m15 9-6 6"></path><path d="M9 9h.01"></path><path d="M15 15h.01"></path></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                            <!-- Status -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">Status</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control" id="statuss">
+                                                            <option value="1">Active</option>
+                                                            <option value="0">Deactive</option>
+                                                        </select>
+                                                       
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            
+
+                                    
+                                        </div>
+                                        <!-- end col -->
+
+                                        <div class="col-lg-6">
+                                            <!-- with Label Input -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">Max Output Token</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div>
+                                                        <input type="text" class="form-control" id="max_output_tokens" placeholder="max_output_tokens">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">Language</label>
+                                                </div>
+
+                                                <div class="col-lg-8">
+                                                    <select class="form-select" id="language">
+                                                        <option value="English">English</option>
+                                                        <option value="Hindi">Hindi</option>
+                                                        <option value="Auto">Auto Detect</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                            <!-- Description Length -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">Description Length</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control" id="description_length">
+                                                            <option value="short">Short</option>
+                                                            <option value="medium">Medius</option>
+                                                            <option value="long">Long</option>
+                                                        </select>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="badge-percent" class="lucide lucide-badge-percent app-search-icon text-muted"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m15 9-6 6"></path><path d="M9 9h.01"></path><path d="M15 15h.01"></path></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                            <!-- Generate SEO -->
+                                          
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">Generate SEO</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control" id="generate_seo">
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        </select>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="badge-percent" class="lucide lucide-badge-percent app-search-icon text-muted"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m15 9-6 6"></path><path d="M9 9h.01"></path><path d="M15 15h.01"></path></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                            <!-- Default Specification -->
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">Generate Specification</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control" id="generate_specifications">
+                                                            <option value="1">Yes</option>
+                                                            <option value="0">No</option>
+                                                        </select>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="badge-percent" class="lucide lucide-badge-percent app-search-icon text-muted"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m15 9-6 6"></path><path d="M9 9h.01"></path><path d="M15 15h.01"></path></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-top border-dashed my-3"></div>
+
+                                            <div class="row g-lg-4 g-2">
+                                                <div class="col-lg-4">
+                                                    <label class="col-form-label">System Prompt</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div>
+                                                        <input type="text" class="form-control" id="system_prompt" placeholder="system_prompt">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            
+
+                                        </div>
+                                        <!-- end col -->
+
+                                        
+                                         <div class="row mt-4">
+    <div class="col-lg-12 text-end">
+
+        <button
+            type="button"
+            id="updateAISettingBtn"
+            class="btn btn-success">
+
+            <span id="saveSettingText">
+                <i class="ri-save-line me-1"></i>
+                Save AI Settings
+            </span>
+
+            <span
+                id="saveSettingLoader"
+                class="spinner-border spinner-border-sm ms-2 d-none"
+                role="status">
+            </span>
+
+        </button>
+
+    </div>
+</div>
+
+
+
+
+                                    </div>
+                                </div>
+                                <!-- end card-body -->
+                            </div>
+                            <!-- end card -->
+
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                  
+                 
+                    
+
+
+                    <!-- end modal-->
+                </div>
+                <!-- container -->
+
+       
+
+            <!-- ============================================================== -->
+            <!-- End of Main Content -->
+            <!-- ============================================================== -->
+{% include "admin/layout/footer.html" %}
+
+<script>
+    /* Brand List loading Section */
+    $(document).ready(function () {
+        renderRowsPerPageSelect();
+        loadBrands();
+    });
+
+    /* Create Brand Section */
+    $(document).on("submit", "#addBrandForm", function (e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    $.ajax({
+        url: "/admin/brand/create",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (res) {
+
+            if (res.status) {
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: res.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                $("#addBrandModal").modal("hide");
+                $("#addBrandForm")[0].reset();
+
+                // Brand List Reload
+                loadBrands();
+
+            } else {
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: res.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+            }
+
+        },
+
+        error: function (xhr) {
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: xhr.responseJSON?.detail || "Something went wrong.",
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        }
+    });
+});
+
+    /* List Brand Section */
+
+    let currentPage = 1;
+    let currentSearch = "";
+    let currentStatus = "";
+    let rowsPerPage = 10;
+    const rowsPerPageOptions = [5, 10, 15, 20];
+
+    function loadBrands() {
+
+   $.ajax({
+
+    url: "/admin/aisetting/list",
+
+    type: "GET",
+
+    success: function(res){
+
+        if(!res.status){
+
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:res.message
+            });
+
+            return;
+        }
+
+        let item = res.data;
+
+        $(`input[name="provider"][value="${item.provider}"]`).prop("checked", true);
+        /*$("#model").val(item.model);*/
+        loadModels(item.provider, item.model);
+        $("#temperature").val(item.temperature);
+        $("#top_p").val(item.top_p);
+        $("#max_output_tokens").val(item.max_output_tokens);
+        $("#language").val(String(item.language));
+        $("#description_length").val(String(item.description_length));
+        $("#generate_seo").val(String(item.generate_seo));
+        $("#generate_tags").val(String(item.generate_tags));
+        $("#generate_specifications").val(String(item.generate_specifications));
+        $("#system_prompt").val(item.system_prompt);
+        $("#statuss").val(String(item.status));
+
+    },
+
+    error:function(){
+
+        Swal.fire({
+            icon:"error",
+            title:"Error",
+            text:"Unable to load AI settings."
+        });
+
+    }
+
+});
+
+}
+
+
+    /* Pagination Area */
+
+function renderPagination(total, page, limit){
+
+    let pages = Math.ceil(total / limit);
+    let html = "";
+
+    if(pages <= 1){
+        $(".pagination-area").html("");
+        return;
+    }
+
+    html += `<nav><ul class="pagination justify-content-end">`;
+
+    for(let i = 1; i <= pages; i++){
+
+        html += `
+            <li class="page-item ${i == page ? 'active' : ''}">
+                <a href="#" class="page-link pagination-btn" data-page="${i}">
+                    ${i}
+                </a>
+            </li>
+        `;
+    }
+
+    html += `</ul></nav>`;
+
+    $(".pagination-area").html(html);
+}
+
+function renderRowsPerPageSelect(){
+
+    let html = "";
+
+    rowsPerPageOptions.forEach(val => {
+
+        html += `
+            <option value="${val}" ${val == rowsPerPage ? "selected" : ""}>
+                ${val}
+            </option>
+        `;
+
+    });
+
+    $("[data-table-set-rows-per-page]").html(html);
+
+}
+
+$(document).on("click", ".pagination-btn", function (e) {
+
+    e.preventDefault();
+
+    currentPage = $(this).data("page");
+
+    loadBrands();
+
+});
+
+$(document).on("change", "[data-table-set-rows-per-page]", function () {
+
+    rowsPerPage = parseInt($(this).val());
+
+    currentPage = 1;
+
+    loadBrands();
+
+});
+
+$(document).on("keyup", "[data-table-search]", function () {
+
+    currentSearch = $(this).val().trim();
+
+    currentPage = 1;
+
+    loadBrands();
+
+});
+
+$(document).on("change", "[data-table-filter='status']", function () {
+
+    currentStatus = $(this).val();
+
+    currentPage = 1;
+
+    loadBrands();
+
+});
+
+/*DELETE*/
+let selectedIds = [];
+function toggleBulkDeleteButton(){
+
+    let btn = $("[data-table-delete-selected]");
+
+    if(selectedIds.length > 0){
+        btn.removeClass("d-none");
+        btn.text(`Delete (${selectedIds.length})`);
+    } else {
+        btn.addClass("d-none");
+        btn.text("Delete");
+    }
+}
+
+$(document).on("change", ".product-item-check", function(){
+   
+    let id = $(this).val();
+
+    if(!id){
+        console.log("Missing ID in checkbox");
+        return;
+    }
+
+    if($(this).is(":checked")){
+
+        if(!selectedIds.includes(id)){
+            selectedIds.push(id);
+        }
+
+    } else {
+
+        selectedIds = selectedIds.filter(i => i != id);
+    }
+
+    console.log("Selected IDs:", selectedIds);
+
+    toggleBulkDeleteButton();
+});
+
+$(document).on("change", "[data-table-select-all]", function(){
+    let checked = $(this).is(":checked");
+    // reset array
+    selectedIds = [];
+    $(".product-item-check").each(function(){
+        $(this).prop("checked", checked);
+        let id = $(this).val();
+        if(checked && id){
+            selectedIds.push(id);
+        }
+    });
+    console.log("Select All:", selectedIds);
+    toggleBulkDeleteButton();
+});
+
+$(document).on("click", "[data-table-delete-selected]", function(){
+
+    if(selectedIds.length === 0){
+        Swal.fire({
+            icon: "warning",
+            title: "No selection",
+            text: "Please select at least one item"
+        });
+        return;
+    }
+
+    Swal.fire({
+        icon: "warning",
+        title: "Are you sure?",
+        text: `${selectedIds.length} items will be deleted`,
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+
+        if(result.isConfirmed){
+
+            $.ajax({
+                url: "/admin/brand/bulk-delete",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    ids: selectedIds
+                }),
+
+                success: function(res){
+
+                    if(res.status){
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Deleted!",
+                            text: res.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        //  RESET STATE
+                        selectedIds = [];
+
+                        // uncheck all checkboxes
+                        $(".product-item-check").prop("checked", false);
+                        $("[data-table-select-all]").prop("checked", false);
+
+                        // hide button
+                        $("[data-table-delete-selected]").addClass("d-none");
+                        $("[data-table-delete-selected]").text("Delete");
+
+                        // reload table
+                        loadBrands();
+                    }
+                },
+
+                error: function(){
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Something went wrong"
+                    });
+
+                }
+            });
+        }
+    });
+
+});
+
+/* Single Row Delete */
+
+$(document).on("click", ".delete-brand", function (e) {
+    e.preventDefault();
+
+    const id = $(this).data("id");
+
+    Swal.fire({
+        icon: "warning",
+        title: "Are you sure?",
+        text: "This brand will be deleted.",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: `/admin/brand/delete/${id}`, // ya jo tumhara route hai
+                type: "DELETE",                   // ya POST
+
+                success: function (res) {
+
+                    if (res.status) {
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Deleted!",
+                            text: res.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        loadBrands(); // Table reload
+                    }
+
+                },
+
+                error: function () {
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Something went wrong."
+                    });
+
+                }
+
+            });
+
+        }
+
+    });
+
+});
+
+/* Edit Attribute Section Start*/
+
+$(document).on("click", ".edit-brand", function (e) {
+
+    e.preventDefault();
+
+    let id = $(this).data("id");
+
+    $.ajax({
+        url: `/admin/brand/${id}`,
+        type: "GET",
+
+        success: function(res){
+
+            if(res.status){
+
+                $("#editBrandId").val(res.data.id);
+                $("#editBrandName").val(res.data.name);
+                $("#editBrandSlug").val(res.data.slug);
+                $("#editBrandStatus").val(res.data.status);
+                $("#editBrandPreview").attr("src", res.data.image);
+                // Open Modal
+                $("#editBrandModal").modal("show");
+            }
+
+        },
+
+        error:function(xhr){
+
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:xhr.responseJSON?.detail || "Something went wrong"
+            });
+
+        }
+
+    });
+
+});
+
+/* Update Attribute Section */
+$("#editBrandForm").submit(function(e){
+
+    e.preventDefault();
+
+    let id = $("#editBrandId").val();
+    let formData = new FormData(this);
+
+    $.ajax({
+
+        url: `/admin/brand/update/${id}`,
+        type: "PUT",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success:function(res){
+
+            Swal.fire({
+                icon:"success",
+                title:"Success",
+                text:res.message,
+                timer:1500,
+                showConfirmButton:false
+            });
+
+            bootstrap.Modal.getInstance(
+                document.getElementById("editBrandModal")
+            ).hide();
+            loadBrands();
+        },
+
+        error:function(xhr){
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:xhr.responseJSON?.detail || "Something went wrong"
+            });
+        }
+    });
+});
+
+
+/* Provider */
+const providers = [
+    {
+        value: "gemini",
+        label: "Gemini"
+    },
+    {
+        value: "openai",
+        label: "OpenAI"
+    },
+    {
+        value: "claude",
+        label: "Claude"
+    },
+    {
+        value: "grok",
+        label: "Grok"
+    }
+];
+
+let html = "";
+
+providers.forEach(function(provider, index) {
+
+    html += `
+        <div>
+            <div class="form-check form-check-success mb-2">
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="provider"
+                    id="provider_${index}"
+                    value="${provider.value}">
+
+                <label
+                    class="form-check-label"
+                    for="provider_${index}">
+                    ${provider.label}
+                </label>
+            </div>
+        </div>
+    `;
+
+});
+
+$("#providerList").html(html);
+
+/* Model */
+
+const models = {
+    gemini: [
+        "gemini-3.5-flash",
+        "gemini-3.5-pro"
+    ],
+
+    openai: [
+        "gpt-5.5",
+        "gpt-5"
+    ],
+
+    claude: [
+        "claude-sonnet-4",
+        "claude-opus-4"
+    ],
+
+    grok: [
+        "grok-4"
+    ]
+};
+
+function loadModels(provider, selectedModel = "") {
+
+    let html = "";
+
+    if (models[provider]) {
+
+        models[provider].forEach(function(model){
+
+            html += `
+                <option value="${model}"
+                    ${selectedModel === model ? "selected" : ""}>
+                    ${model}
+                </option>
+            `;
+
+        });
+
+    }
+
+    $("#model").html(html);
+
+}
+
+$(document).on("change", "input[name='provider']", function () {
+
+    loadModels($(this).val());
+
+});
+
+/* Save Section */
+
+function toggleSettingButton(isLoading) {
+
+    $("#updateAISettingBtn").prop("disabled", isLoading);
+
+    if (isLoading) {
+
+        $("#updateAISettingBtn").html(`
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Saving...
+        `);
+
+    } else {
+
+        $("#updateAISettingBtn").html(`
+            <i class="ri-save-line me-1"></i>
+            Save AI Settings
+        `);
+
+    }
+
+}
+
+$("#updateAISettingBtn").click(function () {
+
+    toggleSettingButton(true);
+
+    $.ajax({
+
+        url: "/admin/aisetting/update",
+
+        type: "POST",
+
+        data: {
+
+            provider: $('input[name="provider"]:checked').val(),
+
+            model: $("#model").val(),
+
+            temperature: $("#temperature").val(),
+
+            top_p: $("#top_p").val(),
+
+            max_output_tokens: $("#max_output_tokens").val(),
+
+            language: $("#language").val(),
+
+            description_length: $("#description_length").val(),
+
+            generate_seo: $("#generate_seo").val(),
+
+            generate_tags: $("#generate_tags").val(),
+
+            generate_specifications: $("#generate_specifications").val(),
+
+            system_prompt: $("#system_prompt").val(),
+
+            status: $("#statuss").val()
+
+        },
+
+        success: function (response) {
+
+            toggleSettingButton(false);
+
+            if (!response.status) {
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: response.message
+                });
+
+                return;
+            }
+
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: response.message,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+        error: function (xhr) {
+
+            toggleSettingButton(false);
+
+            let message = "Something went wrong.";
+
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
+            }
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: message
+            });
+
+        }
+
+    });
+
+});
+
+</script>    

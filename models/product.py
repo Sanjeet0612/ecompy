@@ -49,6 +49,11 @@ class Product(Base):
     approved_by = Column(Integer,ForeignKey("users.id"),nullable=True)
     approved_at = Column(DateTime, nullable=True)
 
+    seo_title = Column(String(255), nullable=True)
+    meta_description = Column(Text, nullable=True)
+    meta_keywords = Column(Text, nullable=True)
+    tags = Column(Text, nullable=True)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     deleted_at = Column(DateTime(timezone=True), nullable=True)
@@ -56,3 +61,4 @@ class Product(Base):
     # Relationships
     images = relationship("ProductImage", back_populates="product", cascade="all, delete-orphan")
     variants = relationship("ProductVariant",back_populates="product",cascade="all, delete-orphan")
+    specifications = relationship("ProductSpecification",back_populates="product",cascade="all, delete-orphan")

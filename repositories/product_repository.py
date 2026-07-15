@@ -18,22 +18,20 @@ class ProductRepository:
             category_id=product_data.category_id,
             subcategory_id=product_data.subcategory_id,
             brand_id=product_data.brand_id,
-
             name=product_data.name,
             slug=product_data.slug,
-
             sku=product_data.sku,
             price=product_data.price,
             stock=product_data.stock,
-
             commission_type=product_data.commission_type,
             commission_value=product_data.commission_value,
-
             short_description=product_data.short_description,
             description=product_data.description,
-
+            seo_title = product_data.seo_title,
+            meta_description = product_data.meta_description,
+            meta_keywords = product_data.meta_keywords,
+            tags = product_data.tags,
             main_image=product_data.main_image,
-
             has_variant=product_data.has_variant,
             status=product_data.status,
             
