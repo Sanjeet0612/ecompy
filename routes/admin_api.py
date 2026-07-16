@@ -15,7 +15,6 @@ from repositories.category_repository import CategoryRepository
 #from schemas.category import CategoryResponse
 
 from repositories.sub_category_repository import SubCategoryRepository
-
 from repositories.brand_repository import BrandRepository
 from repositories.attribute_repository import AttributeRepository
 from repositories.attribute_repository_value import AttributeValueRepository
@@ -24,7 +23,7 @@ from repositories.product_repository import ProductRepository
 from repositories.product_specification_repository import ProductSpecificationRepository
 from schemas.product import ProductCreate
 from sqlalchemy.exc import IntegrityError
-
+from schemas.product import BulkDeleteRequest
 from schemas.admin import AdminLogin
 from utils.security import verify_password
 from utils.jwt import create_access_token
@@ -1527,8 +1526,52 @@ async def get_attribute_values(
     }
 
 
-#-----------------------Product Save Section start---------------------------
+#-----------------------Product List, Save Section start---------------------------
 
+# Product List
+@router.get("/product/list")
+def list_product(
+    page: int = 1,
+    limit: int = 10,
+    search: str = "",
+    status: str = "",
+    category_id: Optional[int] = None,
+    subcategory_id: Optional[int] = None,
+    db: Session = Depends(get_db)
+):
+
+    try:
+        repository = ProductRepository(db)
+        result = repository.get_all(
+            db=db,
+            page=page,
+            limit=limit,
+            search=search,
+            status=status,
+            category_id=category_id,
+            subcategory_id=subcategory_id
+        )
+
+        return {
+            "status": True,
+            "message": "Products fetched successfully.",
+            "data": result["data"],
+            "total": result["total"],
+            "page": page,
+            "limit": limit
+        }
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "message": str(e),
+            "data": [],
+            "total": 0,
+            "page": page,
+            "limit": limit
+        }
+# Save Product
 @router.post("/product/create")
 async def create_product(
     request: Request,
@@ -1550,6 +1593,7 @@ async def create_product(
     meta_keywords: str = Form(None),
     tags : str = Form(None),
     status: int = Form(1),
+    featured:int=Form(0),
     variant_value_ids: Optional[list[str]] = Form(None, alias="variant_value_ids[]"),
     variant_names: Optional[list[str]] = Form(None, alias="variant_names[]"),
     variant_sku: Optional[list[str]] = Form(None, alias="variant_sku[]"),
@@ -1612,6 +1656,7 @@ async def create_product(
             main_image=main_image_name,
             has_variant=has_variant,
             status=status,
+            is_featured=featured
         )
 
         product_repository = ProductRepository(db)
@@ -1695,8 +1740,77 @@ async def create_product(
             "message": "Duplicate data found."
         }
 
+# Get Product By Id
 
+@router.get("/product/{product_id}")
+def get_product(
+    product_id: int,
+    db: Session = Depends(get_db)
+):
 
+    try:
+
+        productRepository = ProductRepository(db)
+
+        result = productRepository.get_by_id(
+            product_id=product_id
+        )
+
+        return result
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "message": str(e),
+            "data": None
+        }
+
+# Delete By Id
+@router.delete("/product/delete/{product_id}")
+def delete_product(
+    product_id: int,
+    db: Session = Depends(get_db)
+):
+
+    try:
+        productRepository = ProductRepository(db)
+        result = productRepository.delete(
+            db=db,
+            product_id=product_id
+        )
+
+        return result
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "message": str(e)
+        }      
+# Bulk Delete
+@router.post("/product/bulk-delete")
+def bulk_delete_products(
+    request: BulkDeleteRequest,
+    db: Session = Depends(get_db)
+):
+
+    try:
+
+        productRepository = ProductRepository(db)
+
+        result = productRepository.bulk_delete(
+            product_ids=request.product_ids
+        )
+
+        return result
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "message": str(e)
+        }
 
 #-----------------------GIMINI GENERATE CONTENT Section start---------------------------
 
@@ -1848,3 +1962,57 @@ def logout(response: Response):
         "status": True,
         "message": "Logout successful"
     }
+
+# Category Dropdown
+@router.get("/categoryDropdown/dropdown")
+def category_dropdown(
+    db: Session = Depends(get_db)
+):
+
+    try:
+        catrepository = CategoryRepository()
+        data = catrepository.get_dropdown(db)
+
+        return {
+            "status": True,
+            "message": "Categories fetched successfully.",
+            "data": data
+        }
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "message": str(e),
+            "data": []
+        }
+    
+
+# Sub Category Dropdown
+@router.get("/subcategoryDropDown/dropdown")
+def subcategory_dropdown(
+    category_id: int,
+    db: Session = Depends(get_db)
+):
+
+    try:
+        subCategoryRepository = SubCategoryRepository()
+        data = subCategoryRepository.get_dropdown_by_category(
+            db=db,
+            category_id=category_id
+        )
+
+        return {
+            "status": True,
+            "message": "Sub categories fetched successfully.",
+            "data": data
+        }
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "message": str(e),
+            "data": []
+        }    
+

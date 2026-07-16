@@ -133,6 +133,68 @@ def products(request: Request):
         }
     )
 
+# Edit Product Start
+@router.get("/edit-product/{product_id}")
+def edit_product(
+    request: Request,
+    product_id: int,
+    db: Session = Depends(get_db)
+):
+
+    admin = getattr(request.state, "admin", None)
+
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+    
+    categories = (
+        db.query(Category)
+        .filter(
+            Category.status == 1,
+            Category.deleted_at == None
+        )
+        .order_by(Category.name.asc())
+        .all()
+    )
+
+    brands = (
+        db.query(Brand)
+        .filter(
+            Brand.status == 1,
+            Brand.deleted_at == None
+        )
+        .order_by(Brand.name.asc())
+        .all()
+    )
+
+    attributes = (
+        db.query(Attribute)
+        .filter(
+            Attribute.status == 1,
+            Attribute.deleted_at == None
+        )
+        .order_by(Attribute.name.asc())
+        .all()
+    )
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/edit_product.html",
+        context={
+            "title": "Dashboard",
+            "product_id": product_id,
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Products", "url": "/admin/products"},
+                {"name": "Edit & Update Product", "url": None}
+            ],
+            "admin": admin,
+            "categories": categories,
+            "brands": brands,
+            "attributes": attributes,
+        }
+    )
+    
+
 # Attribute Section Start
 @router.get("/manage-attribute")
 def manage_attribute(request: Request):

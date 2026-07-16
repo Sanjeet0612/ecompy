@@ -3,25 +3,40 @@ import time
 
 def should_retry(exception: Exception) -> bool:
     """
-    Check whether the AI request should be retried.
+    Return True only for temporary AI service errors.
     """
 
     error = str(exception).lower()
 
-    retry_errors = [
-        "503",
+    retry_errors = (
         "429",
+        "500",
+        "502",
+        "503",
+        "504",
         "timeout",
+        "timed out",
         "temporarily unavailable",
-        "resource_exhausted"
-    ]
+        "resource_exhausted",
+        "service unavailable",
+        "internal server error",
+        "deadline exceeded"
+    )
 
-    return any(item in error for item in retry_errors)
+    return any(keyword in error for keyword in retry_errors)
 
 
-def wait_before_retry(seconds: int = 3):
+def wait_before_retry(attempt: int):
     """
-    Wait before retrying the request.
+    Wait before retrying using exponential backoff.
+
+    Attempt 1 -> 2 seconds
+    Attempt 2 -> 4 seconds
+    Attempt 3 -> 8 seconds
     """
 
-    time.sleep(seconds)
+    delay = 2 ** attempt
+
+    print(f"Retrying AI request in {delay} second(s)...")
+
+    time.sleep(delay)

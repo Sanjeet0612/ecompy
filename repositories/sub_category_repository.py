@@ -113,3 +113,27 @@ class SubCategoryRepository:
             }
      
 
+    def get_dropdown_by_category(
+        self,
+        db,
+        category_id: int
+    ):
+
+        subcategories = (
+            db.query(SubCategory)
+            .filter(
+                SubCategory.category_id == category_id,
+                SubCategory.status == 1,
+                SubCategory.deleted_at.is_(None)
+            )
+            .order_by(SubCategory.name.asc())
+            .all()
+        )
+
+        return [
+            {
+                "id": subcategory.id,
+                "name": subcategory.name
+            }
+            for subcategory in subcategories
+        ]

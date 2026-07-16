@@ -26,6 +26,8 @@ app.add_middleware(AdminAuthMiddleware)
 
 # Static Files
 app.mount("/static", StaticFiles(directory="static"), name="static")
+# Upload Files
+app.mount("/uploads", StaticFiles(directory="static/uploads"), name="uploads")
 
 # Routers
 app.include_router(web_router)

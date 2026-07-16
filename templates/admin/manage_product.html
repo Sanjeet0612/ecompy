@@ -24,54 +24,48 @@
                                 <div class="card-header border-light justify-content-between">
                                     <div class="d-flex gap-2">
                                         <div class="app-search">
-                                            <input data-table-search type="search" class="form-control" placeholder="Search product name..." />
+                                            <input data-table-search type="search" id="searchFilter" class="form-control" placeholder="Search product name..." />
                                             <i data-lucide="search" class="app-search-icon text-muted"></i>
                                         </div>
                                         <button data-table-delete-selected class="btn btn-danger d-none">Delete</button>
                                     </div>
 
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-1">
                                         <span class="me-2 fw-semibold">Filter By:</span>
 
                                         <!-- Category Filter -->
-                                        <div class="app-search">
-                                            <select data-table-filter="category" class="form-select form-control my-1 my-md-0">
-                                                <option value="All">Category</option>
-                                                <option value="Electronics">Electronics</option>
-                                                <option value="Fashion">Fashion</option>
-                                                <option value="Home">Home</option>
-                                                <option value="Sports">Sports</option>
-                                                <option value="Beauty">Beauty</option>
+                                        <div class="app-search" >
+                                            <select id="categoryFilter" data-table-filter="category" class="form-select form-control my-1 my-md-0">
+                                                <option value="">All Categories</option>
                                             </select>
                                             <i data-lucide="tag" class="app-search-icon text-muted"></i>
                                         </div>
 
+                                       <!-- Sub Category Filter -->
+                                        <div class="app-search">
+                                            <select id="subcategoryFilter" data-table-filter="category" class="form-select form-control my-1 my-md-0">
+                                                <option value="All">Sub Category</option>
+                                                
+                                            </select>
+                                            <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                        </div>
+
+
                                         <!-- Stock Filter -->
                                         <div class="app-search">
-                                            <select data-table-filter="status" class="form-select form-control my-1 my-md-0">
-                                                <option value="">Status</option>
-                                                <option value="Published">Published</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Out of Stock">Out of Stock</option>
+                                            <select data-table-filter="status" class="form-select form-control my-1 my-md-0" id="statusFilter">
+                                                <option value="">All Status</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
                                             </select>
                                             <i data-lucide="activity" class="app-search-icon text-muted"></i>
                                         </div>
 
-                                        <!-- Price Range Filter -->
-                                        <div class="app-search">
-                                            <select data-table-range-filter="price" class="form-select form-control my-1 my-md-0">
-                                                <option value="">Price Range</option>
-                                                <option value="0-50">$0 - $50</option>
-                                                <option value="51-150">$51 - $150</option>
-                                                <option value="151-500">$151 - $500</option>
-                                                <option value="500+">$500+</option>
-                                            </select>
-                                            <i data-lucide="dollar-sign" class="app-search-icon text-muted"></i>
-                                        </div>
+                                        
 
                                         <!-- Records Per Page -->
                                         <div>
-                                            <select data-table-set-rows-per-page class="form-select form-control my-1 my-md-0">
+                                            <select data-table-set-rows-per-page class="form-select form-control my-1 my-md-0" id="rowsPerPage">
                                                 <option value="5">5</option>
                                                 <option value="10">10</option>
                                                 <option value="15">15</option>
@@ -81,12 +75,14 @@
                                     </div>
 
                                     <div class="d-flex gap-1">
+                                        <!--
                                         <a href="apps-ecommerce-products-grid.html" class="btn btn-soft-primary btn-icon">
                                             <i data-lucide="layout-grid" class="fs-lg"></i>
                                         </a>
                                         <a href="apps-ecommerce-products.html" class="btn btn-soft-primary btn-icon active">
                                             <i data-lucide="list-check" class="fs-lg"></i>
                                         </a>
+                                        -->
                                         <a href="/admin/add-product" class="btn btn-danger ms-1">
                                             <i data-lucide="plus" class="fs-sm me-2"></i>
                                             Add Product
@@ -107,600 +103,21 @@
                                                 <th data-table-sort>Stock</th>
                                                 <th data-table-sort data-column="price">Price</th>
                                                 <th data-table-sort>Orders</th>
-                                                <th data-table-sort="rating">Rating</th>
                                                 <th data-table-sort data-column="status">Status</th>
                                                 <th data-table-sort>Published</th>
                                                 <th class="text-center" style="width: 1%">Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="productTableBody">
                                             <!-- Product Row -->
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/1.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Wireless Earbuds</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: My Furniture</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>WB-10245</td>
-                                                <td>Electronics</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">56</h5>
-                                                </td>
-                                                <td>$59.99</td>
-                                                <td>124</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(87)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-success fs-xxs">Published</span>
-                                                </td>
-                                                <td>
-                                                    18 Apr, 2025
-                                                    <small class="text-muted">12:24 PM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
 
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/2.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Smart LED Desk Lamp</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: BrightLite</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>SL-89012</td>
-                                                <td>Home & Office</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">32</h5>
-                                                </td>
-                                                <td>$39.49</td>
-                                                <td>78</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(54)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-warning fs-xxs">Pending</span>
-                                                </td>
-                                                <td>
-                                                    22 Apr, 2025
-                                                    <small class="text-muted">09:45 AM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/3.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Men's Running Shoes</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: ActiveWear Co.</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>RS-20450</td>
-                                                <td>Fashion</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">120</h5>
-                                                </td>
-                                                <td>$89.00</td>
-                                                <td>231</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(142)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-success fs-xxs">Published</span>
-                                                </td>
-                                                <td>
-                                                    24 Apr, 2025
-                                                    <small class="text-muted">03:10 PM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/4.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Fitness Tracker Watch</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: FitPulse</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>FT-67123</td>
-                                                <td>Fitness</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">78</h5>
-                                                </td>
-                                                <td>$49.95</td>
-                                                <td>198</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(89)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-success fs-xxs">Published</span>
-                                                </td>
-                                                <td>
-                                                    23 Apr, 2025
-                                                    <small class="text-muted">10:12 AM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/5.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Gaming Mouse RGB</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: HyperClick</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>GM-72109</td>
-                                                <td>Gaming</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">120</h5>
-                                                </td>
-                                                <td>$29.99</td>
-                                                <td>243</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(102)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-success fs-xxs">Published</span>
-                                                </td>
-                                                <td>
-                                                    19 Apr, 2025
-                                                    <small class="text-muted">05:56 PM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/6.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Modern Lounge Chair</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: UrbanLiving</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>FC-31220</td>
-                                                <td>Furniture</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">24</h5>
-                                                </td>
-                                                <td>$199.00</td>
-                                                <td>38</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(27)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-danger fs-xxs">Out of Stock</span>
-                                                </td>
-                                                <td>
-                                                    18 Apr, 2025
-                                                    <small class="text-muted">11:30 AM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/7.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Plush Toy Bear</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: Softies</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>TY-00788</td>
-                                                <td>Toys</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">150</h5>
-                                                </td>
-                                                <td>$15.99</td>
-                                                <td>305</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(120)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-success fs-xxs">Published</span>
-                                                </td>
-                                                <td>
-                                                    17 Apr, 2025
-                                                    <small class="text-muted">04:21 PM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/8.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">55" Ultra HD Smart TV</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: ViewMaster</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>TV-5588</td>
-                                                <td>Electronics</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">64</h5>
-                                                </td>
-                                                <td>$499.00</td>
-                                                <td>142</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(88)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-success fs-xxs">Published</span>
-                                                </td>
-                                                <td>
-                                                    25 Apr, 2025
-                                                    <small class="text-muted">10:10 AM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/9.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Apple iMac 24" M3</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: Apple</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>IMAC-M3-24</td>
-                                                <td>Computers</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">18</h5>
-                                                </td>
-                                                <td>$1,399.00</td>
-                                                <td>29</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(16)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-warning fs-xxs">Pending</span>
-                                                </td>
-                                                <td>
-                                                    24 Apr, 2025
-                                                    <small class="text-muted">02:14 PM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <input class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" value="option" />
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="avatar-md me-3">
-                                                            <img src="/static/admin/assets/images/products/10.png" alt="Product" class="img-fluid rounded" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="mb-1">
-                                                                <a data-sort="product" href="apps-ecommerce-product-details.html" class="link-reset">Smart Watch Pro X2</a>
-                                                            </h5>
-                                                            <p class="text-muted mb-0 fs-xxs">by: FitTech</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>SWPX2-GL</td>
-                                                <td>Wearables</td>
-                                                <td>
-                                                    <h5 class="fs-base mb-0 fw-medium">85</h5>
-                                                </td>
-                                                <td>$149.50</td>
-                                                <td>197</td>
-                                                <td>
-                                                    <span class="text-warning">
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                        <i data-lucide="star"></i>
-                                                    </span>
-                                                    <span class="ms-1">
-                                                        <a data-sort="rating" href="apps-ecommerce-reviews.html" class="link-reset fw-semibold">(65)</a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-soft-success fs-xxs">Published</span>
-                                                </td>
-                                                <td>
-                                                    23 Apr, 2025
-                                                    <small class="text-muted">08:00 AM</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="apps-ecommerce-product-details.html" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="eye" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="square-pen" class="fs-lg"></i>
-                                                        </a>
-                                                        <a href="#" data-table-delete-row class="btn btn-default btn-icon btn-sm rounded-circle">
-                                                            <i data-lucide="trash-2" class="fs-lg"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="card-footer border-0">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div data-table-pagination-info="products"></div>
-                                        <div data-table-pagination></div>
+                                        <div class="pagination-info"></div>
+                                        <div class="pagination-area"></div>
                                     </div>
                                 </div>
                             </div>
@@ -731,3 +148,745 @@
             <!-- End of Main Content -->
             <!-- ============================================================== -->
 {% include "/admin/layout/footer.html" %}
+
+
+<script>
+
+$(document).ready(function () {
+    bindFilters();
+    loadCategories();
+    loadProducts();
+});
+
+let currentPage = 1;
+let rowsPerPage = 10;
+let currentSearch = "";
+let currentStatus = "";
+let currentCategory = "";
+let currentSubCategory = "";
+
+/* Pagination Section Start */
+
+function renderPagination(total, page, limit) {
+
+    let pages = Math.ceil(total / limit);
+
+    let html = "";
+
+    let start = total === 0 ? 0 : ((page - 1) * limit) + 1;
+    let end = Math.min(page * limit, total);
+
+    $(".pagination-info").html(
+        `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${total}</strong> entries`
+    );
+
+    if (pages <= 1) {
+
+        $(".pagination-area").html("");
+
+        return;
+
+    }
+
+    html += `
+        <nav>
+            <ul class="pagination justify-content-end mb-0">
+    `;
+
+    // Previous
+
+    html += `
+        <li class="page-item ${page == 1 ? "disabled" : ""}">
+
+            <a
+                href="#"
+                class="page-link pagination-btn"
+                data-page="${page - 1}">
+
+                Previous
+
+            </a>
+
+        </li>
+    `;
+
+    // Numbers
+
+    for (let i = 1; i <= pages; i++) {
+
+        html += `
+            <li class="page-item ${i == page ? "active" : ""}">
+
+                <a
+                    href="#"
+                    class="page-link pagination-btn"
+                    data-page="${i}">
+
+                    ${i}
+
+                </a>
+
+            </li>
+        `;
+
+    }
+
+    // Next
+
+    html += `
+        <li class="page-item ${page == pages ? "disabled" : ""}">
+
+            <a
+                href="#"
+                class="page-link pagination-btn"
+                data-page="${page + 1}">
+
+                Next
+
+            </a>
+
+        </li>
+    `;
+
+    html += `
+            </ul>
+        </nav>
+    `;
+
+    $(".pagination-area").html(html);
+
+}
+
+$(document).on("click", ".pagination-btn", function (e) {
+
+    e.preventDefault();
+
+    let page = $(this).data("page");
+
+    if ($(this).parent().hasClass("disabled")) {
+        return;
+    }
+
+    currentPage = page;
+
+    loadProducts();
+
+});
+
+/* Pagination Section End */
+
+function loadProducts() {
+
+    let data = {
+        page: currentPage,
+        limit: rowsPerPage,
+        search: currentSearch,
+        status: currentStatus
+    };
+
+    if (currentCategory) {
+        data.category_id = currentCategory;
+    }
+
+    if (currentSubCategory) {
+        data.subcategory_id = currentSubCategory;
+    }
+
+    $.ajax({
+
+        url: "/admin/product/list",
+
+        type: "GET",
+
+        data: data,
+
+        beforeSend: function () {
+
+            $("#productTableBody").html(`
+                <tr>
+                    <td colspan="11" class="text-center py-4">
+                        Loading products...
+                    </td>
+                </tr>
+            `);
+
+        },
+
+        success: function (res) {
+
+
+            if (res.status && res.data.length > 0) {
+            
+                let rows = "";
+
+                res.data.forEach(function(item){
+
+                    let statusBadge = item.status == 1
+                        ? `<span class="badge badge-soft-success">Active</span>`
+                        : `<span class="badge badge-soft-danger">Inactive</span>`;
+
+                    let approvalBadge = item.approval_status == 1
+                        ? `<span class="badge badge-soft-success">Approved</span>`
+                        : `<span class="badge badge-soft-warning">Pending</span>`;
+
+                    let featuredBadge = item.is_featured == 1
+                        ? `<span class="badge badge-soft-primary">Yes</span>`
+                        : `<span class="badge badge-soft-secondary">No</span>`;
+
+                    let image = item.main_image
+                        ? "/" + item.main_image
+                        : "/assets/images/products/1.png";
+
+                    rows += `
+
+                        <tr>
+
+                            <td class="ps-3">
+
+                                <input
+                                    class="form-check-input form-check-input-light fs-14 product-item-check mt-0"
+                                    type="checkbox"
+                                    value="${item.id}" />
+
+                            </td>
+
+                            <td>
+
+                                <div class="d-flex">
+
+                                    <div class="avatar-md me-3">
+
+                                        <img
+                                            src="${item.main_image ? '/' + item.main_image : '/static/uploads/products/main/1.png'}"
+                                            class="img-fluid rounded"
+                                            alt="${item.name}" />
+
+                                    </div>
+
+                                    <div>
+
+                                        <h5 class="mb-1">
+
+                                            <a
+                                                href="/admin/edit-product/${item.id}"
+                                                class="link-reset">
+
+                                                ${item.name}
+
+                                            </a>
+
+                                        </h5>
+
+                                        <p class="text-muted mb-0 fs-xxs">
+
+                                            by: ${item.brand || "-"}
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                ${item.sku || "-"}
+
+                            </td>
+
+                            <td>
+
+                                ${item.category || "-"}
+
+                            </td>
+
+                            <td>
+
+                                <h5 class="fs-base mb-0 fw-medium">
+
+                                    ${item.stock}
+
+                                </h5>
+
+                            </td>
+
+                            <td>
+
+                                ₹${Number(item.price).toLocaleString()}
+
+                            </td>
+
+                            <td>
+
+                                ${item.orders}
+
+                            </td>
+
+                            <td>
+
+                                ${
+                                    item.status == 1
+                                    ? '<span class="badge badge-soft-success fs-xxs">Published</span>'
+                                    : '<span class="badge badge-soft-danger fs-xxs">Draft</span>'
+                                }
+
+                            </td>
+
+                            <td>
+
+                                ${item.updated_at_date}
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    ${item.updated_at_time}
+
+                                </small>
+
+                            </td>
+
+                            <td>
+
+                                <div class="d-flex justify-content-center gap-1">
+
+                                    <a
+                                        href="/admin/product/${item.id}"
+                                        class="btn btn-default btn-icon btn-sm rounded-circle">
+
+                                        <i data-lucide="eye" class="fs-lg"></i>
+
+                                    </a>
+
+                                    <a
+                                        href="/admin/edit-product/${item.id}"
+                                        class="btn btn-default btn-icon btn-sm rounded-circle">
+
+                                        <i data-lucide="square-pen" class="fs-lg"></i>
+
+                                    </a>
+
+                                    <a
+                                        href="#"
+                                        class="btn btn-default btn-icon btn-sm rounded-circle delete-product"
+                                        data-id="${item.id}">
+
+                                        <i data-lucide="trash-2" class="fs-lg"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        `;
+                });
+
+                $("#productTableBody").html(rows);
+
+                if(typeof lucide !== "undefined"){
+                    lucide.createIcons();
+                }
+
+                renderPagination(res.total,res.page,res.limit);
+                $("#select-all-products").prop("checked", false);
+                toggleBulkDeleteButton();
+
+            }
+            else{
+
+                $("#productTableBody").html(`
+
+                    <tr>
+
+                        <td colspan="11"
+                            class="text-center text-muted py-4">
+
+                            No Products Found
+
+                        </td>
+
+                    </tr>
+
+                `);
+
+                $(".pagination-area").html("");
+
+            }
+
+        },
+
+        error: function(xhr){
+
+            let message = "Something went wrong.";
+
+            if(xhr.responseJSON && xhr.responseJSON.detail){
+                message = xhr.responseJSON.detail;
+            }
+
+            $("#productTableBody").html(`
+
+                <tr>
+
+                    <td colspan="11"
+                        class="text-center text-danger py-4">
+
+                        Failed to load products.
+
+                    </td>
+
+                </tr>
+
+            `);
+
+            Swal.fire({
+                icon:"error",
+                title:"Error",
+                text:message
+
+            });
+
+        }
+
+    });
+
+}
+
+function loadCategories() {
+
+    $.ajax({
+
+        url: "/admin/categoryDropdown/dropdown",
+
+        type: "GET",
+
+        success: function(res){
+
+            if(!res.status){
+                return;
+            }
+
+            let html = `
+                <option value="">
+                    All Categories
+                </option>
+            `;
+
+            res.data.forEach(function(item){
+
+                html += `
+                    <option value="${item.id}">
+                        ${item.name}
+                    </option>
+                `;
+
+            });
+
+            $("#categoryFilter").html(html);
+
+        },
+
+        error:function(){
+
+            Swal.fire({
+
+                icon:"error",
+
+                title:"Error",
+
+                text:"Unable to load categories."
+
+            });
+
+        }
+
+    });
+
+}
+
+function bindFilters() {
+    // Search
+    $("#searchFilter").on("keyup", function () {
+        currentSearch = $(this).val().trim();
+        currentPage = 1;
+        loadProducts();
+    });
+    // Category
+    $("#categoryFilter").on("change", function () {
+        currentCategory = $(this).val();
+        currentSubCategory = "";
+        currentPage = 1;
+        loadSubCategories(currentCategory);
+        loadProducts();
+    });
+    // Sub Category
+    $("#subcategoryFilter").on("change", function () {
+        currentSubCategory = $(this).val();
+        currentPage = 1;
+        loadProducts();
+    });
+    // Status
+    $("#statusFilter").on("change", function () {
+
+        currentStatus = $(this).val();
+
+        currentPage = 1;
+
+        loadProducts();
+
+    });
+    // Rows
+    $("#rowsPerPage").on("change", function () {
+
+        rowsPerPage = $(this).val();
+
+        currentPage = 1;
+
+        loadProducts();
+
+    });
+}
+
+function loadSubCategories(categoryId) {
+
+    // Reset Dropdown
+
+    $("#subcategoryFilter").html(`
+        <option value="">All Sub Categories</option>
+    `);
+
+    if (!categoryId) {
+        return;
+    }
+
+    $.ajax({
+
+        url: "/admin/subcategoryDropDown/dropdown",
+
+        type: "GET",
+
+        data: {
+            category_id: categoryId
+        },
+
+        success: function(res){
+
+            if(!res.status){
+                return;
+            }
+
+            let html = `
+                <option value="">All Sub Categories</option>
+            `;
+
+            res.data.forEach(function(item){
+
+                html += `
+                    <option value="${item.id}">
+                        ${item.name}
+                    </option>
+                `;
+
+            });
+
+            $("#subcategoryFilter").html(html);
+
+        }
+
+    });
+
+}
+
+
+/* Delete Section Start */
+
+$(document).on("click", ".delete-product", function (e) {
+
+    e.preventDefault();
+
+    let productId = $(this).data("id");
+
+    Swal.fire({
+        title: "Delete Product?",
+        text: "This product will be moved to trash.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "Cancel"
+
+    }).then((result) => {
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        $.ajax({
+
+            url: "/admin/product/delete/" + productId,
+            type: "DELETE",
+
+            success: function (res) {
+                if (res.status) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: res.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    loadProducts();
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: res.message
+                    });
+                }
+            },
+
+            error: function (xhr) {
+                let message = "Something went wrong.";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    message = xhr.responseJSON.message;
+                }
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: message
+                });
+            }
+        });
+    });
+});
+
+$(document).on("change", "#select-all-products", function () {
+
+    $(".product-item-check").prop(
+        "checked",
+        $(this).prop("checked")
+    );
+
+    toggleBulkDeleteButton();
+
+});
+
+$(document).on("change", ".product-item-check", function () {
+
+    $("#select-all-products").prop(
+
+        "checked",
+
+        $(".product-item-check").length === $(".product-item-check:checked").length
+
+    );
+
+    toggleBulkDeleteButton();
+
+});
+
+$(document).on("click", "[data-table-delete-selected]", function () {
+
+    let ids = getSelectedProducts();
+
+    if (ids.length === 0) {
+        return;
+    }
+
+    Swal.fire({
+        title: "Delete Selected Products?",
+        text: `You are about to delete ${ids.length} products.`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "Cancel"
+
+    }).then((result) => {
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        $.ajax({
+
+            url: "/admin/product/bulk-delete",
+            type: "POST",
+            contentType: "application/json",
+
+            data: JSON.stringify({
+                product_ids: ids
+            }),
+
+            success: function (res) {
+
+                if (res.status) {
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: res.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    loadProducts();
+
+                } else {
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: res.message
+                    });
+
+                }
+
+            }
+
+        });
+
+    });
+
+});
+
+function getSelectedProducts() {
+
+    let ids = [];
+
+    $(".product-item-check:checked").each(function () {
+
+        ids.push(parseInt($(this).val()));
+
+    });
+
+    return ids;
+
+}
+
+function toggleBulkDeleteButton() {
+
+    let count = $(".product-item-check:checked").length;
+
+    let button = $("[data-table-delete-selected]");
+
+    if (count > 0) {
+
+        button
+            .removeClass("d-none")
+            .text("Delete (" + count + ")");
+
+    } else {
+
+        button
+            .addClass("d-none")
+            .text("Delete");
+
+    }
+
+}
+
+</script>

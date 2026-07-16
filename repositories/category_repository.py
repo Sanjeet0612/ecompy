@@ -72,3 +72,23 @@ class CategoryRepository:
         category.deleted_at = datetime.now()
         db.commit()
         return True
+    
+    def get_dropdown(self, db):
+
+        categories = (
+            db.query(Category)
+            .filter(
+                Category.status == 1,
+                Category.deleted_at.is_(None)
+            )
+            .order_by(Category.name.asc())
+            .all()
+        )
+
+        return [
+            {
+                "id": category.id,
+                "name": category.name
+            }
+            for category in categories
+        ]

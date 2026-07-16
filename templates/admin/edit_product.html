@@ -1,0 +1,1454 @@
+{% include "/admin/layout/header.html" %}
+<style>
+#attribute_ids{
+    min-height: 150px;
+}
+
+#attribute_ids option:checked{
+    background:#0d6efd;
+    color:#fff;
+}
+/* ===========================
+   Dropzone Preview
+=========================== */
+
+.dz-details,
+.dz-filename,
+.dz-size,
+.dz-progress,
+.dz-success-mark,
+.dz-error-mark{
+    display:none !important;
+}
+
+/* Preview */
+.dz-preview.dz-image-preview{
+    width:100px;
+    margin:8px;
+}
+
+/* Image */
+.dz-preview .dz-image{
+    width:100px;
+    height:100px;
+}
+
+.dz-preview .dz-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* Hide unwanted */
+.dz-size,
+.dz-progress,
+.dz-success-mark,
+.dz-error-mark{
+    display:none !important;
+}
+
+/* Filename */
+.dz-filename{
+    font-size:11px;
+    margin:5px 0;
+    text-align:center;
+}
+
+/* Remove Button */
+.dz-remove{
+    display:block;
+    margin-top:6px;
+    padding:5px;
+    text-align:center;
+    font-size:12px;
+    color:#dc3545 !important;
+    text-decoration:none;
+    border-top:1px solid #eee;
+}
+
+.dz-remove:hover{
+    background:#dc3545;
+    color:#fff !important;
+}
+
+#galleryImageDropzone{
+    max-height:285px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:10px;
+}
+</style>
+      <!-- ============================================================== -->
+            <!-- Start Main Content -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="container-fluid">
+                    <div class="page-title-head d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="page-main-title m-0">Edit & Update Product</h4>
+                        </div>
+
+                        <div class="text-end">
+                            <ol class="breadcrumb m-0 py-0">
+                                {% include "admin/layout/breadcrumbs.html" %}
+                            </ol>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <form id="productForm" enctype="multipart/form-data">
+                            <div class="col-xxl-12">
+                                <div class="row">
+                                    <div class="col-xxl-8">
+                                        <div class="card">
+                                            <div class="card-header d-block p-3">
+                                                <h4 class="card-title mb-1">Product Information</h4>
+                                                <p class="text-muted mb-0">To add a new product, please provide the necessary details in the fields below.</p>
+                                            </div>
+                                            <!-- end card-header -->
+                                            <input type="hidden" id="product_id" value="{{ product_id }}">
+                                            <div class="card-body">
+                                                <div class="row">
+
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                            <label for="productName" class="form-label">Product Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="productName" id="productName" placeholder="Enter product name" required="" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                            <label for="slug" class="form-label">Slug <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="slug" id="slug" placeholder="Enter slug" required="" />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Product Type -->
+                                                    <div class="row mb-4">
+                                                        <div class="col-lg-12">
+                                                            <label class="form-label fw-bold">Product Type</label>
+
+                                                            <div class="d-flex gap-4 mt-2">
+
+                                                                <div class="form-check">
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="radio"
+                                                                        name="has_variant"
+                                                                        id="simple_product"
+                                                                        value="0"
+                                                                        checked
+                                                                    >
+                                                                    <label class="form-check-label" for="simple_product">
+                                                                        Simple Product
+                                                                    </label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="radio"
+                                                                        name="has_variant"
+                                                                        id="variant_product"
+                                                                        value="1"
+                                                                    >
+                                                                    <label class="form-check-label" for="variant_product">
+                                                                        Variant Product
+                                                                    </label>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Simple Product -->
+                                                    <div id="simpleProductSection">
+
+                                                        <div class="row">
+
+                                                            <div class="col-lg-4">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">
+                                                                        SKU <span class="text-danger">*</span>
+                                                                    </label>
+
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        name="sku"
+                                                                        id="skuId"
+                                                                        placeholder="Enter SKU">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-4">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">
+                                                                        Price <span class="text-danger">*</span>
+                                                                    </label>
+
+                                                                    <input
+                                                                        type="number"
+                                                                        class="form-control"
+                                                                        name="price"
+                                                                        id="price"
+                                                                        placeholder="Enter Price">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-4">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">
+                                                                        Stock <span class="text-danger">*</span>
+                                                                    </label>
+
+                                                                    <input
+                                                                        type="number"
+                                                                        class="form-control"
+                                                                        name="stock"
+                                                                        id="stockNumber"
+                                                                        placeholder="Enter Stock">
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- Variant Product -->
+                                                    <div id="variantProductSection" style="display:none;">
+
+                                                        <div class="card border">
+                                                            <div class="card-header">
+                                                                <h6 class="mb-0">Variant Configuration</h6>
+                                                            </div>
+
+                                                            <div class="card-body">
+
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Attributes</label>
+
+                                                                    <select class="form-select" multiple size="5" id="attribute_ids">
+                                                                        {% for attribute in attributes %}
+                                                                            <option value="{{ attribute.id }}">
+                                                                                {{ attribute.name }}
+                                                                            </option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+
+                                                                <div id="attributeValuesContainer"></div>
+
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn btn-primary mt-3"
+                                                                    id="generateVariantBtn">
+
+                                                                    Generate Variants
+
+                                                                </button>
+
+                                                                <div id="variantTable" class="mt-4"></div>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- Category -->
+                                                    <div class="mb-3">
+                                                        <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                                        <div class="app-search">
+                                                            <select name="category_id" id="category_id" class="form-select">
+                                                                <option value="">Select Category</option>
+
+                                                                {% for category in categories %}
+                                                                <option value="{{ category.id }}">
+                                                                    {{ category.name }}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                     <!--Sub Category -->
+                                                    <div class="mb-3">
+                                                        <label for="subCategory" class="form-label">Sub Category <span class="text-danger">*</span></label>
+                                                        <div class="app-search">
+                                                            <select class="form-select form-control my-1 my-md-0" name="subcategory_id" id="subcategory_id">
+                                                                <option value="">Select Sub Category</option>
+                                                            </select>
+                                                            <i data-lucide="list-check" class="app-search-icon text-muted"></i>
+                                                        </div>
+                                                    </div>
+                                                     <!-- Brand -->
+                                                    <div class="mb-3">
+                                                        <label for="brand" class="form-label">Brand</label>
+                                                        <select name="brand_id" id="brand_id" class="form-select">
+                                                            <option value="">Select Brand</option>
+
+                                                            {% for brand in brands %}
+                                                            <option value="{{ brand.id }}">
+                                                                {{ brand.name }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="card border mt-4">
+
+                                                        <div class="card-header">
+                                                            <h5 class="mb-1">
+                                                                🤖 AI Product Assistant
+                                                            </h5>
+                                                            <p class="text-muted mb-0">
+                                                                Enter product features and let AI generate a professional product description, SEO content, and technical specifications.
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="card-body">
+
+                                                            <!-- Features -->
+                                                            <div class="mb-3">
+                                                                <label class="form-label">
+                                                                    Product Features
+                                                                </label>
+
+                                                                <textarea
+                                                                    class="form-control"
+                                                                    id="featured"
+                                                                    rows="6"
+                                                                    placeholder="Example: 
+                                                                    
+                                                                    • Intel Core i7-1355U
+                                                                    • 16GB DDR4 RAM
+                                                                    • 512GB SSD
+                                                                    • 15.6-inch Full HD Display
+                                                                    • Windows 11 Home"></textarea>
+
+                                                                <small class="text-muted">
+                                                                    Enter one feature per line for the best AI-generated results.
+                                                                </small>
+                                                            </div>
+
+                                                            <!-- AI Button -->
+                                                            <div class="d-flex justify-content-end">
+
+                                                                <button
+                                                                    type="button"
+                                                                    id="generateContentBtn"
+                                                                    class="btn btn-primary">
+                                                                    <i class="ri-magic-line me-1"></i>
+                                                                    Generate AI Content
+                                                                </button>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- Short Description -->
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label class="form-label">
+                                                            Short Description <span class="text-muted">(Required)</span>
+                                                        </label>
+
+                                                        <div id="shortDescriptionEditor" style="height:200px;">
+                                                            <p></p>
+                                                        </div>
+
+                                                        <input
+                                                            type="hidden"
+                                                            name="short_description"
+                                                            id="short_description">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Product Description -->
+                                                <div class="col-12 mt-4">
+                                                    <div>
+                                                        <label class="form-label">
+                                                            Product Description <span class="text-muted">(Required)</span>
+                                                        </label>
+
+                                                        <div id="productDescriptionEditor" style="height:300px;">
+                                                            <p></p>
+                                                        </div>
+
+                                                        <input type="hidden" name="description" id="description">
+                                                    </div>
+                                                </div>
+
+                                                <br>
+
+                                                <div class="card mt-4">
+                                                    <div class="card-header">
+                                                        <h5 class="mb-0">Technical Specifications</h5>
+                                                    </div>
+
+                                                    <div class="card-body p-0">
+                                                        <table class="table table-bordered mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="35%">Specification</th>
+                                                                    <th>Value</th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="specificationTableBody">
+
+                                                            </tbody>
+
+                                                        </table>
+
+                                                        <a href="javascript:void(0)" id="addSpecificationBtn" class="btn btn-primary">
+                                                            Add More
+                                                        </a>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <input type="hidden" id="specifications" name="specifications">
+                                                
+                                                <br>   
+                                            </div>
+                                            <!-- end card-body-->
+                                        </div>
+                                        <!-- end card-->
+
+                                       
+
+                                        <!-- end card-->
+
+                                    </div>
+                                    <!-- end col-->
+
+                                    <div class="col-xxl-4">
+                                        <div class="card">
+                                            <div class="card-header d-block p-3">
+                                                <h4 class="card-title mb-1">Pricing</h4>
+                                                <p class="text-muted mb-0">Set the base price and applicable discount for the product using the options below.</p>
+                                            </div>
+                                            <!-- end card-header -->
+
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label for="featured" class="form-label">Featured <span class="text-muted">(Optional)</span></label>
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control my-1 my-md-0" name="featured" id="is_featured">
+                                                            <option value="0">No</option>
+                                                            <option value="1">Yes</option>
+                                                        </select>
+                                                        <i data-lucide="badge-percent" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="mb-3">
+                                                    <label for="discount" class="form-label">Commission Type <span class="text-muted">(Optional)</span></label>
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control my-1 my-md-0" name="commission_type" id="commission_type">
+                                                            <option selected>Choose Commission Type</option>
+                                                            <option value="">No Commission</option>
+                                                            <option value="fixed">Fixed</option>
+                                                            <option value="percentage">Percentage</option>
+                                                        </select>
+                                                        <i data-lucide="badge-percent" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label for="discountValue" class="form-label">Commission Value <span class="text-muted">(Optional)</span></label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="commission_value" id="commission_value" placeholder="Enter Commision amount or percentage" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card">
+                                            <div class="card-header d-block p-3">
+                                                <h4 class="card-title mb-1">Organize</h4>
+                                                <p class="text-muted mb-0">Organize your product by selecting the appropriate brand, category, sub-category, status, and tags.</p>
+                                            </div>
+                                            <!-- end card-header -->
+
+                                            <div class="card-body">
+                                                
+                                                <div class="mb-0">
+                                                    <label for="tags" class="form-label">Tags</label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter tags separated by commas" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label for="tags" class="form-label">Seo Title</label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="seo_title" id="seo_title" placeholder="Enter tags separated by commas" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label for="tags" class="form-label">Meta Keywords</label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="meta_keywords" id="meta_keywords" placeholder="Enter tags separated by commas" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label for="tags" class="form-label">Meta Description</label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="meta_description" id="meta_description" placeholder="Enter tags separated by commas" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+
+                                    
+                                                <div class="mb-3">
+                                                    <label for="statusOne" class="form-label">Status <span class="text-danger">*</span></label>
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control my-1 my-md-0" name="status" id="statusOne">
+                                                            <option selected>Choose Status</option>
+                                                            <option value="1">Published</option>
+                                                            <option value="0">Inactive</option>
+                                                            <option value="2">Draft</option>
+                                                        </select>
+                                                        <i data-lucide="wand-sparkles" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="card">
+                                            
+                                            <!-- end card-header -->
+                                            <div class="card-body">
+                                                <!------ Main Product Image Start ------>
+                                                    <div class="card">
+
+                                                        <div class="card-header">
+                                                            <h4 class="card-title mb-1">
+                                                                Main Product Image
+                                                            </h4>
+                                                            <!---
+                                                            <p class="text-muted mb-0">
+                                                                Upload the main product image. Only one image is allowed.
+                                                            </p>
+                                                             -->
+                                                        </div>
+
+                                                        <div class="card-body">
+
+                                                            <div id="mainImageDropzone" class="dropzone border rounded">
+
+                                                                <div class="dz-message needsclick">
+
+                                                                    <div class="avatar-lg mx-auto mb-3">
+                                                                        <span class="avatar-title bg-info-subtle text-info rounded-circle">
+                                                                            <i data-lucide="cloud-upload" class="fs-24"></i>
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <h4 class="mb-2">
+                                                                        Drop main image here
+                                                                    </h4>
+
+                                                                    <p class="text-muted">
+                                                                        or click to browse.
+                                                                    </p>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div id="mainImagePreview" class="dropzone-previews mt-3"></div>
+                                                            
+                                                        </div>
+
+                                                    </div>
+                                                <!------ Main Product Image End ------>
+
+                                                <!------ Gallery Images Start ------>
+                                                    <div class="card">
+
+                                                        <div class="card-header">
+                                                            <h4 class="card-title mb-1">
+                                                                Product Gallery
+                                                            </h4>
+                                                            
+                                                            <p class="text-muted mb-0">
+                                                                Upload multiple gallery images for this product.
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="card-body">
+
+                                                            <div id="galleryImageDropzone" class="dropzone border rounded">
+
+                                                                <div class="dz-message needsclick">
+
+                                                                    <div class="avatar-lg mx-auto mb-3">
+                                                                        <span class="avatar-title bg-info-subtle text-info rounded-circle">
+                                                                            <i data-lucide="cloud-upload" class="fs-24"></i>
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <h4 class="mb-2">
+                                                                        Drop gallery images here
+                                                                    </h4>
+
+                                                                    <p class="text-muted">
+                                                                        or click to browse.
+                                                                    </p>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div
+                                                                id="galleryImagePreview"
+                                                                class="dropzone-previews mt-3">
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                <!------ Gallery Images End ------>
+
+
+                                                <div class="mt-2 mb-4 d-flex gap-2 justify-content-center">
+                                                    <!--<a href="#!" class="btn btn-danger fw-semibold"> Discard </a>
+                                                    <a href="#!" class="btn btn-secondary"> Save as Draft </a>
+                                                    <a href="#!" class="btn btn-success"> Publish </a>-->
+                                                    <button type="submit" class="btn btn-success">
+                                                        Save Product
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end row-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- container -->
+
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                ©
+                                <span data-current-year></span>
+                                UBold By <span class="fw-semibold">Coderthemes</span>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End of Main Content -->
+            <!-- ============================================================== -->
+
+{% include "/admin/layout/footer.html" %}
+<script>
+    const shortEditor = new Quill("#shortDescriptionEditor", {
+        theme: "snow"
+    });
+
+    const productEditor = new Quill("#productDescriptionEditor", {
+        theme: "snow"
+    });
+
+    // Short Description
+    shortEditor.on("text-change", function () {
+        $("#short_description").val(shortEditor.root.innerHTML);
+    });
+
+    // Product Description
+    productEditor.on("text-change", function () {
+        $("#description").val(productEditor.root.innerHTML);
+    });
+
+    Dropzone.autoDiscover = false;
+
+    let mainImageFiles = [];
+    let galleryImageFiles = [];
+
+    let mainDropzone = new Dropzone("#mainImageDropzone", {
+        url: "/",
+        autoProcessQueue: false,
+        maxFiles: 1,
+        acceptedFiles: "image/*",
+        addRemoveLinks: true
+    });
+
+    mainDropzone.on("maxfilesexceeded", function(file) {
+        this.removeFile(file);
+        alert("Only one main image is allowed");
+    });
+
+
+    let galleryDropzone = new Dropzone("#galleryImageDropzone", {
+    url: "/",
+    autoProcessQueue: false,
+    maxFiles: 10,
+    acceptedFiles: "image/*",
+    addRemoveLinks: true
+});
+</script>
+<script>
+
+    let productId = $("#product_id").val();
+
+    $(document).ready(function () {
+        loadProduct(productId);
+    });
+
+    function loadProduct(productId) {
+
+        $.ajax({
+
+            url: "/admin/product/" + productId,
+            type: "GET",
+            beforeSend: function () {
+                $("#updateProductBtn")
+                    .prop("disabled", true)
+                    .text("Loading...");
+
+            },
+
+            success: function (res) {
+
+                if (!res.status) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: res.message
+                    });
+                    return;
+                }
+
+                let product = res.data;
+                fillProductForm(product);
+            },
+
+            error: function (xhr) {
+
+                let message = "Something went wrong.";
+
+                if (
+                    xhr.responseJSON &&
+                    xhr.responseJSON.message
+                ) {
+                    message = xhr.responseJSON.message;
+                }
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: message
+                });
+
+            },
+
+            complete: function () {
+                $("#updateProductBtn")
+                    .prop("disabled", false)
+                    .text("Update Product");
+            }
+
+        });
+
+    }
+
+    function fillProductForm(product){
+
+        $("#productName").val(product.name);
+        $("#slug").val(product.slug);
+        $("#skuId").val(product.sku);
+        $("#price").val(product.price);
+        $("#stockNumber").val(product.stock);
+
+        /* Variant Section Start */
+        $("input[name='has_variant'][value='" + product.has_variant + "']")
+        .prop("checked", true)
+        .trigger("change");
+
+    
+        window.selectedAttributeValues = product.attribute_value_ids;
+
+        $("#attribute_ids option").prop("selected", false);
+
+        product.attribute_ids.forEach(function(id){
+
+            $("#attribute_ids option[value='" + id + "']")
+                .prop("selected", true);
+
+        });
+
+        $("#attribute_ids").trigger("change");
+
+        /* Variant Section End */
+       
+        $("#category_id").val(product.category_id);
+        loadSubCategories(
+            product.category_id,
+            product.subcategory_id
+        );
+
+
+        $("#brand_id").val(product.brand_id);
+        $("#is_featured").val(product.featured);
+
+        // Hidden fields
+        $("#short_description").val(product.short_description);
+        $("#description").val(product.description);
+
+        // Quill Editors
+        shortEditor.root.innerHTML = product.short_description || "";
+        productEditor.root.innerHTML = product.description || "";
+
+        
+        $("#commission_type").val(product.commission_type);
+        $("#commission_value").val(product.commission_value);
+        $("#tags").val(product.tags);
+        $("#seo_title").val(product.seo_title);
+        $("#meta_description").val(product.meta_description);
+        $("#meta_keywords").val(product.meta_keywords);
+        $("#statusOne").val(product.status);
+
+        $("#specificationTableBody").html("");
+        product.specifications.forEach(function(spec){
+            addSpecificationRow(
+                spec.title,
+                spec.value
+            );
+        });
+
+        /* Main Image Section  */
+
+        mainDropzone.removeAllFiles(true);
+
+        if(product.main_image) {
+            let imageUrl = "/static/" + product.main_image;
+            let mockFile = {
+                name: product.main_image.split("/").pop(),
+                size: 12345
+            };
+            mainDropzone.emit("addedfile", mockFile);
+            mainDropzone.emit("thumbnail", mockFile, imageUrl);
+            mainDropzone.emit("success", mockFile);
+            mainDropzone.emit("complete", mockFile);
+            mainDropzone.files.push(mockFile);
+        }
+        
+        /* Gallery Image Section  */
+
+        galleryDropzone.removeAllFiles(true);
+
+        if (product.gallery_images.length > 0) {
+
+    product.gallery_images.forEach(function(image){
+
+        let mockFile = {
+            name: image.image.split("/").pop(),
+            size: 12345
+        };
+
+        let imageUrl = "/static/" + image.image;
+
+        galleryDropzone.emit("addedfile", mockFile);
+        galleryDropzone.emit("thumbnail", mockFile, imageUrl);
+        galleryDropzone.emit("success", mockFile);
+        galleryDropzone.emit("complete", mockFile);
+
+        galleryDropzone.files.push(mockFile);
+
+    });
+
+}
+    }
+</script>
+
+
+
+<script>
+
+    $("#category_id").on("change", function () {
+
+        let categoryId = $(this).val();
+
+        $("#subcategory_id").html(
+            '<option value="">Loading...</option>'
+        );
+
+        if (categoryId == "") {
+
+            $("#subcategory_id").html(
+                '<option value="">Select Sub Category</option>'
+            );
+
+            return;
+        }
+
+        $.ajax({
+
+            url: "/admin/subcategories/" + categoryId,
+
+            type: "GET",
+
+            success: function (response) {
+
+                let options =
+                    '<option value="">Select Sub Category</option>';
+
+                if (response.status) {
+
+                    response.data.forEach(function (item) {
+
+                        options +=
+                            `<option value="${item.id}">
+                                ${item.name}
+                            </option>`;
+
+                    });
+
+                }
+
+                $("#subcategory_id").html(options);
+
+            },
+
+            error: function () {
+
+                $("#subcategory_id").html(
+                    '<option value="">No Data Found</option>'
+                );
+
+            }
+
+        });
+
+    });
+
+    /* Varient section */
+    $(document).ready(function () {
+
+        $("input[name='has_variant']").change(function () {
+
+            if ($(this).val() == "0") {
+
+                $("#simpleProductSection").show();
+                $("#variantProductSection").hide();
+
+            } else {
+
+                $("#simpleProductSection").hide();
+                $("#variantProductSection").show();
+
+            }
+
+        });
+
+    });
+
+    $(document).ready(function () {
+
+        $("#attribute_ids").on("change", function () {
+
+            let attributeIds = $(this).val();
+
+            if (!attributeIds || attributeIds.length === 0) {
+                $("#attributeValuesContainer").html("");
+                return;
+            }
+
+            $.ajax({
+                url: "/admin/product/get-attribute-values",
+                type: "POST",
+                contentType: "application/json",
+
+                data: JSON.stringify({
+                    attribute_ids: attributeIds
+                }),
+
+                success: function (response) {
+
+                    //console.log(response);
+
+                    let html = "";
+
+                    if (response.status && response.data.length > 0) {
+
+                        html += `
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">
+                                    Select Values
+                                </label>
+
+                                <div class="row">
+                        `;
+
+                        response.data.forEach(function(item){
+
+                            html += `
+                                <div class="col-md-3 mb-2">
+
+                                    <div class="form-check">
+
+                                        <input
+                                            class="form-check-input attribute-value"
+                                            type="checkbox"
+                                            value="${item.id}"
+                                            data-attribute="${item.attribute_id}"
+                                            id="value_${item.id}"
+                                        >
+
+                                        <label
+                                            class="form-check-label"
+                                            for="value_${item.id}"
+                                        >
+                                            ${item.value}
+                                        </label>
+
+                                    </div>
+
+                                </div>
+                            `;
+
+                        });
+
+                        html += `
+                                </div>
+                            </div>
+                        `;
+
+                    }
+
+                    $("#attributeValuesContainer").html(html);
+                    
+                    //  YAHAN ADD KARNA HAI
+                    if (window.selectedAttributeValues) {
+
+                        window.selectedAttributeValues.forEach(function (id) {
+
+                            $("#value_" + id).prop("checked", true);
+
+                        });
+
+                    }
+
+                    //console.log($(".attribute-value").length);
+                    //console.log(window.selectedAttributeValues);
+                    //console.log($("#attributeValuesContainer").html());
+
+                },
+
+                error: function (xhr) {
+
+                    console.log(xhr.responseText);
+
+                }
+
+            });
+
+        });
+
+    });
+
+    $("#generateVariantBtn").click(function () {
+
+        let selected = [];
+
+        $(".attribute-value:checked").each(function () {
+
+            selected.push({
+                attribute_id: $(this).data("attribute"),
+                value_id: $(this).val(),
+                value: $(this).next("label").text().trim()
+            });
+
+        });
+
+        let grouped = {};
+
+    selected.forEach(function (item) {
+
+        if (!grouped[item.attribute_id]) {
+            grouped[item.attribute_id] = [];
+        }
+
+        grouped[item.attribute_id].push({
+            value_id: item.value_id,
+            value: item.value
+        });
+
+    });
+
+    /*------------------------*/
+
+    let attributes = Object.values(grouped);
+
+    function generateCombinations(arrays) {
+
+        if (arrays.length === 0) return [];
+
+        let result = [[]];
+
+        arrays.forEach(function (array) {
+
+            let temp = [];
+
+            result.forEach(function (resultItem) {
+
+                array.forEach(function (value) {
+
+                    temp.push([...resultItem, value]);
+
+                });
+
+            });
+
+            result = temp;
+
+        });
+
+        return result;
+    }
+
+    let variants = generateCombinations(attributes);
+
+    /*------------------------------*/
+
+    let html = `
+    <table class="table table-bordered align-middle">
+        <thead>
+            <tr>
+                <th width="25%">Variant</th>
+                <th width="20%">SKU</th>
+                <th width="15%">Price</th>
+                <th width="15%">Stock</th>
+                <th width="10%">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+
+    variants.forEach(function (variant, index) {
+
+        let variantName = variant.map(v => v.value).join(" / ");
+        let valueIds = variant.map(v => v.value_id).join(",");
+
+        html += `
+            <tr>
+
+                <td>
+                    ${variantName}
+
+                    <input type="hidden"
+                        name="variant_value_ids[]"
+                        value="${valueIds}">
+
+                    <input type="hidden"
+                        name="variant_names[]"
+                        value="${variantName}">
+                </td>
+
+                <td>
+                    <input type="text"
+                        class="form-control"
+                        name="variant_sku[]">
+                </td>
+
+                <td>
+                    <input type="number"
+                        class="form-control"
+                        name="variant_price[]">
+                </td>
+
+                <td>
+                    <input type="number"
+                        class="form-control"
+                        name="variant_stock[]">
+                </td>
+
+                <td>
+                    <select class="form-select"
+                            name="variant_status[]">
+
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+
+                    </select>
+                </td>
+
+            </tr>
+        `;
+
+    });
+
+    html += `
+        </tbody>
+    </table>
+    `;
+
+    $("#variantTable").html(html);
+
+    });
+
+
+    function loadSubCategories(categoryId, selectedSubCategory = "") {
+
+        $("#subcategory_id").html(`
+            <option value="">Select Sub Category</option>
+        `);
+
+        if (!categoryId) {
+            return;
+        }
+
+        $.ajax({
+
+        url: "/admin/subcategoryDropDown/dropdown",
+
+        type: "GET",
+
+        data: {
+            category_id: categoryId
+        },
+
+        success: function(res){
+
+            if(!res.status){
+                return;
+            }
+
+            let html = `
+                <option value="">Select Sub Category</option>
+            `;
+
+            res.data.forEach(function(item){
+
+                html += `
+                    <option value="${item.id}">
+                        ${item.name}
+                    </option>
+                `;
+
+            });
+
+            $("#subcategory_id").html(html);
+
+            if(selectedSubCategory){
+                $("#subcategory_id").val(selectedSubCategory);
+            }
+
+        }
+
+    });
+
+    }
+
+/* Spection function Add , Remove */
+$("#addSpecificationBtn").click(function () {
+    addSpecificationRow();
+});
+$(document).on("click", ".removeSpecification", function () {
+    $(this).closest("tr").remove();
+});
+
+function addSpecificationRow(title = "", value = "") {
+
+    let html = `
+        <tr>
+
+            <td>
+                <input
+                    type="text"
+                    name="specification_title[]"
+                    class="form-control"
+                    value="${title}">
+            </td>
+
+            <td>
+                <input
+                    type="text"
+                    name="specification_value[]"
+                    class="form-control"
+                    value="${value}">
+            </td>
+
+            <td width="60">
+                <button
+                    type="button"
+                    class="btn btn-danger btn-sm removeSpecification">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trash-2" class="lucide lucide-trash-2 fs-lg"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+
+                </button>
+            </td>
+
+        </tr>
+    `;
+
+    $("#specificationTableBody").append(html);
+
+}
+
+</script>
+
+/* Generate Content Using GIMINI AI*/
+
+<script>
+
+function toggleAIGenerator(isLoading) {
+    $("#generateContentBtn").prop("disabled", isLoading);
+    if(isLoading) {
+        $("#generateContentBtn")
+            .html('<span class="spinner-border spinner-border-sm me-2"></span> Generating AI Content...');
+    } else {
+        $("#generateContentBtn")
+            .html('<i class="ri-magic-line me-1"></i> Generate AI Content');
+    }
+}
+
+
+$("#generateContentBtn").click(function () {
+    
+    let product_name = $("#productName").val().trim();
+    if (product_name === "") {
+        Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text: "Please enter product name."
+        });
+        return;
+    }
+
+    toggleAIGenerator(true);
+
+    $.ajax({
+
+        url: "/admin/generate-content",
+        type: "POST",
+        data: {
+            product_name: product_name,
+            category: $("#category_id option:selected").text(),
+            sub_category: $("#subcategory_id option:selected").text(),
+            brand: $("#brand_id option:selected").text(),
+            features: $("#featured").val()
+        },
+
+        success: function (response) {
+
+            toggleAIGenerator(false);
+
+            if (!response.status) {
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Generation Failed",
+                    text: response.message
+                });
+
+                return;
+            }
+
+            // Short Description
+            shortEditor.clipboard.dangerouslyPasteHTML(
+                response.data.short_description
+            );
+
+            $("#short_description").val(
+                response.data.short_description
+            );
+
+            // Product Description
+            productEditor.clipboard.dangerouslyPasteHTML(
+                response.data.description
+            );
+
+            $("#description").val(
+                response.data.description
+            );
+            // SEO
+            $("#seo_title").val(
+                response.data.seo_title
+            );
+            $("#meta_description").val(
+                response.data.meta_description
+            );
+            $("#meta_keywords").val(
+                response.data.meta_keywords
+            );
+            // Tags
+            $("#tags").val(
+                response.data.tags.join(", ")
+            );
+            // Specifications
+            $("#specificationTableBody").html("");
+
+            if (response.data.specifications.length > 0) {
+
+                response.data.specifications.forEach(function(item){
+
+                    addSpecificationRow(
+                        item.title,
+                        item.value
+                    );
+
+                });
+
+            } else {
+                addSpecificationRow();
+            }
+
+            
+            $("#specifications").val(
+                JSON.stringify(response.data.specifications)
+            );
+
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "AI content generated successfully.",
+                timer: 1800,
+                showConfirmButton: false
+            });
+        },
+
+        error: function () {
+            toggleAIGenerator(false);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Something went wrong while generating AI content."
+            });
+        }
+    });
+});
+</script>

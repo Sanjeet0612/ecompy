@@ -4,12 +4,140 @@ from schemas.product import ProductCreate
 from models.product_image import ProductImage
 from models.product_variant import ProductVariant
 from models.product_variant_value import ProductVariantValue
+from models.attribute_value import AttributeValue
+from sqlalchemy.orm import joinedload
+from math import ceil
+from sqlalchemy import or_
+from datetime import datetime
+
+
+
 
 
 class ProductRepository:
 
     def __init__(self, db: Session):
         self.db = db
+
+    def get_all(
+        self,
+        db,
+        page: int = 1,
+        limit: int = 10,
+        search: str = "",
+        status: str = "",
+        category_id: int | None = None,
+        subcategory_id: int | None = None,
+    ):
+
+        query = ( 
+                db.query(Product)
+                .filter(Product.deleted_at.is_(None))
+                .options(
+                    joinedload(Product.category),
+                    joinedload(Product.subcategory),
+                    joinedload(Product.brand)
+                )
+            )
+        
+        
+        # Search
+        if search:
+
+            query = query.filter(
+                or_(
+                    Product.name.ilike(f"%{search}%"),
+                    Product.sku.ilike(f"%{search}%"),
+                    Product.slug.ilike(f"%{search}%")
+                )
+            )
+
+        # Status
+        if status != "":
+            query = query.filter(Product.status == int(status))
+
+        if category_id:
+            query = query.filter(Product.category_id == category_id)
+
+        if subcategory_id:
+            query = query.filter(Product.subcategory_id == subcategory_id)    
+
+        total = query.count()
+
+        products = (
+            query.order_by(Product.id.desc())
+            .offset((page - 1) * limit)
+            .limit(limit)
+            .all()
+        )
+
+        data = []
+
+        for product in products:
+
+            data.append({
+
+                "id": product.id,
+
+                "name": product.name,
+
+                "slug": product.slug,
+
+                "sku": product.sku,
+
+                "category": (
+                    product.category.name
+                    if product.category
+                    else "-"
+                ),
+
+                "brand": (
+                    product.brand.name
+                    if product.brand
+                    else "-"
+                ),
+
+                "price": product.price,
+
+                "stock": product.stock,
+
+                "orders": 0,
+
+                "status": product.status,
+
+                "approval_status": product.approval_status,
+
+                "is_featured": product.is_featured,
+
+                "main_image": product.main_image,
+
+                "updated_at_date": (
+                    product.updated_at.strftime("%d %b, %Y")
+                    if product.updated_at
+                    else "-"
+                ),
+
+                "updated_at_time": (
+                    product.updated_at.strftime("%I:%M %p")
+                    if product.updated_at
+                    else "-"
+                )
+
+            })
+
+        return {
+
+            "data": data,
+
+            "total": total,
+
+            "page": page,
+
+            "limit": limit,
+
+            "total_pages": ceil(total / limit) if limit else 1
+
+        }
 
     def create(self, product_data: ProductCreate):
 
@@ -34,6 +162,7 @@ class ProductRepository:
             main_image=product_data.main_image,
             has_variant=product_data.has_variant,
             status=product_data.status,
+            is_featured=product_data.featured,
             
         )
 
@@ -42,7 +171,7 @@ class ProductRepository:
 
         return product
     
-# Gallery Section 
+    # Gallery Section 
     def save_gallery_images(self, product_id: int, images: list[str]):
 
         sort_order = 1
@@ -60,7 +189,7 @@ class ProductRepository:
 
         self.db.flush()
 
-# Variant Section 
+    # Variant Section 
 
     def save_variants(self,product_id: int,variants: list):
 
@@ -85,7 +214,7 @@ class ProductRepository:
 
         return variant_ids 
     
-# Variant Value Section
+    # Variant Value Section
 
     def save_variant_values(self, variant_data: list):
 
@@ -104,3 +233,203 @@ class ProductRepository:
 
         self.db.flush()    
     
+    # Delete By Id  Section
+    
+    def delete(
+        self, db, product_id
+    ):
+
+        try:
+            product = (
+                db.query(Product)
+                .filter(
+                    Product.id == product_id,
+                    Product.deleted_at.is_(None)
+                )
+                .first()
+            )
+
+            if not product:
+
+                return {
+                    "status": False,
+                    "message": "Product not found."
+                }
+
+            product.deleted_at = datetime.utcnow()
+
+            db.commit()
+
+            return {
+                "status": True,
+                "message": "Product deleted successfully."
+            }
+
+        except Exception as e:
+
+            db.rollback()
+
+            return {
+                "status": False,
+                "message": str(e)
+            }
+
+    # Bulk Delete Section
+
+    def bulk_delete(
+        self,
+        product_ids: list[int]
+    ):
+
+        try:
+
+            if not product_ids:
+
+                return {
+                    "status": False,
+                    "message": "No products selected."
+                }
+
+            deleted_count = (
+                self.db.query(Product)
+                .filter(
+                    Product.id.in_(product_ids),
+                    Product.deleted_at.is_(None)
+                )
+                .update(
+                    {
+                        Product.deleted_at: datetime.utcnow(),
+                        Product.updated_at: datetime.utcnow()
+                    },
+                    synchronize_session=False
+                )
+            )
+
+            self.db.commit()
+
+            return {
+                "status": True,
+                "message": f"{deleted_count} product(s) deleted successfully."
+            }
+
+        except Exception as e:
+
+            self.db.rollback()
+
+            return {
+                "status": False,
+                "message": str(e)
+            }   
+
+    # Get Product By Id
+
+    def get_by_id(
+        self,
+        product_id: int
+    ):
+
+        try:
+
+            product = (
+                self.db.query(Product)
+                .options(
+                    joinedload(Product.category),
+                    joinedload(Product.subcategory),
+                    joinedload(Product.brand),
+                    joinedload(Product.images),
+
+                    joinedload(Product.variants)
+                        .joinedload(ProductVariant.variant_values)
+                        .joinedload(ProductVariantValue.attribute_value),
+
+                    joinedload(Product.specifications)    
+                )
+                .filter(
+                    Product.id == product_id,
+                    Product.deleted_at.is_(None)
+                )
+                .first()
+            )
+
+            attribute_ids = set()
+            attribute_value_ids = []
+
+            for variant in product.variants:
+
+                for variantValue in variant.variant_values:
+
+                    attribute_value_ids.append(
+                        variantValue.attribute_value_id
+                    )
+
+                    attribute_ids.add(
+                        variantValue.attribute_value.attribute_id
+                    )
+
+            if not product:
+
+                return {
+                    "status": False,
+                    "message": "Product not found.",
+                    "data": None
+                }
+
+            data = {
+                "id": product.id,
+                "category_id": product.category_id,
+                "subcategory_id": product.subcategory_id,
+                "brand_id": product.brand_id,
+                "name": product.name,
+                "slug": product.slug,
+                "sku": product.sku,
+                "price": product.price,
+                "stock": product.stock,
+                "has_variant": product.has_variant,
+                "attribute_ids": list(attribute_ids),
+                "attribute_value_ids": attribute_value_ids,
+                "short_description": product.short_description,
+                "description": product.description,
+                "specifications": [
+                    {
+                        "title": specification.title,
+                        "value": specification.value
+                    }
+                    for specification in product.specifications
+                ],
+                "main_image": product.main_image,
+                "gallery_images": [
+                    {
+                        "id": image.id,
+                        "image": image.image
+                    }
+                    for image in product.images
+                ],
+                "seo_title": product.seo_title,
+                "meta_description":product.meta_description,
+                "meta_keywords":product.meta_keywords,
+                "tags": product.tags,
+                "status": product.status,
+                "approval_status": product.approval_status,
+                "commission_type":product.commission_type,
+                "commission_value":product.commission_value,
+                "featured": product.is_featured,
+                "created_at": product.created_at,
+                "updated_at": product.updated_at
+            }
+
+            return {
+                "status": True,
+                "message": "Product fetched successfully.",
+                "data": data
+            }
+
+        except Exception as e:
+
+            return {
+                "status": False,
+                "message": str(e),
+                "data": None
+            }
+        
+
+

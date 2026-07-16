@@ -59,6 +59,9 @@ class Product(Base):
     deleted_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relationships
+    category = relationship("Category")
+    brand = relationship("Brand")
+    subcategory = relationship("SubCategory")
     images = relationship("ProductImage", back_populates="product", cascade="all, delete-orphan")
     variants = relationship("ProductVariant",back_populates="product",cascade="all, delete-orphan")
     specifications = relationship("ProductSpecification",back_populates="product",cascade="all, delete-orphan")

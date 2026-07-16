@@ -1,6 +1,6 @@
 from google import genai
 from google.genai import types
-from config.settings import GEMINI_API_KEY
+from config.settings import GEMINI_API_KEY,GEMINI_MODEL
 from utils.ai.prompts.product import build_product_prompt
 from utils.ai.parser import parse_json_response
 from utils.ai.validator import validate_product_response
@@ -42,47 +42,40 @@ def generate_product_content(
 
 def generate_content(prompt: str, settings):
 
-    model = settings.model if settings else "gemini-3.5-flash"
-    temperature = float(settings.temperature) if settings else 0.7
-    top_p = float(settings.top_p) if settings else 0.95
-    max_output_tokens = int(settings.max_output_tokens) if settings else 8192
+    for attempt in range(MAX_RETRIES):
 
-    try:
-        last_error = None
+        try:
 
-        for _ in range(MAX_RETRIES):
+            print(f"AI Attempt: {attempt + 1}")
 
-            try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt
+            )
 
-                response = client.models.generate_content(
-                    model=model,
-                    contents=prompt,
-                    config=types.GenerateContentConfig(
-                        temperature=temperature,
-                        top_p=top_p,
-                        max_output_tokens=max_output_tokens
-                    )
-                )
+            return {
+                "status": True,
+                "data": response.text
+            }
 
-                data = parse_json_response(response.text)
-                return data
+        except Exception as e:
 
-            except Exception as e:
+            print("=" * 80)
+            print(f"AI Attempt : {attempt + 1}/{MAX_RETRIES}")
+            print(f"Model      : {GEMINI_MODEL}")
+            print(f"Error      : {e}")
+            print("=" * 80)
 
-                last_error = e
+            if should_retry(e) and attempt < MAX_RETRIES - 1:
 
-                if should_retry(e):
-                    wait_before_retry()
-                    continue
+                wait_before_retry(attempt + 1)
+                continue
 
-                raise
+            print("=" * 80)
+            print("AI Generation Failed After Maximum Retries")
+            print("=" * 80)
 
-        raise last_error
-
-    except Exception as e:
-
-        return {
-            "status": False,
-            "message": str(e),
-            "data": None
-        }
+            return {
+                "status": False,
+                "message": "AI service is temporarily busy. Please try again after a few moments."
+            }

@@ -57,6 +57,7 @@ class ProductUpdate(BaseModel):
     has_variant: int = 0
 
     status: int = 1
+    is_featured: int = 0
 
 
 # =========================================
@@ -109,3 +110,11 @@ class ProductDetailResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# =========================================
+# BULK DELETE RESPONSE
+# =========================================
+
+class BulkDeleteRequest(BaseModel):
+    product_ids: list[int]
