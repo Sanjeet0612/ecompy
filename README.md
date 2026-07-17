@@ -1,3 +1,9 @@
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
+![Gemini AI](https://img.shields.io/badge/Google-Gemini_AI-orange)
+![License](https://img.shields.io/badge/License-MIT-blue)
+
+
 # AI Product Content Generator
 
 AI-powered Product Content Generator built with **FastAPI** and **Google Gemini AI**.
