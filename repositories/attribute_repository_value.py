@@ -221,6 +221,7 @@ class AttributeValueRepository:
     def get_by_attribute_ids(self, db, attribute_ids):
         return (
             db.query(AttributeValue)
+            .options(joinedload(AttributeValue.attribute))
             .filter(AttributeValue.attribute_id.in_(attribute_ids))
             .filter(AttributeValue.status == 1)
             .order_by(AttributeValue.attribute_id)

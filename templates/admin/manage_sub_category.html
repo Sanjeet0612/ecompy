@@ -325,7 +325,7 @@ $(document).ready(function () {
         let formData = new FormData(form);
 
         $.ajax({
-            url: "/admin/subcategory/create",
+            url: "/admin/subcategories/subcategory/create",
             type: "POST",
             data: formData,
             processData: false,
@@ -391,7 +391,7 @@ $(document).on("click", ".edit-subcategory", function (e) {
     let id = $(this).data("id");
 
     $.ajax({
-        url: "/admin/subcategory/" + id,
+        url: "/admin/subcategories/subcategory/" + id,
         type: "GET",
 
         success: function (res) {
@@ -440,7 +440,7 @@ $(document).ready(function () {
     function loadCategories() {
 
         $.ajax({
-            url: "/admin/category/list",   // 👈 API endpoint
+            url: "/admin/categories/category/list",   // 👈 API endpoint
             type: "GET",
 
             success: function (res) {
@@ -543,7 +543,7 @@ $(document).on("click", "[data-table-delete-selected]", function () {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: "/admin/subcategory/bulk-delete",
+                url: "/admin/subcategories/subcategory/bulk-delete",
                 type: "POST",
                 data: { ids: ids },
 
@@ -582,7 +582,7 @@ function loadSubCategories(){
         `);
 
         $.ajax({
-            url: "/admin/subcategory/list",
+            url: "/admin/subcategories/subcategory/list",
             type: "GET",
             data: {
                 page: currentPage || 1,
@@ -769,7 +769,7 @@ $(document).on("click", ".edit-subcategory", function (e) {
 
     $.ajax({
 
-        url: "/admin/subcategory/" + id,
+        url: "/admin/subcategories/subcategory/" + id,
         type: "GET",
 
         success: function (res) {
@@ -833,7 +833,7 @@ $(document).on("submit", "#editSubCategoryForm", function (e) {
     let formData = new FormData(form);
 
     $.ajax({
-        url: "/admin/subcategory/update",
+        url: "/admin/subcategories/subcategory/update",
         type: "POST",
         data: formData,
         processData: false,
@@ -914,7 +914,7 @@ $(document).on("click", ".delete-subcategory", function (e) {
         if (!result.isConfirmed) return;
 
         $.ajax({
-            url: `/admin/subcategory/delete/${id}`,
+            url: `/admin/subcategories/subcategory/delete/${id}`,
             type: "DELETE",
             success: function (res) {
 

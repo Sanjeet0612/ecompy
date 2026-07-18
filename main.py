@@ -7,10 +7,16 @@ from routes.web import router as web_router
 from routes.user import router as user_router
 from routes.admin import router as admin_router
 from routes.admin_api import router as admin_api_router
+from routes.categories_api import router as categories_api_router
+from routes.sub_categories_api import router as sub_categories_api_router
+from routes.brands_api import router as brands_api_router
+from routes.attributes_api import router as attributes_api_router
+from routes.attribute_values_api import router as attribute_value_api_router
+from routes.products_api import router as products_api_router
 
 from middleware.auth_middleware import AuthMiddleware
 from middleware.admin_auth import AdminAuthMiddleware
-import models
+
 
 app = FastAPI(title=APP_NAME)
 
@@ -36,3 +42,14 @@ app.include_router(user_router)
 # Admin Section
 app.include_router(admin_router)
 app.include_router(admin_api_router)
+app.include_router(categories_api_router)
+app.include_router(sub_categories_api_router)
+app.include_router(brands_api_router)
+app.include_router(attributes_api_router)
+app.include_router(attribute_value_api_router)
+app.include_router(products_api_router)
+
+
+
+
+

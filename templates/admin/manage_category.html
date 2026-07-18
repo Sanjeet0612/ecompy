@@ -406,7 +406,7 @@ function loadCategories(){
     `);
 
     $.ajax({
-        url: "/admin/category/list",
+        url: "/admin/categories/category/list",
         type: "GET",
         data: {
             page: currentPage,
@@ -586,7 +586,7 @@ $(document).on("click", ".edit-category", function (e) {
     let id = $(this).data("id");
 
     $.ajax({
-        url: `/admin/category/${id}`,
+        url: `/admin/categories/category/${id}`,
         type: "GET",
 
         success: function(res){
@@ -631,7 +631,7 @@ $("#editCategoryForm").submit(function(e){
 
     $.ajax({
 
-        url: `/admin/category/update/${id}`,
+        url: `/admin/categories/category/update/${id}`,
         type: "PUT",
         data: formData,
         processData: false,
@@ -671,7 +671,7 @@ $(document).on("click", ".view-category", function (e) {
     let id = $(this).data("id");
 
     $.ajax({
-        url: `/admin/category/${id}`,
+        url: `/admin/categories/category/${id}`,
         type: "GET",
 
         success: function(res){
@@ -715,7 +715,7 @@ $("#addCategoryForm").submit(function(e){
     let formData = new FormData(this);
 
     $.ajax({
-        url: "/admin/category/create",
+        url: "/admin/categories/category/create",
         type: "POST",
         data: formData,
         processData: false,
@@ -845,7 +845,7 @@ $(document).on("click", "[data-table-delete-selected]", function(){
         if(result.isConfirmed){
 
             $.ajax({
-                url: "/admin/category/bulk-delete",
+                url: "/admin/categories/category/bulk-delete",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -913,7 +913,7 @@ $(document).on("click", ".delete-category", function(e){
         if(result.isConfirmed){
 
             $.ajax({
-                url: `/admin/category/delete/${id}`,
+                url: `/admin/categories/category/delete/${id}`,
                 type: "DELETE",
 
                 success: function(res){

@@ -50,3 +50,13 @@ async def upload_image(file: UploadFile, upload_path: str):
         upload_path.replace("static/", ""),
         filename
     ).replace("\\", "/")
+
+
+def delete_image(filename: str):
+    if not filename:
+        return
+
+    file_path = os.path.join("static", filename.replace("/", os.sep))
+
+    if os.path.exists(file_path):
+        os.remove(file_path)

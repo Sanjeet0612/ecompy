@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from models.product import Product
-from schemas.product import ProductCreate
+from schemas.product import ProductCreate, ProductUpdate
 from models.product_image import ProductImage
 from models.product_variant import ProductVariant
 from models.product_variant_value import ProductVariantValue
@@ -9,9 +9,6 @@ from sqlalchemy.orm import joinedload
 from math import ceil
 from sqlalchemy import or_
 from datetime import datetime
-
-
-
 
 
 class ProductRepository:
@@ -173,10 +170,12 @@ class ProductRepository:
     
     # Gallery Section 
     def save_gallery_images(self, product_id: int, images: list[str]):
-
+       
         sort_order = 1
 
         for image in images:
+            print("Adding:", image)
+
             product_images = ProductImage(
                 product_id=product_id,
                 image=image,
@@ -186,6 +185,41 @@ class ProductRepository:
             self.db.add(product_images)
 
             sort_order += 1
+
+        self.db.flush()
+        self.db.commit()
+        
+    
+    # Gallery Image By Product Id
+    def get_gallery_images(self, product_id: int):
+        return (
+            self.db.query(ProductImage)
+            .filter(ProductImage.product_id == product_id)
+            .order_by(ProductImage.sort_order)
+            .all()
+        )
+
+    # Delete Gallery Image
+
+    def delete_gallery_image(self, image_id: int):
+        image = (
+            self.db.query(ProductImage)
+            .filter(ProductImage.id == image_id)
+            .first()
+        )
+
+        if image:
+            self.db.delete(image)
+            self.db.flush()
+
+        return image
+    
+    # Delete All Gallery
+
+    def delete_all_gallery_images(self, product_id: int):
+        self.db.query(ProductImage).filter(
+            ProductImage.product_id == product_id
+        ).delete()
 
         self.db.flush()
 
@@ -387,6 +421,26 @@ class ProductRepository:
                 "has_variant": product.has_variant,
                 "attribute_ids": list(attribute_ids),
                 "attribute_value_ids": attribute_value_ids,
+
+                "variants": [
+                    {
+                        "id": variant.id,
+                        "variant_value_ids": ",".join(
+                            str(v.attribute_value_id)
+                            for v in variant.variant_values
+                        ),
+                        "variant_name": " / ".join(
+                            v.attribute_value.value
+                            for v in variant.variant_values
+                        ),
+                        "sku": variant.sku,
+                        "price": variant.price,
+                        "stock": variant.stock,
+                        "status": variant.status
+                    }
+                    for variant in product.variants
+                ],
+
                 "short_description": product.short_description,
                 "description": product.description,
                 "specifications": [
@@ -431,5 +485,41 @@ class ProductRepository:
                 "data": None
             }
         
+    # Update Product By Id
+    def update(self, product_id: int, product_data: ProductUpdate):
 
+        product = (
+            self.db.query(Product)
+            .filter(Product.id == product_id)
+            .first()
+        )
 
+        if not product:
+            return None
+
+        product.category_id = product_data.category_id
+        product.subcategory_id = product_data.subcategory_id
+        product.brand_id = product_data.brand_id
+        product.name = product_data.name
+        product.slug = product_data.slug
+        product.sku = product_data.sku
+        product.price = product_data.price
+        product.stock = product_data.stock
+        product.commission_type = product_data.commission_type
+        product.commission_value = product_data.commission_value
+        product.short_description = product_data.short_description
+        product.description = product_data.description
+        product.seo_title = product_data.seo_title
+        product.meta_description = product_data.meta_description
+        product.meta_keywords = product_data.meta_keywords
+        product.tags = product_data.tags
+        product.has_variant = product_data.has_variant
+        product.status = product_data.status
+        product.is_featured = product_data.is_featured
+        # Main image update karenge
+        product.main_image = product_data.main_image
+
+        #self.db.commit()
+        #self.db.refresh(product)
+
+        return product

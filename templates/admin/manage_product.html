@@ -294,7 +294,7 @@ function loadProducts() {
 
     $.ajax({
 
-        url: "/admin/product/list",
+        url: "/admin/products/product/list",
 
         type: "GET",
 
@@ -727,7 +727,7 @@ $(document).on("click", ".delete-product", function (e) {
 
         $.ajax({
 
-            url: "/admin/product/delete/" + productId,
+            url: "/admin/products/product/delete/" + productId,
             type: "DELETE",
 
             success: function (res) {
@@ -813,7 +813,7 @@ $(document).on("click", "[data-table-delete-selected]", function () {
 
         $.ajax({
 
-            url: "/admin/product/bulk-delete",
+            url: "/admin/products/product/bulk-delete",
             type: "POST",
             contentType: "application/json",
 

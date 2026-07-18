@@ -7,8 +7,8 @@ from config.database import get_db
 from models.category import Category
 from models.brand import Brand
 from models.attribute import Attribute
-
 from repositories.attribute_repository import AttributeRepository
+
 
 router = APIRouter(prefix="/admin")
 
@@ -175,7 +175,7 @@ def edit_product(
         .order_by(Attribute.name.asc())
         .all()
     )
-    
+  
     return templates.TemplateResponse(
         request=request,
         name="admin/edit_product.html",
@@ -190,7 +190,8 @@ def edit_product(
             "admin": admin,
             "categories": categories,
             "brands": brands,
-            "attributes": attributes,
+            "attributes": attributes
+            
         }
     )
     

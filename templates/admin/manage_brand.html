@@ -302,7 +302,7 @@
     let formData = new FormData(this);
 
     $.ajax({
-        url: "/admin/brand/create",
+        url: "/admin/brands/brand/create",
         type: "POST",
         data: formData,
         processData: false,
@@ -365,7 +365,7 @@
     function loadBrands() {
 
     $.ajax({
-        url: "/admin/brand/list",
+        url: "/admin/brands/brand/list",
         type: "GET",
         data: {
             page: currentPage,
@@ -685,7 +685,7 @@ $(document).on("click", "[data-table-delete-selected]", function(){
         if(result.isConfirmed){
 
             $.ajax({
-                url: "/admin/brand/bulk-delete",
+                url: "/admin/brands/brand/bulk-delete",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -754,7 +754,7 @@ $(document).on("click", ".delete-brand", function (e) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: `/admin/brand/delete/${id}`, // ya jo tumhara route hai
+                url: `/admin/brands/brand/delete/${id}`, // ya jo tumhara route hai
                 type: "DELETE",                   // ya POST
 
                 success: function (res) {
@@ -801,7 +801,7 @@ $(document).on("click", ".edit-brand", function (e) {
     let id = $(this).data("id");
 
     $.ajax({
-        url: `/admin/brand/${id}`,
+        url: `/admin/brands/brand/${id}`,
         type: "GET",
 
         success: function(res){
@@ -843,7 +843,7 @@ $("#editBrandForm").submit(function(e){
 
     $.ajax({
 
-        url: `/admin/brand/update/${id}`,
+        url: `/admin/brands/brand/update/${id}`,
         type: "PUT",
         data: formData,
         processData: false,
@@ -874,8 +874,5 @@ $("#editBrandForm").submit(function(e){
         }
     });
 });
-
-
-
 
 </script>    

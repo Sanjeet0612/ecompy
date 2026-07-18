@@ -300,7 +300,7 @@
     let formData = new FormData(this);
 
     $.ajax({
-        url: "/admin/attributevalue/create",
+        url: "/admin/attributesValue/attributevalue/create",
         type: "POST",
         data: formData,
         processData: false,
@@ -363,7 +363,7 @@
     function loadAttributeValue() {
 
     $.ajax({
-        url: "/admin/attributevalue/list",
+        url: "/admin/attributesValue/attributevalue/list",
         type: "GET",
         data: {
             page: currentPage,
@@ -692,7 +692,7 @@ $(document).on("click", "[data-table-delete-selected]", function(){
         if(result.isConfirmed){
 
             $.ajax({
-                url: "/admin/attributevalue/bulk-delete-value",
+                url: "/admin/attributesValue/attributevalue/bulk-delete-value",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -761,7 +761,7 @@ $(document).on("click", ".delete-attribute-value", function (e) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: `/admin/attributevalue/delete/${id}`, // ya jo tumhara route hai
+                url: `/admin/attributesValue/attributevalue/delete/${id}`, // ya jo tumhara route hai
                 type: "DELETE",                   // ya POST
 
                 success: function (res) {
@@ -808,7 +808,7 @@ $(document).on("click", ".edit-attribute-value", function (e) {
     let id = $(this).data("id");
 
     $.ajax({
-        url: `/admin/attributevalue/${id}`,
+        url: `/admin/attributesValue/attributevalue/${id}`,
         type: "GET",
 
         success: function(res){
@@ -848,7 +848,7 @@ $("#editAttributeValueForm").submit(function(e){
 
     $.ajax({
 
-        url: `/admin/attributevalue/update/${id}`,
+        url: `/admin/attributesValue/attributevalue/update/${id}`,
         type: "PUT",
         data: formData,
         processData: false,
@@ -879,8 +879,5 @@ $("#editAttributeValueForm").submit(function(e){
         }
     });
 });
-
-
-
 
 </script>    

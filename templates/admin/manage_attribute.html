@@ -276,7 +276,7 @@
     let formData = new FormData(this);
 
     $.ajax({
-        url: "/admin/attribute/create",
+        url: "/admin/attributes/attribute/create",
         type: "POST",
         data: formData,
         processData: false,
@@ -328,7 +328,7 @@
     });
 });
 
-    /* List Brand Section */
+    /* List Attribute Section */
 
     let currentPage = 1;
     let currentSearch = "";
@@ -339,7 +339,7 @@
     function loadBrands() {
 
     $.ajax({
-        url: "/admin/attribute/list",
+        url: "/admin/attributes/attribute/list",
         type: "GET",
         data: {
             page: currentPage,
@@ -659,7 +659,7 @@ $(document).on("click", "[data-table-delete-selected]", function(){
         if(result.isConfirmed){
 
             $.ajax({
-                url: "/admin/attribute/bulk-delete",
+                url: "/admin/attributes/attribute/bulk-delete",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -728,7 +728,7 @@ $(document).on("click", ".delete-attribute", function (e) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: `/admin/attribute/delete/${id}`, // ya jo tumhara route hai
+                url: `/admin/attributes/attribute/delete/${id}`, // ya jo tumhara route hai
                 type: "DELETE",                   // ya POST
 
                 success: function (res) {
@@ -775,7 +775,7 @@ $(document).on("click", ".edit-attribute", function (e) {
     let id = $(this).data("id");
 
     $.ajax({
-        url: `/admin/attribute/${id}`,
+        url: `/admin/attributes/attribute/${id}`,
         type: "GET",
 
         success: function(res){
@@ -815,7 +815,7 @@ $("#editAttributeForm").submit(function(e){
 
     $.ajax({
 
-        url: `/admin/attribute/update/${id}`,
+        url: `/admin/attributes/attribute/update/${id}`,
         type: "PUT",
         data: formData,
         processData: false,

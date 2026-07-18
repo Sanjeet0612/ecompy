@@ -683,6 +683,7 @@
         theme: "snow"
     });
 
+
     // Short Description
     shortEditor.on("text-change", function () {
         $("#short_description").val(shortEditor.root.innerHTML);
@@ -711,18 +712,28 @@
         alert("Only one main image is allowed");
     });
 
-
+    let deletedGalleryIds = [];
     let galleryDropzone = new Dropzone("#galleryImageDropzone", {
-    url: "/",
-    autoProcessQueue: false,
-    maxFiles: 10,
-    acceptedFiles: "image/*",
-    addRemoveLinks: true
-});
+        url: "/",
+        autoProcessQueue: false,
+        maxFiles: 10,
+        acceptedFiles: "image/*",
+        addRemoveLinks: true
+    });
+
+    galleryDropzone.on("removedfile", function(file) {
+        if (file.isMock) {
+            deletedGalleryIds.push(file.imageId);
+            console.log(deletedGalleryIds);
+        }
+    });
+
 </script>
 <script>
 
     let productId = $("#product_id").val();
+    let pageLoaded = false;
+    let variantInvalid = false;
 
     $(document).ready(function () {
         loadProduct(productId);
@@ -732,7 +743,7 @@
 
         $.ajax({
 
-            url: "/admin/product/" + productId,
+            url: "/admin/products/product/" + productId,
             type: "GET",
             beforeSend: function () {
                 $("#updateProductBtn")
@@ -811,8 +822,11 @@
         });
 
         $("#attribute_ids").trigger("change");
+        renderVariantTable(product.variants);
 
         /* Variant Section End */
+
+        
        
         $("#category_id").val(product.category_id);
         loadSubCategories(
@@ -857,13 +871,14 @@
             let imageUrl = "/static/" + product.main_image;
             let mockFile = {
                 name: product.main_image.split("/").pop(),
-                size: 12345
+                size: 12345,
+                isMock: true
             };
             mainDropzone.emit("addedfile", mockFile);
             mainDropzone.emit("thumbnail", mockFile, imageUrl);
             mainDropzone.emit("success", mockFile);
             mainDropzone.emit("complete", mockFile);
-            mainDropzone.files.push(mockFile);
+            mainDropzone.files.push(mockFile)
         }
         
         /* Gallery Image Section  */
@@ -872,26 +887,32 @@
 
         if (product.gallery_images.length > 0) {
 
-    product.gallery_images.forEach(function(image){
+                    product.gallery_images.forEach(function(image){
 
-        let mockFile = {
-            name: image.image.split("/").pop(),
-            size: 12345
-        };
+                        let mockFile = {
+                            name: image.image.split("/").pop(),
+                            size: 12345,
+                            isMock: true,
+                            imageId: image.id
+                        };
 
-        let imageUrl = "/static/" + image.image;
+                        let imageUrl = "/static/" + image.image;
 
-        galleryDropzone.emit("addedfile", mockFile);
-        galleryDropzone.emit("thumbnail", mockFile, imageUrl);
-        galleryDropzone.emit("success", mockFile);
-        galleryDropzone.emit("complete", mockFile);
+                        galleryDropzone.emit("addedfile", mockFile);
+                        galleryDropzone.emit("thumbnail", mockFile, imageUrl);
+                        galleryDropzone.emit("success", mockFile);
+                        galleryDropzone.emit("complete", mockFile);
 
-        galleryDropzone.files.push(mockFile);
+                        galleryDropzone.files.push(mockFile);
 
-    });
+                });
 
-}
+        }
+
+        pageLoaded = true;
     }
+
+  
 </script>
 
 
@@ -917,7 +938,7 @@
 
         $.ajax({
 
-            url: "/admin/subcategories/" + categoryId,
+            url: "/admin/subcategories/subcategories/" + categoryId,
 
             type: "GET",
 
@@ -980,6 +1001,16 @@
 
         $("#attribute_ids").on("change", function () {
 
+            if (pageLoaded) {
+                $("#variantTable").empty();
+
+                Swal.fire({
+                    icon: "info",
+                    title: "Variants Removed",
+                    text: "Attributes changed. Please generate variants again."
+                });
+            }
+
             let attributeIds = $(this).val();
 
             if (!attributeIds || attributeIds.length === 0) {
@@ -988,7 +1019,7 @@
             }
 
             $.ajax({
-                url: "/admin/product/get-attribute-values",
+                url: "/admin/products/product/get-attribute-values",
                 type: "POST",
                 contentType: "application/json",
 
@@ -998,43 +1029,76 @@
 
                 success: function (response) {
 
-                    //console.log(response);
-
                     let html = "";
 
                     if (response.status && response.data.length > 0) {
 
-                        html += `
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">
-                                    Select Values
-                                </label>
+                        let grouped = {};
 
-                                <div class="row">
-                        `;
-
+                        // Group by Attribute Name
                         response.data.forEach(function(item){
 
+                            if (!grouped[item.attribute_name]) {
+                                grouped[item.attribute_name] = [];
+                            }
+
+                            grouped[item.attribute_name].push(item);
+
+                        });
+
+                        // Render Attribute Wise
+                        Object.keys(grouped).forEach(function(attributeName){
+
                             html += `
-                                <div class="col-md-3 mb-2">
+                                    <div class="card border-0 shadow-sm mb-4">
 
-                                    <div class="form-check">
+                                        <div class="card-header bg-primary bg-opacity-10 d-flex justify-content-between align-items-center">
 
-                                        <input
-                                            class="form-check-input attribute-value"
-                                            type="checkbox"
-                                            value="${item.id}"
-                                            data-attribute="${item.attribute_id}"
-                                            id="value_${item.id}"
-                                        >
+                                            <h6 class="mb-0 fw-bold text-primary">
+                                                ${attributeName}
+                                            </h6>
 
-                                        <label
-                                            class="form-check-label"
-                                            for="value_${item.id}"
-                                        >
-                                            ${item.value}
-                                        </label>
+                                            <span class="badge bg-primary rounded-pill">
+                                                ${grouped[attributeName].length} Values
+                                            </span>
 
+                                        </div>
+
+                                        <div class="card-body">
+
+                                            <div class="d-flex flex-wrap gap-2">
+                                    `;
+
+                            grouped[attributeName].forEach(function(item){
+
+                                html += `
+                                    <div class="col-md-3 mb-2">
+
+                                        <div class="form-check">
+
+                                            <input
+                                                class="form-check-input attribute-value"
+                                                type="checkbox"
+                                                value="${item.id}"
+                                                data-attribute="${item.attribute_id}"
+                                                id="value_${item.id}"
+                                            >
+
+                                            <label
+                                                class="form-check-label"
+                                                for="value_${item.id}"
+                                            >
+                                                ${item.value}
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+                                `;
+
+                            });
+
+                            html += `
                                     </div>
 
                                 </div>
@@ -1042,29 +1106,19 @@
 
                         });
 
-                        html += `
-                                </div>
-                            </div>
-                        `;
-
                     }
 
                     $("#attributeValuesContainer").html(html);
-                    
-                    //  YAHAN ADD KARNA HAI
+
                     if (window.selectedAttributeValues) {
 
-                        window.selectedAttributeValues.forEach(function (id) {
+                        window.selectedAttributeValues.forEach(function(id){
 
                             $("#value_" + id).prop("checked", true);
 
                         });
 
                     }
-
-                    //console.log($(".attribute-value").length);
-                    //console.log(window.selectedAttributeValues);
-                    //console.log($("#attributeValuesContainer").html());
 
                 },
 
@@ -1144,79 +1198,43 @@
 
     /*------------------------------*/
 
-    let html = `
-    <table class="table table-bordered align-middle">
-        <thead>
-            <tr>
-                <th width="25%">Variant</th>
-                <th width="20%">SKU</th>
-                <th width="15%">Price</th>
-                <th width="15%">Stock</th>
-                <th width="10%">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-    `;
+let renderData = [];
 
-    variants.forEach(function (variant, index) {
+variants.forEach(function (variant) {
 
-        let variantName = variant.map(v => v.value).join(" / ");
-        let valueIds = variant.map(v => v.value_id).join(",");
+    renderData.push({
 
-        html += `
-            <tr>
+        variant_name: variant.map(v => v.value).join(" / "),
+        variant_value_ids: variant.map(v => v.value_id).join(","),
 
-                <td>
-                    ${variantName}
-
-                    <input type="hidden"
-                        name="variant_value_ids[]"
-                        value="${valueIds}">
-
-                    <input type="hidden"
-                        name="variant_names[]"
-                        value="${variantName}">
-                </td>
-
-                <td>
-                    <input type="text"
-                        class="form-control"
-                        name="variant_sku[]">
-                </td>
-
-                <td>
-                    <input type="number"
-                        class="form-control"
-                        name="variant_price[]">
-                </td>
-
-                <td>
-                    <input type="number"
-                        class="form-control"
-                        name="variant_stock[]">
-                </td>
-
-                <td>
-                    <select class="form-select"
-                            name="variant_status[]">
-
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
-
-                    </select>
-                </td>
-
-            </tr>
-        `;
+        sku: "",
+        price: "",
+        stock: "",
+        status: 1
 
     });
 
-    html += `
-        </tbody>
-    </table>
-    `;
+});
 
-    $("#variantTable").html(html);
+renderVariantTable(renderData);
+
+    });
+
+    $(document).on("change", ".attribute-value", function () {
+
+        if (!pageLoaded || variantInvalid) {
+            return;
+        }
+
+        variantInvalid = true;
+
+        $("#variantTable").empty();
+
+        Swal.fire({
+            icon: "info",
+            title: "Variants Removed",
+            text: "Attributes changed. Please generate variants again."
+        });
 
     });
 
@@ -1451,4 +1469,257 @@ $("#generateContentBtn").click(function () {
         }
     });
 });
+</script>
+
+ /* Update Section */
+<script>
+
+    $("#productForm").submit(function(e){
+
+    e.preventDefault();
+
+    $("#short_description").val(
+        shortEditor.root.innerHTML
+    );
+
+    $("#description").val(
+        productEditor.root.innerHTML
+    );
+
+    let formData = new FormData(this);
+
+    // Main Image
+    if(mainDropzone.files.length > 0 && !mainDropzone.files[0].isMock) {
+        formData.append(
+            "main_image",
+            mainDropzone.files[0]
+        );
+    }
+
+    // Gallery Images
+    galleryDropzone.files.forEach(function(file){
+        if(!file.isMock){
+            formData.append(
+                "gallery_images[]",
+                file
+            );
+        }
+    });
+
+    deletedGalleryIds.forEach(function(id) {
+        formData.append("deleted_gallery_ids[]", id);
+    });
+
+    let specifications = [];
+
+    $("input[name='specification_title[]']").each(function(index){
+
+        let title = $(this).val().trim();
+        let value = $("input[name='specification_value[]']").eq(index).val().trim();
+
+        if(title && value){
+            specifications.push({
+                title: title,
+                value: value
+            });
+        }
+
+    });
+
+    formData.set(
+        "specifications",
+        JSON.stringify(specifications)
+    );
+
+    $.ajax({
+
+        url: "/admin/products/product/update/" + $("#product_id").val(),
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function(res) {
+
+            if(res.status){
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: res.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+            }else{
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: res.message
+                });
+
+            }
+
+        },
+
+        error: function(xhr){
+
+            let message = "Something went wrong.";
+
+            const fieldNames = {
+                category_id: "Category",
+                subcategory_id: "Sub Category",
+                brand_id: "Brand",
+                productName: "Product Name",
+                status: "Status",
+                sku: "SKU",
+                price: "Price",
+                stock: "Stock",
+                main_image: "Main Image"
+            };
+
+            if(xhr.responseJSON){
+
+                // FastAPI Validation Error (422)
+                if(xhr.responseJSON.detail){
+
+                    if(Array.isArray(xhr.responseJSON.detail)){
+
+                        message = xhr.responseJSON.detail.map(function(err){
+
+                            let field = fieldNames[err.loc[1]] || err.loc[1];
+
+                            return field + " : " + err.msg;
+
+                        }).join("<br>");
+
+                    }else{
+
+                        message = xhr.responseJSON.detail;
+
+                    }
+
+                }
+
+                // Custom API Error
+                else if(xhr.responseJSON.message){
+
+                    message = xhr.responseJSON.message;
+
+                }
+
+            }
+
+            Swal.fire({
+                icon: "error",
+                title: "Validation Error",
+                html: "<pre style='text-align:left'>" + message + "</pre>"
+            });
+
+        }
+
+    });
+
+});
+</script>
+
+
+<script>
+ function renderVariantTable(variants) {
+    $("#variantTable").html("");
+    let html = `
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th width="25%">Variant</th>
+                    <th width="20%">SKU</th>
+                    <th width="15%">Price</th>
+                    <th width="15%">Stock</th>
+                    <th width="10%">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    variants.forEach(function (variant) {
+
+        html += `
+            <tr>
+
+                <td>
+                    ${variant.variant_name}
+
+                    <input
+                        type="hidden"
+                        name="variant_value_ids[]"
+                        value="${variant.variant_value_ids}"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="variant_names[]"
+                        value="${variant.variant_name}"
+                    >
+                </td>
+
+                <td>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="variant_sku[]"
+                        value="${variant.sku}"
+                    >
+                </td>
+
+                <td>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="variant_price[]"
+                        value="${variant.price}"
+                    >
+                </td>
+
+                <td>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="variant_stock[]"
+                        value="${variant.stock}"
+                    >
+                </td>
+
+                <td>
+                    <select
+                        class="form-select"
+                        name="variant_status[]"
+                    >
+                        <option value="1"
+                            ${variant.status == 1 ? "selected" : ""}
+                        >
+                            Active
+                        </option>
+
+                        <option value="0"
+                            ${variant.status == 0 ? "selected" : ""}
+                        >
+                            Inactive
+                        </option>
+                    </select>
+                </td>
+
+            </tr>
+        `;
+
+    });
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+    $("#variantTable").html(html);
+
+}   
 </script>
