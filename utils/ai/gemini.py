@@ -5,7 +5,8 @@ from utils.ai.prompts.product import build_product_prompt
 from utils.ai.parser import parse_json_response
 from utils.ai.validator import validate_product_response
 from utils.ai.retry import should_retry, wait_before_retry
-#from utils.ai.exceptions import (AIQuotaExceededError,AIConnectionError,AIRetryLimitExceededError)
+import json
+
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 MAX_RETRIES = 3
@@ -35,10 +36,13 @@ def generate_product_content(
 
     if data.get("status") is False:
         return data
-
-    return validate_product_response(data)
     
+    parsed_data = parse_json_response(data["data"])
 
+    print(json.dumps(parsed_data, indent=4, ensure_ascii=False))
+
+    return validate_product_response(parsed_data)
+    
 
 def generate_content(prompt: str, settings):
 

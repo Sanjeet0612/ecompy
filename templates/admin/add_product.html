@@ -393,6 +393,9 @@
                                                             </tbody>
 
                                                         </table>
+                                                         <a href="javascript:void(0)" id="addSpecificationBtn" class="btn btn-primary">
+                                                            Add More
+                                                        </a>
                                                     </div>
                                                     
                                                 </div>
@@ -423,7 +426,7 @@
                                                 <div class="mb-3">
                                                     <label for="featured" class="form-label">Featured <span class="text-muted">(Optional)</span></label>
                                                     <div class="app-search">
-                                                        <select class="form-select form-control my-1 my-md-0" name="featured" id="featured">
+                                                        <select class="form-select form-control my-1 my-md-0" name="featured" id="is_featured">
                                                             <option value="0">No</option>
                                                             <option value="1">Yes</option>
                                                         </select>
@@ -724,7 +727,7 @@
 
     $.ajax({
 
-        url: "/admin/subcategories/" + categoryId,
+        url: "/admin/subcategories/subcategories/" + categoryId,
 
         type: "GET",
 
@@ -1019,7 +1022,7 @@ $("#variantTable").html(html);
 </script>
 
 <script>
-    $("#productForm").submit(function(e){
+$("#productForm").submit(function(e){
 
     e.preventDefault();
 
@@ -1052,9 +1055,28 @@ $("#variantTable").html(html);
 
     });
 
+    // Specification
+
+        let specifications = [];
+
+        $("input[name='specification_title[]']").each(function(index){
+            let title = $(this).val().trim();
+            let value = $("input[name='specification_value[]']").eq(index).val().trim();
+            if(title && value){
+                specifications.push({
+                    title: title,
+                    value: value
+                });
+            }
+        });
+        formData.set(
+            "specifications",
+            JSON.stringify(specifications)
+        );
+
     $.ajax({
 
-        url: "/admin/product/create",
+        url: "/admin/products/product/create",
         type: "POST",
         data: formData,
         processData: false,
@@ -1243,15 +1265,23 @@ $("#generateContentBtn").click(function () {
                 response.data.tags.join(", ")
             );
             // Specifications
-            let specificationHtml = "";
+            //let specificationHtml = "";
+            $("#specificationTableBody").html("");
             if (response.data.specifications.length > 0) {
                 response.data.specifications.forEach(function(item){
+                    /*
                     specificationHtml += `
                         <tr>
                             <td><strong>${item.title}</strong></td>
                             <td>${item.value}</td>
                         </tr>
                     `;
+                    */
+                   
+                    addSpecificationRow(
+                        item.title,
+                        item.value
+                    );
                 });
 
             } else {
@@ -1289,6 +1319,56 @@ $("#generateContentBtn").click(function () {
         }
     });
 });
+
+
+
+/* Spection function Add , Remove */
+$("#addSpecificationBtn").click(function () {
+    addSpecificationRow();
+});
+$(document).on("click", ".removeSpecification", function () {
+    $(this).closest("tr").remove();
+});
+
+function addSpecificationRow(title = "", value = "") {
+
+    let html = `
+        <tr>
+
+            <td>
+                <input
+                    type="text"
+                    name="specification_title[]"
+                    class="form-control"
+                    value="${title}">
+            </td>
+
+            <td>
+                <input
+                    type="text"
+                    name="specification_value[]"
+                    class="form-control"
+                    value="${value}">
+            </td>
+
+            <td width="60">
+                <button
+                    type="button"
+                    class="btn btn-danger btn-sm removeSpecification">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trash-2" class="lucide lucide-trash-2 fs-lg"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+
+                </button>
+            </td>
+
+        </tr>
+    `;
+
+    $("#specificationTableBody").append(html);
+
+}
+
+
 </script>
 
 

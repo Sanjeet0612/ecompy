@@ -159,7 +159,7 @@ class ProductRepository:
             main_image=product_data.main_image,
             has_variant=product_data.has_variant,
             status=product_data.status,
-            is_featured=product_data.featured,
+            is_featured=product_data.is_featured,
             
         )
 
