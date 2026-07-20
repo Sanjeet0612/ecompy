@@ -10,6 +10,7 @@ PRODUCT_GALLERY_PATH = "static/uploads/products/gallery"
 CATEGORY_PATH        = "static/uploads/categories"
 SUB_CATEGORY_PATH    = "static/uploads/subcategory"
 BRAND_PATH           = "static/uploads/brand"
+BLOG_MAIN_PATH       = "static/uploads/blog"
 VENDOR_PATH          = "static/uploads/vendors"
 
 

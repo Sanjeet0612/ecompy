@@ -13,6 +13,9 @@ from routes.brands_api import router as brands_api_router
 from routes.attributes_api import router as attributes_api_router
 from routes.attribute_values_api import router as attribute_value_api_router
 from routes.products_api import router as products_api_router
+# BLOG
+from routes.blog_categories_api import router as blog_categories_api_router
+from routes.blog_api import router as blog_api_router
 
 from middleware.auth_middleware import AuthMiddleware
 from middleware.admin_auth import AdminAuthMiddleware
@@ -48,6 +51,10 @@ app.include_router(brands_api_router)
 app.include_router(attributes_api_router)
 app.include_router(attribute_value_api_router)
 app.include_router(products_api_router)
+app.include_router(blog_categories_api_router)
+app.include_router(blog_api_router)
+
+
 
 
 

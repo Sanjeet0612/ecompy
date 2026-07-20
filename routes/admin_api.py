@@ -4,6 +4,7 @@ from config.database import get_db
 from repositories.admin_repository import AdminRepository
 from repositories.category_repository import CategoryRepository
 from repositories.sub_category_repository import SubCategoryRepository
+from repositories.blog_category_repository import BlogCategoryRepository
 from repositories.ai_setting_repository import aiSettingRepository
 from schemas.admin import AdminLogin
 from utils.security import verify_password
@@ -196,6 +197,28 @@ async def generate_content(
         "data": result
     }
 
+@router.post("/generate-blog-content")
+async def generate_content(
+    title: str = Form(...),
+    category: str = Form(""),
+    db: Session = Depends(get_db)
+):
+    settings = aiSettingRepository.get_settings(db)
+
+    result = gemini.generate_blog_content(
+        title=title,
+        category=category,
+        settings=settings
+    )
+
+    if result.get("status") is False:
+        return result
+
+    return {
+        "status": True,
+        "message": "Content generated successfully.",
+        "data": result
+    }
 
 # -------------------------Logout Section Start---------------------------------------
 @router.post("/api/logout")
@@ -208,7 +231,7 @@ def logout(response: Response):
 
 # -------------------------Common Section Start---------------------------------------
 
-# Category Dropdown
+# Product Category Dropdown
 @router.get("/categoryDropdown/dropdown")
 def category_dropdown(
     db: Session = Depends(get_db)
@@ -231,9 +254,8 @@ def category_dropdown(
             "message": str(e),
             "data": []
         }
-    
-
-# Sub Category Dropdown
+     
+# Product Sub Category Dropdown
 @router.get("/subcategoryDropDown/dropdown")
 def subcategory_dropdown(
     category_id: int,
@@ -261,3 +283,27 @@ def subcategory_dropdown(
             "data": []
         }    
 
+# Blog Category Dropdown
+@router.get("/blogCategoryDropdown/dropdown")
+def category_dropdown(
+    db: Session = Depends(get_db)
+):
+
+    try:
+        catrepository = BlogCategoryRepository()
+        data = catrepository.get_dropdown(db)
+
+        return {
+            "status": True,
+            "message": "Categories fetched successfully.",
+            "data": data
+        }
+
+    except Exception as e:
+
+        return {
+            "status": False,
+            "message": str(e),
+            "data": []
+        }
+      

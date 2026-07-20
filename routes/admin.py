@@ -7,6 +7,7 @@ from config.database import get_db
 from models.category import Category
 from models.brand import Brand
 from models.attribute import Attribute
+from models.blog_category import BlogCategory
 from repositories.attribute_repository import AttributeRepository
 
 
@@ -304,6 +305,129 @@ def add_products(
             "attributes": attributes,
         }
     )
+
+
+# Blog Category Section Start
+@router.get("/manage-blog-category")
+def manage_blog_category(
+    request: Request
+):
+    admin = getattr(request.state, "admin", None)
+
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/manage_blog_category.html",
+        context={
+            "title": "Blog Category",
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Blog Category", "url": "/admin/manage-blog-category"},
+                {"name": "Manage Blog Category", "url": None}
+            ],
+            "admin": admin
+        }
+    )
+
+# Blog Section Start
+@router.get("/manage-blog")
+def manage_blog(
+    request: Request
+):
+    admin = getattr(request.state, "admin", None)
+
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/manage_blog.html",
+        context={
+            "title": "Blog",
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Blog", "url": "/admin/manage-blog"},
+                {"name": "Manage Blog", "url": None}
+            ],
+            "admin": admin
+        }
+    )
+# Add Blog
+@router.get("/add-blog")
+def add_blog(
+    request: Request,
+    db: Session = Depends(get_db)
+    ):
+    admin = getattr(request.state, "admin", None)
+
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+
+    categories = (
+        db.query(BlogCategory)
+        .filter(
+            BlogCategory.status == 1,
+            BlogCategory.deleted_at == None
+        )
+        .order_by(BlogCategory.name.asc())
+        .all()
+    )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/add_blog.html",
+        context={
+            "title": "Add Blog",
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Blog", "url": "/admin/manage-blog"},
+                {"name": "Add Blog", "url": None}
+            ],
+            "admin": admin,
+            "categories": categories
+        }
+    )
+
+# Edit Blog Section Start
+@router.get("/blog/edit-blog/{blog_id}")
+def edit_blog(
+    request:Request,
+    blog_id: int,
+    db: Session = Depends(get_db)        
+):
+    admin = getattr(request.state, "admin", None)
+
+    if not admin:
+        return RedirectResponse(url="/admin/", status_code=302)
+    
+    categories = (
+        db.query(BlogCategory)
+        .filter(
+            BlogCategory.status == 1,
+            BlogCategory.deleted_at == None
+        )
+        .order_by(BlogCategory.name.asc())
+        .all()
+    )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/edit_blog.html",
+        context={
+            "title": "Edit Blog",
+            "blog_id": blog_id,
+            "breadcrumbs": [
+                {"name": "Dashboard", "url": "/admin/dashboard"},
+                {"name": "Blog", "url": "/admin/manage-blog"},
+                {"name": "Edit Blog", "url": None}
+            ],
+            "admin": admin,
+            "categories": categories
+        }
+    )
+    
 
 # AI SETTING SECTION START
 @router.get("/manage-ai-setting")

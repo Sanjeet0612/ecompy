@@ -1,0 +1,846 @@
+{% include "/admin/layout/header.html" %}
+<style>
+
+/* ===========================
+   Dropzone Preview
+=========================== */
+
+.dz-details,
+.dz-filename,
+.dz-size,
+.dz-progress,
+.dz-success-mark,
+.dz-error-mark{
+    display:none !important;
+}
+
+/* Preview */
+.dz-preview.dz-image-preview{
+    width:100px;
+    margin:8px;
+}
+
+/* Image */
+.dz-preview .dz-image{
+    width:100px;
+    height:100px;
+}
+
+.dz-preview .dz-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* Hide unwanted */
+.dz-size,
+.dz-progress,
+.dz-success-mark,
+.dz-error-mark{
+    display:none !important;
+}
+
+/* Filename */
+.dz-filename{
+    font-size:11px;
+    margin:5px 0;
+    text-align:center;
+}
+
+/* Remove Button */
+.dz-remove{
+    display:block;
+    margin-top:6px;
+    padding:5px;
+    text-align:center;
+    font-size:12px;
+    color:#dc3545 !important;
+    text-decoration:none;
+    border-top:1px solid #eee;
+}
+
+.dz-remove:hover{
+    background:#dc3545;
+    color:#fff !important;
+}
+
+
+</style>
+      <!-- ============================================================== -->
+            <!-- Start Main Content -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="container-fluid">
+                    <div class="page-title-head d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="page-main-title m-0">Edit & Update Blog</h4>
+                        </div>
+
+                        <div class="text-end">
+                            <ol class="breadcrumb m-0 py-0">
+                                {% include "admin/layout/breadcrumbs.html" %}
+                            </ol>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <form id="blogForm"  enctype="multipart/form-data">
+                            <div class="col-xxl-12">
+                                <div class="row">
+                                    <div class="col-xxl-8">
+                                        <div class="card">
+                                            <div class="card-header d-block p-3">
+                                                <h4 class="card-title mb-1">Blog Information</h4>
+                                                <p class="text-muted mb-0">To add a new blog, please provide the necessary details in the fields below.</p>
+                                            </div>
+                                            <!-- end card-header -->
+
+                                            <div class="card-body">
+                                                <div class="row">
+
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                            <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="title" id="title" placeholder="Enter blog title" required="" />
+                                                        </div>
+                                                    </div>
+
+                                                    <input type="hidden" id="blog_id" value="{{ blog_id }}">
+                                                    <div class="mb-3">
+                                                        <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                                        <div class="app-search">
+                                                            <select name="category_id" id="category_id" class="form-select">
+                                                                <option value="">Select Category</option>
+
+                                                                {% for category in categories %}
+                                                                <option value="{{ category.id }}">
+                                                                    {{ category.name }}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="card border mt-4">
+
+                                                        <div class="card-header">
+                                                            <h5 class="mb-1">
+                                                                🤖 AI Product Assistant
+                                                            </h5>
+                                                            <p class="text-muted mb-0">
+                                                                Enter product features and let AI generate a professional product description, SEO content, and technical specifications.
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="card-body">
+
+                                                            <!-- Features -->
+                                                            <div class="mb-3">
+                                                                <label class="form-label">
+                                                                    Product Features
+                                                                </label>
+
+                                                                <textarea
+                                                                    class="form-control"
+                                                                    id="featured"
+                                                                    rows="6"
+                                                                    placeholder="Example: 
+                                                                    
+                                                                    • Intel Core i7-1355U
+                                                                    • 16GB DDR4 RAM
+                                                                    • 512GB SSD
+                                                                    • 15.6-inch Full HD Display
+                                                                    • Windows 11 Home"></textarea>
+
+                                                                <small class="text-muted">
+                                                                    Enter one feature per line for the best AI-generated results.
+                                                                </small>
+                                                            </div>
+
+                                                            <!-- AI Button -->
+                                                            <div class="d-flex justify-content-end">
+
+                                                                <button
+                                                                    type="button"
+                                                                    id="generateContentBtn"
+                                                                    class="btn btn-primary">
+                                                                    <i class="ri-magic-line me-1"></i>
+                                                                    Generate AI Content
+                                                                </button>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- Short Description -->
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label class="form-label">
+                                                            Short Description <span class="text-muted">(Required)</span>
+                                                        </label>
+
+                                                        <div id="shortDescriptionEditor" style="height:200px;">
+                                                            <p></p>
+                                                        </div>
+
+                                                        <input
+                                                            type="hidden"
+                                                            name="short_description"
+                                                            id="short_description">
+                                                    </div>
+                                                </div>
+
+                                                <!--  Description -->
+                                                <div class="col-12 mt-4">
+                                                    <div>
+                                                        <label class="form-label">
+                                                            Product Description <span class="text-muted">(Required)</span>
+                                                        </label>
+
+                                                        <div id="productDescriptionEditor" style="height:300px;">
+                                                            <p></p>
+                                                        </div>
+
+                                                        <input type="hidden" name="description" id="description">
+                                                    </div>
+                                                </div>
+
+                                                <br>
+
+                                                <div class="card mt-4">
+                                                    <div class="card-header">
+                                                        <h5 class="mb-0">Technical Specifications</h5>
+                                                    </div>
+
+                                                    <div class="card-body p-0">
+                                                        <table class="table table-bordered mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="35%">Specification</th>
+                                                                    <th>Value</th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="specificationTableBody">
+
+                                                            </tbody>
+
+                                                        </table>
+                                                         <a href="javascript:void(0)" id="addSpecificationBtn" class="btn btn-primary">
+                                                            Add More
+                                                        </a>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                
+                                                <br>   
+                                            </div>
+                                            <!-- end card-body-->
+                                        </div>
+                                        <!-- end card-->
+
+                                       
+
+                                        <!-- end card-->
+
+                                    </div>
+                                    <!-- end col-->
+                                    <div class="col-xxl-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="mb-0">
+                                                    <label for="tags" class="form-label">Tags</label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter tags separated by commas" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label for="tags" class="form-label">Seo Title</label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="seo_title" id="seo_title" placeholder="Enter tags separated by commas" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label for="tags" class="form-label">Meta Keywords</label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="meta_keywords" id="meta_keywords" placeholder="Enter tags separated by commas" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label for="tags" class="form-label">Meta Description</label>
+                                                    <div class="app-search">
+                                                        <input type="text" class="form-control" name="meta_description" id="meta_description" placeholder="Enter tags separated by commas" />
+                                                        <i data-lucide="tag" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+
+                                    
+                                                <div class="mb-3">
+                                                    <label for="statusOne" class="form-label">Status <span class="text-danger">*</span></label>
+                                                    <div class="app-search">
+                                                        <select class="form-select form-control my-1 my-md-0" name="status" id="statusOne">
+                                                            <option selected>Choose Status</option>
+                                                            <option value="1">Published</option>
+                                                            <option value="0">Inactive</option>
+                                                            <option value="2">Draft</option>
+                                                        </select>
+                                                        <i data-lucide="wand-sparkles" class="app-search-icon text-muted"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="card">
+                                            
+                                            <!-- end card-header -->
+                                            <div class="card-body">
+                                                <!------ Main Product Image Start ------>
+                                                    <div class="card">
+
+                                                        <div class="card-header">
+                                                            <h4 class="card-title mb-1">
+                                                                Featured Image
+                                                            </h4>
+                                                            <!---
+                                                            <p class="text-muted mb-0">
+                                                                Upload the main product image. Only one image is allowed.
+                                                            </p>
+                                                             -->
+                                                        </div>
+
+                                                        <div class="card-body">
+
+                                                            <div id="mainImageDropzone" class="dropzone border rounded">
+
+                                                                <div class="dz-message needsclick">
+
+                                                                    <div class="avatar-lg mx-auto mb-3">
+                                                                        <span class="avatar-title bg-info-subtle text-info rounded-circle">
+                                                                            <i data-lucide="cloud-upload" class="fs-24"></i>
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <h4 class="mb-2">
+                                                                        Drop main image here
+                                                                    </h4>
+
+                                                                    <p class="text-muted">
+                                                                        or click to browse.
+                                                                    </p>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div id="mainImagePreview" class="dropzone-previews mt-3"></div>
+                                                            
+                                                        </div>
+
+                                                    </div>
+                                                <!------ Main Product Image End ------>
+
+                                                <div class="mt-2 mb-4 d-flex gap-2 justify-content-center">
+                                                    <!--<a href="#!" class="btn btn-danger fw-semibold"> Discard </a>
+                                                    <a href="#!" class="btn btn-secondary"> Save as Draft </a>
+                                                    <a href="#!" class="btn btn-success"> Publish </a>-->
+                                                    <button type="submit" class="btn btn-success">
+                                                        Save Blog
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end row-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- container -->
+
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                ©
+                                <span data-current-year></span>
+                                UBold By <span class="fw-semibold">Coderthemes</span>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End of Main Content -->
+            <!-- ============================================================== -->
+
+{% include "/admin/layout/footer.html" %}
+
+<script>
+    let blogId = $("#blog_id").val();
+
+    $(document).ready(function () {
+        loadBlog(blogId);
+    });
+
+    function loadBlog(blogId) {
+
+        $.ajax({
+
+            url: "/admin/blog/blog/" + blogId,
+            type: "GET",
+            beforeSend: function () {
+                $("#updateProductBtn")
+                    .prop("disabled", true)
+                    .text("Loading...");
+
+            },
+
+            success: function (res) {
+                if (!res.status) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: res.message
+                    });
+                    return;
+                }
+
+                let blog = res.data;
+                fillProductForm(blog);
+            },
+
+            error: function (xhr) {
+
+                let message = "Something went wrong.";
+
+                if (
+                    xhr.responseJSON &&
+                    xhr.responseJSON.message
+                ) {
+                    message = xhr.responseJSON.message;
+                }
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: message
+                });
+
+            },
+
+            complete: function () {
+                $("#updateProductBtn")
+                    .prop("disabled", false)
+                    .text("Update Product");
+            }
+
+        });
+
+    }
+
+    function fillProductForm(blog){
+
+        $("#title").val(blog.title);
+        $("#category_id").val(blog.category_id);
+        
+        // Hidden fields
+        $("#short_description").val(blog.short_description);
+        $("#description").val(blog.description);
+
+        // Quill Editors
+        shortEditor.root.innerHTML = blog.short_description || "";
+        productEditor.root.innerHTML = blog.description || "";
+
+        
+        $("#tags").val(blog.tags);
+        $("#seo_title").val(blog.seo_title);
+        $("#meta_description").val(blog.meta_description);
+        $("#meta_keywords").val(blog.meta_keywords);
+        $("#statusOne").val(blog.status);
+
+        /* Main Image Section  */
+
+        mainDropzone.removeAllFiles(true);
+
+        if(blog.featured_image) {
+            let imageUrl = "/static/" + blog.featured_image;
+            let mockFile = {
+                name: blog.featured_image.split("/").pop(),
+                size: 12345,
+                isMock: true
+            };
+            mainDropzone.emit("addedfile", mockFile);
+            mainDropzone.emit("thumbnail", mockFile, imageUrl);
+            mainDropzone.emit("success", mockFile);
+            mainDropzone.emit("complete", mockFile);
+            mainDropzone.files.push(mockFile)
+        }
+        
+        pageLoaded = true;
+    }
+</script>
+
+/* Editor Section */
+<script>
+    const shortEditor = new Quill("#shortDescriptionEditor", {
+        theme: "snow"
+    });
+
+    const productEditor = new Quill("#productDescriptionEditor", {
+        theme: "snow"
+    });
+
+    // Short Description
+    shortEditor.on("text-change", function () {
+        $("#short_description").val(shortEditor.root.innerHTML);
+    });
+
+    // Product Description
+    productEditor.on("text-change", function () {
+        $("#description").val(productEditor.root.innerHTML);
+    });
+
+    Dropzone.autoDiscover = false;
+
+    let mainImageFiles = [];
+    let mainDropzone = new Dropzone("#mainImageDropzone", {
+        url: "/",
+        autoProcessQueue: false,
+        maxFiles: 1,
+        acceptedFiles: "image/*",
+        addRemoveLinks: true
+    });
+
+    mainDropzone.on("maxfilesexceeded", function(file) {
+        this.removeFile(file);
+        alert("Only one main image is allowed");
+    });
+</script>
+
+
+<script>
+ /* Update Section */
+ $("#blogForm").submit(function(e){
+
+    e.preventDefault();
+
+    $("#short_description").val(
+        shortEditor.root.innerHTML
+    );
+
+    $("#description").val(
+        productEditor.root.innerHTML
+    );
+
+    let formData = new FormData(this);
+
+    // Main Image
+    if(mainDropzone.files.length > 0 && !mainDropzone.files[0].isMock) {
+        formData.append(
+            "featured_image",
+            mainDropzone.files[0]
+        );
+    }
+
+
+    $.ajax({
+
+        url: "/admin/blog/update/" + $("#blog_id").val(),
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function(res) {
+
+            if(res.status){
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: res.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+            }else{
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: res.message
+                });
+            }
+        },
+
+        error: function(xhr){
+
+            let message = "Something went wrong.";
+
+            const fieldNames = {
+                category_id: "Category",
+                title: "Title",
+                status: "Status",
+                featured_image: "Featured Image"
+            };
+
+            if(xhr.responseJSON){
+
+                // FastAPI Validation Error (422)
+                if(xhr.responseJSON.detail){
+
+                    if(Array.isArray(xhr.responseJSON.detail)){
+
+                        message = xhr.responseJSON.detail.map(function(err){
+
+                            let field = fieldNames[err.loc[1]] || err.loc[1];
+
+                            return field + " : " + err.msg;
+
+                        }).join("<br>");
+
+                    }else{
+
+                        message = xhr.responseJSON.detail;
+
+                    }
+
+                }
+
+                // Custom API Error
+                else if(xhr.responseJSON.message){
+
+                    message = xhr.responseJSON.message;
+
+                }
+
+            }
+
+            Swal.fire({
+                icon: "error",
+                title: "Validation Error",
+                html: "<pre style='text-align:left'>" + message + "</pre>"
+            });
+
+        }
+
+    });
+
+});
+</script>
+
+
+
+
+<script>
+
+function toggleAIGenerator(isLoading) {
+    $("#generateContentBtn").prop("disabled", isLoading);
+    if(isLoading) {
+        $("#generateContentBtn")
+            .html('<span class="spinner-border spinner-border-sm me-2"></span> Generating AI Content...');
+    } else {
+        $("#generateContentBtn")
+            .html('<i class="ri-magic-line me-1"></i> Generate AI Content');
+    }
+}
+
+$("#generateContentBtn").click(function () {
+    
+    let title = $("#title").val().trim();
+    if (title === "") {
+        Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text: "Please enter blog title."
+        });
+        return;
+    }
+
+    toggleAIGenerator(true);
+
+    $.ajax({
+
+        url: "/admin/generate-content",
+        type: "POST",
+        data: {
+            product_name: product_name,
+            category: $("#category_id option:selected").text(),
+            sub_category: $("#subcategory_id option:selected").text(),
+            brand: $("#brand_id option:selected").text(),
+            features: $("#featured").val()
+        },
+
+        success: function (response) {
+
+            toggleAIGenerator(false);
+
+            if (!response.status) {
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Generation Failed",
+                    text: response.message
+                });
+
+                return;
+            }
+
+            // Short Description
+            shortEditor.clipboard.dangerouslyPasteHTML(
+                response.data.short_description
+            );
+
+            $("#short_description").val(
+                response.data.short_description
+            );
+
+            // Product Description
+            productEditor.clipboard.dangerouslyPasteHTML(
+                response.data.description
+            );
+
+            $("#description").val(
+                response.data.description
+            );
+            // SEO
+            $("#seo_title").val(
+                response.data.seo_title
+            );
+            $("#meta_description").val(
+                response.data.meta_description
+            );
+            $("#meta_keywords").val(
+                response.data.meta_keywords
+            );
+            // Tags
+            $("#tags").val(
+                response.data.tags.join(", ")
+            );
+            // Specifications
+            //let specificationHtml = "";
+            $("#specificationTableBody").html("");
+            if (response.data.specifications.length > 0) {
+                response.data.specifications.forEach(function(item){
+                    /*
+                    specificationHtml += `
+                        <tr>
+                            <td><strong>${item.title}</strong></td>
+                            <td>${item.value}</td>
+                        </tr>
+                    `;
+                    */
+                   
+                    addSpecificationRow(
+                        item.title,
+                        item.value
+                    );
+                });
+
+            } else {
+                specificationHtml = `
+                    <tr>
+                        <td colspan="2" class="text-center text-muted">
+                            No specifications available.
+                        </td>
+                    </tr>
+                `;
+            }
+
+            $("#specificationTableBody").html(specificationHtml);
+
+            $("#specifications").val(
+                JSON.stringify(response.data.specifications)
+            );
+
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "AI content generated successfully.",
+                timer: 1800,
+                showConfirmButton: false
+            });
+        },
+
+        error: function () {
+            toggleAIGenerator(false);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Something went wrong while generating AI content."
+            });
+        }
+    });
+});
+
+/* Spection function Add , Remove */
+$("#addSpecificationBtn").click(function () {
+    addSpecificationRow();
+});
+$(document).on("click", ".removeSpecification", function () {
+    $(this).closest("tr").remove();
+});
+
+function addSpecificationRow(title = "", value = "") {
+
+    let html = `
+        <tr>
+
+            <td>
+                <input
+                    type="text"
+                    name="specification_title[]"
+                    class="form-control"
+                    value="${title}">
+            </td>
+
+            <td>
+                <input
+                    type="text"
+                    name="specification_value[]"
+                    class="form-control"
+                    value="${value}">
+            </td>
+
+            <td width="60">
+                <button
+                    type="button"
+                    class="btn btn-danger btn-sm removeSpecification">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trash-2" class="lucide lucide-trash-2 fs-lg"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+
+                </button>
+            </td>
+
+        </tr>
+    `;
+
+    $("#specificationTableBody").append(html);
+
+}
+
+</script>
+
+
