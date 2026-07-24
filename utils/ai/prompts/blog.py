@@ -26,7 +26,13 @@ Structure:
     "seo_title": "",
     "meta_description": "",
     "meta_keywords": "",
-    "tags": []
+    "tags": [
+        "tag1",
+        "tag2",
+        "tag3",
+        "tag4",
+        "tag5"
+    ]
 }}
 
 Rules:
@@ -45,9 +51,16 @@ Rules:
 7. SEO Title should be under 60 characters.
 8. Meta Description should be under 160 characters.
 9. Meta Keywords should be comma separated string.
-10. Tags should be JSON array.
-11. Generate natural and human readable content.
-12. Do not include any explanation outside JSON.
+10. Tags MUST be a JSON array containing exactly 5 to 10 SEO relevant tags.
+11. Every tag should be short (1-3 words).
+12. Tags must be unique.
+13. Do not leave tags empty.
+14. Do not return tags as a comma separated string.
+15. Return at least 5 tags.
+
+IMPORTANT:
+All fields are mandatory. Never return empty values for any field including tags.
+
 """
 
     return prompt.strip()

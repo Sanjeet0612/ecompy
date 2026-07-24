@@ -19,5 +19,15 @@ EXPIRY_MINUTES = int(os.getenv("EXPIRY_MINUTES"))
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv(
     "GEMINI_MODEL",
-    "gemini-3.5-flash"
+    "Gemini 3.5 Flash"
 )
+
+# ============================
+# SMTP
+# ============================
+
+SMTP_HOST = os.getenv("SMTP_HOST")
+SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
+SMTP_USERNAME = os.getenv("SMTP_USERNAME")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL")

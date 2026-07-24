@@ -10,6 +10,8 @@ import json
 
 
 client = genai.Client(api_key=GEMINI_API_KEY)
+
+
 MAX_RETRIES = 3
 
 """

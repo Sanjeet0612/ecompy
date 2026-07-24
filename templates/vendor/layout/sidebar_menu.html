@@ -1,0 +1,242 @@
+ <div class="sidenav-menu">
+                <!-- Brand Logo -->
+                <a href="index.html" class="logo">
+                    <span class="logo logo-light">
+                        <span class="logo-lg"><img src="/static/admin/assets/images/logo.png" alt="logo" /></span>
+                        <span class="logo-sm"><img src="/static/admin/assets/images/logo-sm.png" alt="small logo" /></span>
+                    </span>
+
+                    <span class="logo logo-dark">
+                        <span class="logo-lg"><img src="/static/admin/assets/images/logo-black.png" alt="dark logo" /></span>
+                        <span class="logo-sm"><img src="/static/admin/assets/images/logo-sm.png" alt="small logo" /></span>
+                    </span>
+                </a>
+
+                <!-- Sidebar Hover Menu Toggle Button -->
+                <button class="button-on-hover">
+                    <span class="btn-on-hover-icon"></span>
+                </button>
+
+                <!-- Full Sidebar Menu Close Button -->
+                <button class="button-close-offcanvas">
+                    <i data-lucide="menu" class="align-middle"></i>
+                </button>
+
+                <div class="scrollbar" data-simplebar="">
+                    <div id="user-profile-settings" class="sidenav-user" style="background: url(assets/images/user-bg-pattern.svg)">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <a href="#!" class="link-reset">
+                                    <img src="/static/admin/assets/images/users/user-1.jpg" alt="user-image" class="rounded-circle mb-2 avatar-md" />
+                                    <span class="sidenav-user-name fw-bold">Geneva K.</span>
+                                    <span class="fs-12 fw-semibold" data-lang="user-role">Art Director</span>
+                                </a>
+                            </div>
+                            <div>
+                                <a class="dropdown-toggle drop-arrow-none link-reset sidenav-user-set-icon" data-bs-toggle="dropdown" data-bs-offset="0,12" href="#!" aria-haspopup="false" aria-expanded="false">
+                                    <i data-lucide="settings" class="fs-24 align-middle ms-1"></i>
+                                </a>
+
+                                <div class="dropdown-menu">
+                                    <!-- Header -->
+                                    <div class="dropdown-header noti-title">
+                                        <h6 class="text-overflow m-0">Welcome back!</h6>
+                                    </div>
+
+                                    <!-- My Profile -->
+                                    <a href="#!" class="dropdown-item">
+                                        <i data-lucide="circle-user-round" class="me-1 fs-lg align-middle"></i>
+                                        <span class="align-middle">Profile</span>
+                                    </a>
+
+                                    <!-- Settings -->
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        <i data-lucide="bolt" class="me-1 fs-lg align-middle"></i>
+                                        <span class="align-middle">Account Settings</span>
+                                    </a>
+
+                                    <!-- Lock -->
+                                    <a href="auth-lock-screen.html" class="dropdown-item">
+                                        <i data-lucide="lock-keyhole" class="me-1 fs-lg align-middle"></i>
+                                        <span class="align-middle">Lock Screen</span>
+                                    </a>
+
+                                    <!-- Logout -->
+                                    <a href="javascript:void(0);" class="dropdown-item text-danger fw-semibold">
+                                        <i data-lucide="log-out" class="me-1 fs-lg align-middle"></i>
+                                        <span class="align-middle">Log Out</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--- Sidenav Menu -->
+                    <div id="sidenav-menu">
+                        <ul class="side-nav">
+                            <li class="side-nav-title mt-2" data-lang="main">Main</li>
+                            <li class="side-nav-item">
+                                <a  href="/vendor/dashboard" aria-expanded="false" aria-controls="dashboards" class="side-nav-link">
+                                    <span class="menu-icon"><i data-lucide="layout-dashboard"></i></span>
+                                    <span class="menu-text" data-lang="dashboards">Dashboards</span>
+                                </a>
+                                
+                            </li>
+                           
+                            <li class="side-nav-title mt-2" data-lang="apps">Apps</li>
+                            <li class="side-nav-item">
+                                <a data-bs-toggle="collapse" href="#ecommerce" aria-expanded="false" aria-controls="ecommerce" class="side-nav-link">
+                                    <span class="menu-icon"><i data-lucide="shopping-basket"></i></span>
+                                    <span class="menu-text" data-lang="ecommerce">Ecommerce</span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <div class="collapse" id="ecommerce">
+                                    <ul class="sub-menu">
+                                        <li class="side-nav-item">
+                                            <a data-bs-toggle="collapse" href="#products" aria-expanded="false" aria-controls="products" class="side-nav-link">
+                                                <span class="menu-text" data-lang="products">Product</span>
+                                                <span class="menu-arrow"></span>
+                                            </a>
+                                            <div class="collapse" id="products">
+                                                <ul class="sub-menu">
+                                                    <li class="side-nav-item">
+                                                        <a href="/vendor/products" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-products">All Products</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="side-nav-item">
+                                                        <a href="/vendor/manage-category" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-categories">Categories</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="side-nav-item">
+                                                        <a href="/vendor/manage-sub-category" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-categories">Sub Categories</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="side-nav-item">
+                                                        <a href="/vendor/manage-brand" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-categories">Brand</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="side-nav-item">
+                                                        <a href="/vendor/manage-attribute" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-categories">Attribute</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="side-nav-item">
+                                                        <a href="/vendor/manage-attribute-value" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-categories">Attribute Value</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                       
+                                        <li class="side-nav-item">
+                                            <a data-bs-toggle="collapse" href="#orders" aria-expanded="false" aria-controls="orders" class="side-nav-link">
+                                                <span class="menu-text" data-lang="orders">Orders</span>
+                                                <span class="menu-arrow"></span>
+                                            </a>
+                                            <div class="collapse" id="orders">
+                                                <ul class="sub-menu">
+                                                    <li class="side-nav-item">
+                                                        <a href="apps-ecommerce-orders.html" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-orders">Orders</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="side-nav-item">
+                                                        <a href="apps-ecommerce-order-details.html" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-order-details">Order Details</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="side-nav-item">
+                                                        <a href="apps-ecommerce-order-add.html" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-order-add">Add/Edit Order</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        
+                                        
+                                        <li class="side-nav-item">
+                                            <a data-bs-toggle="collapse" href="#sellers" aria-expanded="false" aria-controls="sellers" class="side-nav-link">
+                                                <span class="menu-text" data-lang="sellers">Sellers</span>
+                                                <span class="menu-arrow"></span>
+                                            </a>
+                                            <div class="collapse" id="sellers">
+                                                <ul class="sub-menu">
+                                                    <li class="side-nav-item">
+                                                        <a href="apps-ecommerce-sellers.html" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-sellers">Sellers</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="side-nav-item">
+                                                        <a href="apps-ecommerce-seller-details.html" class="side-nav-link">
+                                                            <span class="menu-text" data-lang="apps-ecommerce-seller-details">Sellers Details</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="side-nav-item">
+                                            <a href="apps-ecommerce-refunds.html" class="side-nav-link">
+                                                <span class="menu-text" data-lang="apps-ecommerce-refunds">Refunds</span>
+                                            </a>
+                                        </li>
+                                      
+                                    </ul>
+                                </div>
+                            </li>
+                           
+                            <li class="side-nav-item">
+                                <a href="apps-chat.html" class="side-nav-link">
+                                    <span class="menu-icon"><i data-lucide="message-square-text"></i></span>
+                                    <span class="menu-text" data-lang="apps-chat">Chat</span>
+                                </a>
+                            </li>
+
+                            <li class="side-nav-item">
+                                    <a data-bs-toggle="collapse" href="#blog" aria-expanded="false" aria-controls="setting" class="side-nav-link">
+                                        <span class="menu-icon"><i data-lucide="text"></i></span>
+                                        <span class="menu-text" data-lang="setting">Blog</span>
+                                        <span class="menu-arrow"></span>
+                                    </a>
+                                    <div class="collapse" id="blog">
+                                        <ul class="sub-menu">
+                                            <li class="side-nav-item">
+                                                <a href="/vendor/manage-blog-category" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="apps-ecommerce-orders">Manage Category</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="/vendor/manage-blog" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="apps-ecommerce-orders">Manage Blog</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                            <li class="side-nav-item">
+                                <a data-bs-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="setting" class="side-nav-link">
+                                    <span class="menu-icon"><i data-lucide="settings"></i></span>
+                                    <span class="menu-text" data-lang="setting">Settings</span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <div class="collapse" id="setting">
+                                    <ul class="sub-menu">
+                                        <li class="side-nav-item">
+                                            <a href="/vendor/manage-ai-setting" class="side-nav-link">
+                                                <span class="menu-text" data-lang="apps-ecommerce-orders">AI Setting</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+                <!-- Sidenav Menu End -->

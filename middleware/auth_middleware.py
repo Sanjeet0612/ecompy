@@ -44,8 +44,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
         protected_paths = [
             "/dashboard",
             "/profile",
-            "/user/settings",
-            "/admin"
+            "/user/settings"
+            
         ]
 
         if path in protected_paths and not user:

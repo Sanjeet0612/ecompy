@@ -6,6 +6,7 @@ from config.settings import APP_NAME, SECRET_KEY
 from routes.web import router as web_router
 from routes.user import router as user_router
 from routes.admin import router as admin_router
+
 from routes.admin_api import router as admin_api_router
 from routes.categories_api import router as categories_api_router
 from routes.sub_categories_api import router as sub_categories_api_router
@@ -16,9 +17,13 @@ from routes.products_api import router as products_api_router
 # BLOG
 from routes.blog_categories_api import router as blog_categories_api_router
 from routes.blog_api import router as blog_api_router
-
 from middleware.auth_middleware import AuthMiddleware
 from middleware.admin_auth import AdminAuthMiddleware
+
+# Vendor
+from middleware.vendor_auth import VendorAuthMiddleware
+from routes.vendor.vendor import router as vendor_router
+from routes.vendor.vendor_api import router as vendor_api_router
 
 
 app = FastAPI(title=APP_NAME)
@@ -32,6 +37,8 @@ app.add_middleware(
 # Custom Auth Middleware
 app.add_middleware(AuthMiddleware)
 app.add_middleware(AdminAuthMiddleware)
+app.add_middleware(VendorAuthMiddleware)
+
 
 # Static Files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -53,6 +60,12 @@ app.include_router(attribute_value_api_router)
 app.include_router(products_api_router)
 app.include_router(blog_categories_api_router)
 app.include_router(blog_api_router)
+
+# Vendor Section
+app.include_router(vendor_router)
+app.include_router(vendor_api_router)
+
+
 
 
 

@@ -1,0 +1,66 @@
+  <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                ©
+                                <span data-current-year></span>
+                                UBold By <span class="fw-semibold">Coderthemes</span>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer --> 
+        </div>
+
+                       
+        
+ <!-- Vendor js -->
+<script src="/static/admin/assets/js/vendors.min.js"></script>
+<!-- App js -->
+<script src="/static/admin/assets/js/app.js"></script>
+ <!-- Quill Editor js -->
+<script src="/static/admin/assets/plugins/quill/quill.js"></script>
+
+<!-- Dropzone File Upload js -->
+<script src="/static/admin/assets/plugins/dropzone/dropzone-min.js"></script>
+
+<!-- Add Product Page js -->
+<script src="/static/admin/assets/js/pages/ecommerce-product-add.js"></script>
+<!-- E Charts js -->
+<script src="/static/admin/assets/plugins/chartjs/chart.umd.js"></script>
+<!-- Custom table -->
+<script src="/static/admin/assets/js/pages/custom-table.js"></script>
+<!-- Dashboard Page js -->
+<script src="/static/admin/assets/js/pages/dashboard-ecommerce.js"></script>
+<!-- By Me js -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
+
+<script>
+/* Logout Section Start */ 
+function vendorLogout() {
+
+    Swal.fire({
+        title: "Logout?",
+        text: "Are you sure you want to logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Logout",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+
+        if(result.isConfirmed){
+
+           window.location.href = "/vendor/logout";
+
+        }
+
+    });
+
+}
+/* Logout Section End */ 
+
+</script>
